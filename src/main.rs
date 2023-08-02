@@ -68,8 +68,9 @@ async fn main() {
 
     let app = Router::new().route("/", get(root)).with_state(shared_state);
 
-    let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
+    let addr = SocketAddr::from(([0, 0, 0, 0], 8000));
     tracing::debug!("Listening on {}", addr);
+    info!("Listening on {}", addr);
     axum::Server::bind(&addr)
         .serve(app.into_make_service())
         .await

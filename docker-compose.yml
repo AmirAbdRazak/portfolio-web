@@ -9,11 +9,12 @@ services:
     volumes:
       - /tmp/app:/var/log/app
     ports:
-      - '8080:8080'
+      - '8000:8000'
     depends_on:
       - postgres
 
   postgres:
+    container_name: postgres
     image: postgres:latest
     environment:
       POSTGRES_USER: amrrz
