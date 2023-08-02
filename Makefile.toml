@@ -1,0 +1,14 @@
+[tasks.dev]
+install_crate = "cargo-watch"
+cwd = "./src"
+command = "cargo"
+args = ["watch", "-x", "run"]
+dependencies = ["postgres"]
+
+[tasks.build]
+command = "docker"
+args = ["compose", "-f", "./docker-compose.yml", "up", "--build"]
+
+[tasks.postgres]
+command = "docker"
+args = ["compose", "-f", "./docker-compose.yml", "up", "-d", "postgres"]
