@@ -65,7 +65,7 @@ async fn main() -> Result<(), sqlx::Error> {
     tracing_subscriber::fmt::init();
     dotenv().ok();
 
-    let db_url = env::var("POSTGRES_URL").expect("POSTGRES_URL is not set");
+    let db_url = env::var("DATABASE_URL").expect("POSTGRES_URL is not set");
 
     let pg_pool = PgPoolOptions::new()
         .max_connections(5)
