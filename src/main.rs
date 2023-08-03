@@ -14,7 +14,6 @@ use sqlx::{postgres::PgPoolOptions, Pool, Postgres};
 use std::{env, net::SocketAddr};
 use tracing::info;
 
-// async fn graphql_handler()
 #[derive(Default)]
 struct UserQuery;
 

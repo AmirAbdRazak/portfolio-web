@@ -1,5 +1,5 @@
 # rust-backend
-backend for a rust project, maybe it would be turned into a docker container and jumbled with nextjs, or turned into some monolith leptos :D
+backend for a rust project, frontend is probably gonna be wasm leptos or something
 
 Backend would probably end up as like a GraphQL endpoint, theres gonna be a few apps since its gonna be for a portfolio website with apps integrated in it
 </br>
@@ -16,3 +16,9 @@ Here is an example of it running with `cargo make build`:
 $ docker compose exec axum curl "http://localhost:3000/"                      
 Hello, here is the result to your query: {"data":{"user":{"getUser":{"id":1337,"username":"amrrzk"}}}}% 
 ```
+
+#Todo
+[] Edit makefile so that cargo watch -x run is ran inside docker and create corresponding docker-compose and docker file
+[] Refactor file structure with separations of concern
+[] Create migrations for db and general database structure
+[] Get into the juicy implementation
