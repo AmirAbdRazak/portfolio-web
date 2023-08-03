@@ -1,5 +1,5 @@
 use async_graphql::{
-    http::GraphiQLSource, EmptyMutation, EmptySubscription, Object, Schema, SimpleObject,
+    http::GraphiQLSource, Context, EmptyMutation, EmptySubscription, Object, Schema, SimpleObject,
 };
 use async_graphql_axum::{GraphQLRequest, GraphQLResponse};
 use axum::{
@@ -8,8 +8,10 @@ use axum::{
     routing::get,
     Router,
 };
+use dotenv::dotenv;
 use serde::Serialize;
-use std::net::SocketAddr;
+use sqlx::{postgres::PgPoolOptions, Pool, Postgres};
+use std::{env, net::SocketAddr};
 use tracing::info;
 
 // async fn graphql_handler()
@@ -18,8 +20,14 @@ struct UserQuery;
 
 #[Object]
 impl UserQuery {
-    async fn get_user(&self, username: String) -> User {
+    async fn get_user(&self, ctx: &Context<'_>, username: String) -> User {
         let id = 1337;
+
+        let pool = ctx.data::<Pool<Postgres>>();
+
+        if pool.is_ok() {
+            info!("Postgres pool connections is retrieved");
+        }
 
         info!("It got into get_user");
 
@@ -54,10 +62,20 @@ impl Query {
 type GraphQLSchema = Schema<Query, EmptyMutation, EmptySubscription>;
 
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<(), sqlx::Error> {
     tracing_subscriber::fmt::init();
+    dotenv().ok();
 
-    let schema = Schema::new(Query::default(), EmptyMutation, EmptySubscription);
+    let db_url = env::var("POSTGRES_URL").expect("POSTGRES_URL is not set");
+
+    let pg_pool = PgPoolOptions::new()
+        .max_connections(5)
+        .connect(&db_url)
+        .await?;
+
+    let schema = Schema::build(Query, EmptyMutation, EmptySubscription)
+        .data(pg_pool)
+        .finish();
 
     let app = Router::new()
         .route("/graphql", get(graphiql).post(graphql_handler))
@@ -71,6 +89,8 @@ async fn main() {
         .serve(app.into_make_service())
         .await
         .unwrap();
+
+    Ok(())
 }
 
 async fn root() -> String {
