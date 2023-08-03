@@ -17,8 +17,12 @@ $ docker compose exec axum curl "http://localhost:3000/"
 Hello, here is the result to your query: {"data":{"user":{"getUser":{"id":1337,"username":"amrrzk"}}}}% 
 ```
 
-#Todo
-[] Edit makefile so that cargo watch -x run is ran inside docker and create corresponding docker-compose and docker file
-[] Refactor file structure with separations of concern
-[] Create migrations for db and general database structure
-[] Get into the juicy implementation
+# Todo
+[ ] Edit makefile so that cargo watch -x run is ran inside docker and create corresponding docker-compose and docker file
+</br>
+[ ] Refactor file structure with separations of concern
+</br>
+[ ] Create migrations for db and general database structure
+</br>
+[ ] Get into the juicy implementation
+</br>
