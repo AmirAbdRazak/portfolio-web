@@ -1,8 +1,15 @@
-use async_graphql::{EmptyMutation, EmptySubscription, Object, Schema, SimpleObject};
-use axum::{extract::State, routing::get, Router};
+use async_graphql::{
+    http::GraphiQLSource, EmptyMutation, EmptySubscription, Object, Schema, SimpleObject,
+};
+use async_graphql_axum::{GraphQLRequest, GraphQLResponse};
+use axum::{
+    extract::Extension,
+    response::{self, IntoResponse},
+    routing::get,
+    Router,
+};
 use serde::Serialize;
-use serde_json;
-use std::{net::SocketAddr, sync::Arc};
+use std::net::SocketAddr;
 use tracing::info;
 
 // async fn graphql_handler()
@@ -44,48 +51,37 @@ impl Query {
     }
 }
 
-struct AppState {
-    gql_res: String,
-}
+type GraphQLSchema = Schema<Query, EmptyMutation, EmptySubscription>;
 
 #[tokio::main]
 async fn main() {
     tracing_subscriber::fmt::init();
 
     let schema = Schema::new(Query::default(), EmptyMutation, EmptySubscription);
-    let res = schema
-        .execute("{user {getUser(username: \"amrrzk\"){id, username}}}")
-        .await;
 
-    let data = res;
-    let json = serde_json::to_string(&data);
-
-    info!("{}", serde_json::to_string(&data).unwrap());
-
-    let shared_state = Arc::new(AppState {
-        gql_res: json.unwrap(),
-    });
-
-    let app = Router::new().route("/", get(root)).with_state(shared_state);
+    let app = Router::new()
+        .route("/graphql", get(graphiql).post(graphql_handler))
+        .layer(Extension(schema))
+        .route("/", get(root));
 
     let addr = SocketAddr::from(([0, 0, 0, 0], 8000));
     tracing::debug!("Listening on {}", addr);
-    info!("Listening on {}", addr);
+
     axum::Server::bind(&addr)
         .serve(app.into_make_service())
         .await
         .unwrap();
 }
 
-async fn root(State(state): State<Arc<AppState>>) -> String {
-    let app_state = &Arc::as_ref(&state).gql_res;
+async fn root() -> String {
+    format!("Hello, you have entered root")
+}
+async fn graphiql() -> impl IntoResponse {
+    response::Html(GraphiQLSource::build().endpoint("/graphql").finish())
+}
 
-    info!("It got into root");
-
-    format!(
-        "Hello, here is the result to your query: {}",
-        app_state.to_owned()
-    )
+async fn graphql_handler(schema: Extension<GraphQLSchema>, req: GraphQLRequest) -> GraphQLResponse {
+    schema.execute(req.into_inner()).await.into()
 }
 
 #[derive(Serialize, SimpleObject)]
