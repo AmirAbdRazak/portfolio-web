@@ -4,7 +4,7 @@ services:
   axum:
     container_name: axum
     build:
-      context: .
+      context: ./backend
       dockerfile: Dockerfile
     volumes:
       - /tmp/app:/var/log/app
@@ -14,6 +14,16 @@ services:
       - postgres
     environment:
       DATABASE_URL: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:5432/${POSTGRES_DB}"
+
+  svelte:
+    container_name: svelte
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ./frontend:/app
+    ports:
+      - '3000:3000'
 
   postgres:
     container_name: postgres
@@ -26,7 +36,6 @@ services:
       - pg_data:/var/lib/postgresql/data
     ports:
       - '5432:5432'
-
 
 volumes:
   pg_data:

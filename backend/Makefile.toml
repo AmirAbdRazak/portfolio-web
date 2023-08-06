@@ -7,8 +7,8 @@ dependencies = ["postgres"]
 
 [tasks.build]
 command = "docker"
-args = ["compose", "-f", "./docker-compose.yml", "up", "--build"]
+args = ["compose", "-f", "../docker-compose.yml", "up", "--build"]
 
 [tasks.postgres]
 command = "docker"
-args = ["compose", "-f", "./docker-compose.yml", "up", "-d", "postgres"]
+args = ["compose", "-f", "../docker-compose.yml", "up", "-d", "postgres"]
