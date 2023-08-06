@@ -20,7 +20,7 @@ Hello, here is the result to your query: {"data":{"user":{"getUser":{"id":1337,"
 </br>
 [X] Implment Docker Svelte setup
 </br>
-[X] Implement Svelte data visualization
+[ ] Implement Svelte data visualization
 </br>
 
 [ ] Work on Search Spotify New Releases next :D
