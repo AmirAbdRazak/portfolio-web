@@ -1,15 +1,15 @@
-/backend/target
+/axum/target
 
-/backend/Cargo.lock
+/axum/Cargo.lock
 .env
 
-/frontend/.DS_Store
-/frontend/node_modules
-/frontend/build
-/frontend/.svelte-kit
-/frontend/package
-/frontend/.env
-/frontend/.env.*
-/frontend/!.env.example
-/frontend/vite.config.js.timestamp-*
-/frontend/vite.config.ts.timestamp-*
+/svelte/.DS_Store
+/svelte/node_modules
+/svelte/build
+/svelte/.svelte-kit
+/svelte/package
+/svelte/.env
+/svelte/.env.*
+/svelte/!.env.example
+/svelte/vite.config.js.timestamp-*
+/svelte/vite.config.ts.timestamp-*
