@@ -1,42 +1,33 @@
+pub mod album;
 pub mod artist;
+pub mod track;
 use async_graphql::{Object, SimpleObject};
 use dotenv::dotenv;
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 use surf;
 use tracing::info;
 
-use self::artist::{get_artist_chart_list, WeeklyArtistChart};
+use self::{
+    album::{get_album_chart_list, WeeklyAlbumChart},
+    artist::{get_artist_chart_list, WeeklyArtistChart},
+    track::{get_track_chart_list, WeeklyTrackChart},
+};
 
-// Enum support is pretty eh for async graphql if the enum variants aren't of the same structure, on top of that I couldn't pass generic traits and stuff into types
-// Hence this abonimation is necessary, for now, maybe I'm being dumb about this
-
-#[derive(Serialize, SimpleObject)]
-struct AlbumEntry {
-    name: String,
-    artist_name: Vec<String>,
-    playcount: u32,
-    rank: u8,
-}
-#[derive(SimpleObject)]
-struct AlbumEntryChart {
-    chart_from: u64,
-    chart_to: u64,
-    chart_list: Vec<AlbumEntry>,
+#[derive(Deserialize, SimpleObject)]
+struct ArtistAttr {
+    #[serde(rename = "#text")]
+    text: String,
 }
 
-#[derive(Serialize, SimpleObject)]
-struct TrackEntry {
-    name: String,
-    album_name: String,
-    artist_name: Vec<String>,
-    playcount: u32,
-    rank: u8,
+#[derive(Deserialize, SimpleObject)]
+struct EntryAttr {
+    rank: String,
 }
-#[derive(SimpleObject)]
-struct TrackEntryChart {
-    chart_from: u64,
-    chart_to: u64,
-    chart_list: Vec<TrackEntry>,
+
+#[derive(Deserialize, SimpleObject)]
+struct WeeklyChartAttr {
+    from: String,
+    to: String,
 }
 
 #[derive(Debug, Deserialize)]
@@ -101,16 +92,26 @@ impl WeeklyChartsQuery {
     async fn album<'ctx>(
         &self,
         // ctx: &Context<'ctx>,
-        // lastfm_username: String,
-    ) -> Vec<AlbumEntryChart> {
-        todo!()
+        lastfm_username: String,
+    ) -> Vec<WeeklyAlbumChart> {
+        let join_all_result = get_album_chart_list(&lastfm_username).await.await;
+
+        join_all_result
+            .into_iter()
+            .filter_map(|result| result.ok())
+            .collect()
     }
 
     async fn track<'ctx>(
         &self,
         // ctx: &Context<'ctx>,
-        // lastfm_username: String,
-    ) -> Vec<TrackEntryChart> {
-        todo!()
+        lastfm_username: String,
+    ) -> Vec<WeeklyTrackChart> {
+        let join_all_result = get_track_chart_list(&lastfm_username).await.await;
+
+        join_all_result
+            .into_iter()
+            .filter_map(|result| result.ok())
+            .collect()
     }
 }
