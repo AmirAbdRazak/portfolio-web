@@ -1,9 +1,7 @@
-# rust-backend
+# Portfolio Hub
 backend for a rust project, frontend is set on Svelte
 
-Backend would probably end up as like a GraphQL endpoint, theres gonna be a few apps since its gonna be for a portfolio website with apps integrated in it
-</br>
-so main endpoints would be something like main {}, spotifyDataVisualizer {}, and the subsequent apps planned, if they ever make it
+Backend would probably end up as like a GraphQL endpoint, theres gonna be a few apps since its gonna be for a portfolio website with apps integrated in it so main endpoints would be something like main {}, spotifyDataVisualizer {}, and the subsequent apps planned, if they ever make it
 
 
 # How to setup
