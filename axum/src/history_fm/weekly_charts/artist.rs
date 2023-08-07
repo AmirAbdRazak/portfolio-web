@@ -1,5 +1,3 @@
-use std::env;
-
 use async_graphql::SimpleObject;
 use futures::future::JoinAll;
 use serde::Deserialize;
@@ -29,10 +27,10 @@ struct WeeklyArtistChartResponse {
 
 pub async fn get_artist_chart_list<'a>(
     lastfm_username: &'a str,
+    api_key: &'a str,
+    registered_unixtime: u64,
 ) -> JoinAll<JoinHandle<WeeklyArtistChart>> {
-    let api_key = env::var("LASTFM_API_KEY").expect("LASTFM_API_KEY is not set");
-
-    let available_chart_list = get_chart_list(&lastfm_username, &api_key)
+    let available_chart_list = get_chart_list(&lastfm_username, &api_key, registered_unixtime)
         .await
         .expect("Error getting chart list");
 
