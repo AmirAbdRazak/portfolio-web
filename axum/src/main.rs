@@ -7,20 +7,25 @@ use dotenv::dotenv;
 use schema::Query;
 use sqlx::postgres::PgPoolOptions;
 use std::{env, net::SocketAddr};
+use tracing::info;
 
 use crate::schema::{graphiql, graphql_handler};
 
 #[tokio::main]
 async fn main() -> Result<(), sqlx::Error> {
     tracing_subscriber::fmt::init();
+    info!("Its in axum server");
     dotenv().ok();
 
-    let db_url = env::var("DATABASE_URL").expect("DATABASE_URL is not set");
+    let database_url = env::var("DATABASE_URL").unwrap();
+
+    info!("{}", database_url);
 
     let pg_pool = PgPoolOptions::new()
         .max_connections(5)
-        .connect(&db_url)
-        .await?;
+        .connect(&database_url)
+        .await
+        .expect("Failed to connect to database");
 
     let schema = Schema::build(Query, EmptyMutation, EmptySubscription)
         .data(pg_pool)
@@ -30,6 +35,7 @@ async fn main() -> Result<(), sqlx::Error> {
         .route("/graphql", get(graphiql).post(graphql_handler))
         .layer(Extension(schema));
 
+    info!("Starting the server...");
     let addr = SocketAddr::from(([0, 0, 0, 0], 8000));
     tracing::debug!("Listening on {}", addr);
 

@@ -4,9 +4,10 @@ pub mod track;
 pub mod user_info;
 use std::env;
 
-use async_graphql::{Object, SimpleObject};
+use async_graphql::{Context, Object, SimpleObject};
 use dotenv::dotenv;
 use serde::Deserialize;
+use sqlx::{Pool, Postgres};
 use surf;
 
 use self::{
@@ -84,21 +85,19 @@ pub struct WeeklyChartsQuery;
 impl WeeklyChartsQuery {
     async fn artist<'ctx>(
         &self,
-        // ctx: &Context<'ctx>,
+        ctx: &Context<'ctx>,
         lastfm_username: String,
     ) -> Vec<WeeklyArtistChart> {
         dotenv().ok();
         let api_key = env::var("LASTFM_API_KEY").expect("LASTFM_API_KEY is not set");
-        let user_info = get_user_info(&lastfm_username, &api_key).await;
+        let pool = ctx
+            .data::<Pool<Postgres>>()
+            .expect("Error connecting to Postgres pool connection");
 
-        let registered_unixtime = user_info
-            .registered
-            .unixtime
-            .parse::<u64>()
-            .expect("Failed to parse registered unixtime to u64");
+        let user_info = get_user_info(&lastfm_username, &api_key, pool).await;
 
         let join_all_result =
-            get_artist_chart_list(&lastfm_username, &api_key, registered_unixtime)
+            get_artist_chart_list(&lastfm_username, &api_key, user_info.registered_unixtime)
                 .await
                 .await;
 
@@ -110,20 +109,20 @@ impl WeeklyChartsQuery {
 
     async fn album<'ctx>(
         &self,
-        // ctx: &Context<'ctx>,
+        ctx: &Context<'ctx>,
         lastfm_username: String,
     ) -> Vec<WeeklyAlbumChart> {
         let api_key = env::var("LASTFM_API_KEY").expect("LASTFM_API_KEY is not set");
-        let user_info = get_user_info(&lastfm_username, &api_key).await;
+        let pool = ctx
+            .data::<Pool<Postgres>>()
+            .expect("Error connecting to Postgres pool connection");
 
-        let registered_unixtime = user_info
-            .registered
-            .unixtime
-            .parse::<u64>()
-            .expect("Failed to parse registered unixtime to u64");
-        let join_all_result = get_album_chart_list(&lastfm_username, &api_key, registered_unixtime)
-            .await
-            .await;
+        let user_info = get_user_info(&lastfm_username, &api_key, pool).await;
+
+        let join_all_result =
+            get_album_chart_list(&lastfm_username, &api_key, user_info.registered_unixtime)
+                .await
+                .await;
 
         join_all_result
             .into_iter()
@@ -133,20 +132,20 @@ impl WeeklyChartsQuery {
 
     async fn track<'ctx>(
         &self,
-        // ctx: &Context<'ctx>,
+        ctx: &Context<'ctx>,
         lastfm_username: String,
     ) -> Vec<WeeklyTrackChart> {
         let api_key = env::var("LASTFM_API_KEY").expect("LASTFM_API_KEY is not set");
-        let user_info = get_user_info(&lastfm_username, &api_key).await;
+        let pool = ctx
+            .data::<Pool<Postgres>>()
+            .expect("Error connecting to Postgres pool connection");
 
-        let registered_unixtime = user_info
-            .registered
-            .unixtime
-            .parse::<u64>()
-            .expect("Failed to parse registered unixtime to u64");
-        let join_all_result = get_track_chart_list(&lastfm_username, &api_key, registered_unixtime)
-            .await
-            .await;
+        let user_info = get_user_info(&lastfm_username, &api_key, pool).await;
+
+        let join_all_result =
+            get_track_chart_list(&lastfm_username, &api_key, user_info.registered_unixtime)
+                .await
+                .await;
 
         join_all_result
             .into_iter()

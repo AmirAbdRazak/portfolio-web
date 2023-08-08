@@ -1,0 +1,58 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT username, image_url, playcount, artist_count, album_count, track_count, registered_unixtime FROM users where username ILIKE $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "username",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 1,
+        "name": "image_url",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "playcount",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 3,
+        "name": "artist_count",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 4,
+        "name": "album_count",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 5,
+        "name": "track_count",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 6,
+        "name": "registered_unixtime",
+        "type_info": "Int8"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  "hash": "a2d2d8b4e02ad8e7571b0e26bcfdb7312422eda26e9ecf96ab358d020a512a6a"
+}

@@ -4,38 +4,50 @@ services:
   axum:
     container_name: axum
     build:
-      context: ./backend
+      context: ./axum
       dockerfile: Dockerfile
     volumes:
       - /tmp/app:/var/log/app
     ports:
       - '8000:8000'
     depends_on:
-      - postgres
+      postgres:
+          condition: service_healthy
     environment:
-      DATABASE_URL: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:5432/${POSTGRES_DB}"
+      PGUSER: ${PGUSER}
+      PGPASSWORD: ${PGPASSWORD}
+      PGDATABASE: ${PGDATABASE}
+      PGHOST: ${PGHOST}
+      PGPORT: ${PGPORT}
+      DATABASE_URL: ${DATABASE_URL}
 
   svelte:
     container_name: svelte
     build:
-      context: ./frontend
+      context: ./svelte
       dockerfile: Dockerfile
     volumes:
-      - ./frontend:/app
+      - ./svelte:/app
     ports:
-      - '3000:3000'
+      - '5173:5173'
 
   postgres:
     container_name: postgres
     image: postgres:latest
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      PGUSER: ${PGUSER}
+      PGPASSWORD: ${PGPASSWORD}
+      PGDATABASE: ${PGDATABASE}
+      PGHOST: ${PGHOST}
     volumes:
       - pg_data:/var/lib/postgresql/data
     ports:
       - '5432:5432'
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $PGUSER --dbname $PGDATABASE"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   pg_data:

@@ -1,5 +1,5 @@
 [package]
-name = "amrrz_proj"
+name = "axum"
 version = "0.1.0"
 edition = "2021"
 

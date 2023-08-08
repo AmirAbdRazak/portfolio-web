@@ -1,4 +1,4 @@
-/backend/target
+/axum/target
 
-/frontend/.DS_Store
-/frontend/node_modules
+/svelte/.DS_Store
+/svelte/node_modules
