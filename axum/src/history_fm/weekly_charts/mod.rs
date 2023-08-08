@@ -2,13 +2,15 @@ pub mod album;
 pub mod artist;
 pub mod track;
 pub mod user_info;
-use std::env;
+use std::{env, thread::current, time::Instant};
 
 use async_graphql::{Context, Object, SimpleObject};
+use chrono::{DateTime, Datelike, Duration, NaiveDateTime, Utc};
 use dotenv::dotenv;
 use serde::Deserialize;
 use sqlx::{Pool, Postgres};
 use surf;
+use tracing::info;
 
 use self::{
     album::{get_album_chart_list, WeeklyAlbumChart},
@@ -36,46 +38,43 @@ struct WeeklyChartAttr {
 
 #[derive(Debug, Deserialize)]
 struct WeeklyChartEntry {
-    from: String,
-    to: String,
+    from: i64,
+    to: i64,
 }
 
-#[derive(Debug, Deserialize)]
-struct WeeklyChartList {
-    chart: Vec<WeeklyChartEntry>,
-}
+async fn get_chart_list(start_timestamp: u64) -> Vec<WeeklyChartEntry> {
+    let start = Instant::now();
+    let current_naive = NaiveDateTime::from_timestamp_opt(start_timestamp as i64, 0)
+        .expect("Failed to parse start timestamp");
+    let current_datetime: DateTime<Utc> = DateTime::from_utc(current_naive, Utc);
+    let days_to_sunday = current_datetime.weekday().num_days_from_sunday();
 
-#[derive(Debug, Deserialize)]
-struct WeeklyChartListResponse {
-    weeklychartlist: WeeklyChartList,
-}
+    let nearest_sunday = current_datetime - Duration::days(days_to_sunday as i64);
+    let start_of_nearest_sunday = nearest_sunday
+        .date_naive()
+        .and_hms_opt(0, 0, 0)
+        .expect("Failed to parse nearest sunday")
+        .timestamp();
 
-async fn get_chart_list<'a>(
-    username: &'a str,
-    api_key: &'a str,
-    registered_unixtime: u64,
-) -> Result<Vec<WeeklyChartEntry>, surf::Error> {
-    dotenv().ok();
-    let api_url = format!("http://ws.audioscrobbler.com/2.0/?method=user.getweeklychartlist&user={}&api_key={}&format=json", username, api_key);
+    let mut current_timestamp = start_of_nearest_sunday + 43200;
+    let end_timestamp = Utc::now().timestamp();
+    let mut results: Vec<WeeklyChartEntry> = Vec::new();
 
-    let WeeklyChartList { chart } = surf::get(api_url)
-        .recv_json::<WeeklyChartListResponse>()
-        .await
-        .expect("Error when calling surf API on weeklychartlist")
-        .weeklychartlist;
+    while current_timestamp < end_timestamp {
+        results.push(WeeklyChartEntry {
+            from: current_timestamp,
+            to: current_timestamp + 604800,
+        });
 
-    let filtered_chart = chart
-        .into_iter()
-        .filter(|chart_entry| {
-            chart_entry
-                .to
-                .parse::<u64>()
-                .expect("Failed to parse chart_entry['to'] into u64")
-                > registered_unixtime
-        })
-        .collect();
+        current_timestamp += 604800;
+    }
 
-    Ok(filtered_chart)
+    info!(
+        "Benchmarked time elapsed for calling inbuild chart list: {:?}",
+        start.elapsed()
+    );
+
+    results
 }
 
 #[derive(Default)]
@@ -89,22 +88,36 @@ impl WeeklyChartsQuery {
         lastfm_username: String,
     ) -> Vec<WeeklyArtistChart> {
         dotenv().ok();
+        let artist_start = Instant::now();
+
         let api_key = env::var("LASTFM_API_KEY").expect("LASTFM_API_KEY is not set");
         let pool = ctx
             .data::<Pool<Postgres>>()
             .expect("Error connecting to Postgres pool connection");
 
+        let start = Instant::now();
         let user_info = get_user_info(&lastfm_username, &api_key, pool).await;
+        info!(
+            "Time Elapsed from fetching user info: {:?}",
+            start.elapsed()
+        );
 
         let join_all_result =
             get_artist_chart_list(&lastfm_username, &api_key, user_info.registered_unixtime)
                 .await
                 .await;
 
-        join_all_result
+        let res = join_all_result
             .into_iter()
             .filter_map(|result| result.ok())
-            .collect()
+            .collect();
+
+        info!(
+            "Time Elapsed from running artist fetch: {:?}",
+            artist_start.elapsed()
+        );
+
+        res
     }
 
     async fn album<'ctx>(

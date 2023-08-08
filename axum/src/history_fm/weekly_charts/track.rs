@@ -31,9 +31,7 @@ pub async fn get_track_chart_list<'a>(
     api_key: &'a str,
     registered_unixtime: u64,
 ) -> JoinAll<JoinHandle<WeeklyTrackChart>> {
-    let available_chart_list = get_chart_list(&lastfm_username, &api_key, registered_unixtime)
-        .await
-        .expect("Error getting chart list");
+    let available_chart_list = get_chart_list(registered_unixtime).await;
 
     let results: Vec<JoinHandle<WeeklyTrackChart>> = available_chart_list.into_iter().map(|chart| {
             let api_url = format!("http://ws.audioscrobbler.com/2.0/?method=user.getweeklytrackchart&username={}&api_key={}&from={}&to={}&format=json&limit=200", lastfm_username, api_key, chart.from, chart.to);
