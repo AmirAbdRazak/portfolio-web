@@ -13,13 +13,8 @@ services:
     depends_on:
       postgres:
           condition: service_healthy
-    environment:
-      PGUSER: ${PGUSER}
-      PGPASSWORD: ${PGPASSWORD}
-      PGDATABASE: ${PGDATABASE}
-      PGHOST: ${PGHOST}
-      PGPORT: ${PGPORT}
-      DATABASE_URL: ${DATABASE_URL}
+    env_file:
+      - .env
 
   svelte:
     container_name: svelte

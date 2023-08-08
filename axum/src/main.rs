@@ -19,13 +19,15 @@ async fn main() -> Result<(), sqlx::Error> {
 
     let database_url = env::var("DATABASE_URL").unwrap();
 
-    info!("{}", database_url);
+    info!("Connecting to database...");
 
     let pg_pool = PgPoolOptions::new()
-        .max_connections(5)
+        .max_connections(10)
         .connect(&database_url)
         .await
         .expect("Failed to connect to database");
+
+    info!("Building the schema...");
 
     let schema = Schema::build(Query, EmptyMutation, EmptySubscription)
         .data(pg_pool)
