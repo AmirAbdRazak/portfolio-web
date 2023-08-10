@@ -7,7 +7,7 @@
 /svelte/node_modules
 /svelte/build
 /svelte/.svelte-kit
-/svelte/package
+/svelte/package-lock.json
 /svelte/.env
 /svelte/.env.*
 /svelte/!.env.example
