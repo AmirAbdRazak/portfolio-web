@@ -1,18 +1,5 @@
 <script lang="ts">
 	import chart_image from '$lib/assets/chart_image.png';
-	import { queryStore, gql, getContextClient } from '@urql/svelte';
-	import { ArtistChartDocument } from '../../../generated/graphql';
-
-	$: artistChart = queryStore({
-		client: getContextClient(),
-		query: ArtistChartDocument,
-		variables: { username },
-		pause: true
-	});
-
-	function getChart() {
-		artistChart.resume();
-	}
 
 	let username: string;
 </script>
@@ -37,7 +24,6 @@
 				bind:value={username}
 			/>
 			<button
-				on:click={getChart}
 				class="inline-flex items-center justify-center px-5 py-3 text-base font-semibold text-center text-slate-900 bg-rose-400 border rounded-lg hover:bg-slate-100 focus:ring-4 focus:ring-slate-100 dark:text-slate-100 dark:border-rose-700 dark:hover:bg-rose-700 dark:focus:ring-slate-800 focus:outline-none"
 			>
 				Generate chart
@@ -48,13 +34,3 @@
 		</div>
 	</div>
 </section>
-
-{username}
-
-{#if $artistChart.fetching}
-	<p>Loading...</p>
-{:else if $artistChart.error}
-	<p>Oh no... {$artistChart.error.message}</p>
-{:else}
-	{$artistChart.data}
-{/if}
