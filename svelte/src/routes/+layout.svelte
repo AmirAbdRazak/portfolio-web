@@ -1,5 +1,13 @@
 <script lang="ts">
 	import '../app.css';
+	import { Client, cacheExchange, fetchExchange, setContextClient } from '@urql/svelte';
+
+	const client = new Client({
+		url: 'http://localhost:8000/graphql',
+		exchanges: [cacheExchange, fetchExchange]
+	})
+
+    setContextClient(client);
 </script>
 
 <svelte:head>

@@ -1,15 +1,36 @@
 pub mod history_fm;
 pub mod schema;
 
+use crate::schema::{graphiql, graphql_handler};
 use async_graphql::{EmptyMutation, EmptySubscription, Schema};
-use axum::{extract::Extension, routing::get, Router};
+use axum::http::header::{
+    ACCESS_CONTROL_ALLOW_CREDENTIALS, ACCESS_CONTROL_ALLOW_HEADERS, ACCESS_CONTROL_ALLOW_METHODS,
+    ACCESS_CONTROL_ALLOW_ORIGIN, CONTENT_LENGTH, CONTENT_TYPE,
+};
+use axum::{extract::Extension, http::Method, routing::get, Router};
 use dotenv::dotenv;
 use schema::Query;
 use sqlx::postgres::PgPoolOptions;
 use std::{env, net::SocketAddr};
+use tower_http::cors::{Any, CorsLayer};
 use tracing::info;
 
-use crate::schema::{graphiql, graphql_handler};
+fn cors_layer() -> CorsLayer {
+    let allowed_methods = vec![Method::GET, Method::POST];
+
+    let allowed_headers = vec![
+        CONTENT_LENGTH,
+        CONTENT_TYPE,
+        ACCESS_CONTROL_ALLOW_ORIGIN,
+        ACCESS_CONTROL_ALLOW_HEADERS,
+        ACCESS_CONTROL_ALLOW_METHODS,
+    ];
+
+    CorsLayer::new()
+        .allow_origin(Any)
+        .allow_methods(allowed_methods)
+        .allow_headers(allowed_headers)
+}
 
 #[tokio::main]
 async fn main() -> Result<(), sqlx::Error> {
@@ -35,7 +56,8 @@ async fn main() -> Result<(), sqlx::Error> {
 
     let app = Router::new()
         .route("/graphql", get(graphiql).post(graphql_handler))
-        .layer(Extension(schema));
+        .layer(Extension(schema))
+        .layer(cors_layer());
 
     info!("Starting the server...");
     let addr = SocketAddr::from(([0, 0, 0, 0], 8000));

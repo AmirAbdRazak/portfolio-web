@@ -2,14 +2,13 @@ pub mod album;
 pub mod artist;
 pub mod track;
 pub mod user_info;
-use std::{env, thread::current, time::Instant};
+use std::{env, time::Instant};
 
 use async_graphql::{Context, Object, SimpleObject};
 use chrono::{DateTime, Datelike, Duration, NaiveDateTime, Utc};
 use dotenv::dotenv;
 use serde::Deserialize;
 use sqlx::{Pool, Postgres};
-use surf;
 use tracing::info;
 
 use self::{

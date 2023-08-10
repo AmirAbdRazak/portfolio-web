@@ -1,0 +1,20 @@
+query artistChart($username: String!) {
+  historyFm {
+    getWeeklyCharts {
+      artist(lastfmUsername: $username) {
+      	attr {
+          from
+          to
+        }
+        artist {
+          name
+          playcount
+          attr {
+            rank
+          }
+        }
+      }
+      
+    }
+  }
+}

@@ -1,66 +1,20 @@
 <script lang="ts">
 	import chart_image from '$lib/assets/chart_image.png';
-	import { request, gql } from 'graphql-request';
+	import { queryStore, gql, getContextClient } from '@urql/svelte';
+	import { ArtistChartDocument } from '../../../generated/graphql';
 
-	import { useQuery } from '@sveltestack/svelte-query';
+	$: artistChart = queryStore({
+		client: getContextClient(),
+		query: ArtistChartDocument,
+		variables: { username },
+		pause: true
+	});
 
-	let username: string = 'Enter';
-	let chartData: ArtistChartResponse;
+	function getChart() {
+		artistChart.resume();
+	}
 
-	const endpoint = 'http://localhost:8000/graphql';
-
-	type ArtistEntry = {
-		name: string;
-		playcount: number;
-		attr: {
-			rank: string;
-		};
-	};
-
-	type ArtistChart = {
-		attr: {
-			from: number;
-			to: number;
-		};
-		artist: ArtistEntry[];
-	};
-
-	type ArtistChartResponse = {
-		data: {
-			historyFm: {
-				getWeeklyCharts: {
-					artist: ArtistChart;
-				};
-			};
-		};
-	};
-
-	const document = gql`
-		query {
-			historyFm {
-				getWeeklyCharts {
-					artist(lastfmUsername: $username) {
-						attr {
-							from
-							to
-						}
-						artist {
-							name
-							playcount
-							attr {
-								rank
-							}
-						}
-					}
-				}
-			}
-		}
-	`;
-
-	const getChartData = async () => {
-		const { artist }: { artist: ArtistChartResponse } = await request(endpoint, document);
-		chartData = artist;
-	};
+	let username: string;
 </script>
 
 <section class="bg-white dark:bg-slate-900 p-10">
@@ -83,7 +37,7 @@
 				bind:value={username}
 			/>
 			<button
-				on:click={getChartData}
+				on:click={getChart}
 				class="inline-flex items-center justify-center px-5 py-3 text-base font-semibold text-center text-slate-900 bg-rose-400 border rounded-lg hover:bg-slate-100 focus:ring-4 focus:ring-slate-100 dark:text-slate-100 dark:border-rose-700 dark:hover:bg-rose-700 dark:focus:ring-slate-800 focus:outline-none"
 			>
 				Generate chart
@@ -95,4 +49,12 @@
 	</div>
 </section>
 
-{chartData}
+{username}
+
+{#if $artistChart.fetching}
+	<p>Loading...</p>
+{:else if $artistChart.error}
+	<p>Oh no... {$artistChart.error.message}</p>
+{:else}
+	{$artistChart.data}
+{/if}
