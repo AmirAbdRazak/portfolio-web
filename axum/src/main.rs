@@ -13,15 +13,17 @@ use schema::Query;
 use sqlx::postgres::PgPoolOptions;
 use std::{env, net::SocketAddr};
 use tower_http::cors::{Any, CorsLayer};
+use tower_http::trace::TraceLayer;
 use tracing::info;
 
 fn cors_layer() -> CorsLayer {
-    let allowed_methods = vec![Method::GET, Method::POST];
+    let allowed_methods = vec![Method::GET, Method::POST, Method::OPTIONS];
 
     let allowed_headers = vec![
         CONTENT_LENGTH,
         CONTENT_TYPE,
         ACCESS_CONTROL_ALLOW_ORIGIN,
+        ACCESS_CONTROL_ALLOW_CREDENTIALS,
         ACCESS_CONTROL_ALLOW_HEADERS,
         ACCESS_CONTROL_ALLOW_METHODS,
     ];
@@ -57,7 +59,8 @@ async fn main() -> Result<(), sqlx::Error> {
     let app = Router::new()
         .route("/graphql", get(graphiql).post(graphql_handler))
         .layer(Extension(schema))
-        .layer(cors_layer());
+        .layer(cors_layer())
+        .layer(TraceLayer::new_for_http());
 
     info!("Starting the server...");
     let addr = SocketAddr::from(([0, 0, 0, 0], 8000));

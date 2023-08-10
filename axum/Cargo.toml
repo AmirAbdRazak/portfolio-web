@@ -26,4 +26,4 @@ dotenv = "0.15.0"
 surf = "2.3.2"
 futures = "0.3.28"
 chrono = "0.4.26"
-tower-http = { version = "0.4.3", features = ["cors", "tokio"] }
+tower-http = { version = "0.4.3", features = ["cors", "tokio", "trace"] }
