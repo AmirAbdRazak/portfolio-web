@@ -1,61 +1,123 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import { getContextClient, queryStore } from '@urql/svelte';
+	import { getContextClient, queryStore, type OperationResultStore } from '@urql/svelte';
 	import { ArtistChartDocument, type ArtistChartQuery } from '../../../../generated/graphql';
-	import { error } from '@sveltejs/kit';
+	import {
+		Chart,
+		type ChartConfiguration,
+		type ChartTypeRegistry,
+		LineController,
+		LineElement,
+		PointElement,
+		LinearScale,
+		Title,
+		CategoryScale
+	} from 'chart.js';
+	import { onMount } from 'svelte';
 
 	export let data: PageData;
 	let username = data.username;
 
 	type ArtistPlaycountMapping = {
-		[artist_name: string]: {
-			date: string;
-			playcount: number;
-		}[];
+		[artistName: string]: {
+			playcount: number[];
+			prevTotal: number;
+			lastIterationUpdated: number;
+		};
 	};
-
-	let artistPlaycountMapping: ArtistPlaycountMapping;
-
-	$: artistPlaycountMapping = {};
-
+	let queryData: OperationResultStore;
 	$: queryData = queryStore({
 		client: getContextClient(),
 		query: ArtistChartDocument,
 		variables: { username }
 	});
-	function generateChart() {
+
+	let artistPlaycountMapping: ArtistPlaycountMapping = {};
+
+	function generateChart(): ChartConfiguration<keyof ChartTypeRegistry, number[]> {
 		const rawArtistData: ArtistChartQuery = $queryData.data;
 		const artistData = rawArtistData.historyFm.getWeeklyCharts.artist;
 
-		const dateRanges = artistData.map((artistEntry) => artistEntry.attr.to);
-		artistData.forEach((artistEntry) => {
+		artistData.forEach((artistEntry, iteration) => {
 			artistEntry.artist.forEach((artist) => {
 				if (!(artist.name in artistPlaycountMapping)) {
-					artistPlaycountMapping[artist.name] = [];
+					artistPlaycountMapping[artist.name] = {
+						playcount: new Array(iteration).fill(0),
+						prevTotal: 0,
+						lastIterationUpdated: iteration
+					};
 				}
 
-				artistPlaycountMapping[artist.name].push({
-					date: artistEntry.attr.to,
-					playcount: parseInt(artist.playcount)
-				});
+				const artistMap = artistPlaycountMapping[artist.name];
+
+				const prevTotal = artistMap['prevTotal'];
+				const currentPlaycount = parseInt(artist.playcount);
+				artistMap['prevTotal'] += currentPlaycount;
+
+				if (iteration > artistMap['lastIterationUpdated'] + 1) {
+					artistMap['playcount'].push(
+						...new Array(iteration - artistMap['lastIterationUpdated'] - 1).fill(
+							artistMap['prevTotal']
+						)
+					);
+				}
+
+				artistMap['playcount'].push(currentPlaycount + prevTotal);
+				artistMap['lastIterationUpdated'] = iteration;
 			});
 		});
 
-		console.log('===artist play count mapping===');
-		console.log(artistPlaycountMapping);
+		const data = {
+			labels: artistData.map((artistEntry) => artistEntry.attr.to),
+			datasets: Object.entries(artistPlaycountMapping).map(
+				([artistName, { playcount }]: [string, { playcount: number[] }]) => ({
+					label: artistName,
+					data: playcount
+					// borderColor: '#005550',
+					// backgroundColor: '#005550',
+					// yAxisID: artistName
+				})
+			)
+		};
 
-		console.log(dateRanges);
-
-		const m = artistPlaycountMapping;
-		return m;
+		return {
+			type: 'line',
+			data: data,
+			options: {
+				responsive: true,
+				interaction: {
+					mode: 'index',
+					intersect: false
+				},
+				plugins: {
+					title: {
+						display: true,
+						text: 'Artist All Time Chart'
+					}
+				}
+			}
+		};
 	}
+
+	let isMounted = false;
+	let ctx: HTMLCanvasElement;
+
+	onMount(() => {
+		isMounted = true;
+		ctx = document.getElementById('chart') as HTMLCanvasElement;
+
+		Chart.register(LineController, LineElement, PointElement, LinearScale, Title, CategoryScale);
+	});
 </script>
 
+<div>
+	Canvas should have been here
+	<canvas id="chart" />
+</div>
 {#if $queryData.fetching}
 	<p>Loading...</p>
 {:else if $queryData.error}
 	<p>{$queryData.error.message}</p>
-{:else}
-	{JSON.stringify(generateChart())}
-	{JSON.stringify(artistPlaycountMapping)}
+{:else if isMounted}
+	{new Chart(ctx, generateChart())}
 {/if}
