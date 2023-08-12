@@ -9,14 +9,14 @@ use tracing::info;
 use super::get_chart_timestamp_list;
 
 #[derive(Deserialize, SimpleObject)]
-struct EntryAttr {
+pub struct EntryAttr {
     rank: String,
 }
 
 #[derive(Deserialize, SimpleObject)]
-struct WeeklyChartAttr {
-    from: String,
-    to: String,
+pub struct WeeklyChartAttr {
+    pub from: String,
+    pub to: String,
 }
 
 #[derive(Debug, Deserialize)]
@@ -25,26 +25,26 @@ pub struct WeeklyChartEntry {
     pub to: i64,
 }
 #[derive(Deserialize, SimpleObject)]
-struct ArtistAttr {
+pub struct ArtistAttr {
     #[serde(rename = "#text")]
-    text: String,
+    pub text: String,
 }
 #[derive(Deserialize, SimpleObject)]
-struct ChartEntry {
-    name: String,
-    playcount: String,
+pub struct ChartEntry {
+    pub name: String,
+    pub playcount: String,
     #[serde(rename = "artist")]
-    artist: Option<ArtistAttr>,
+    pub artist: Option<ArtistAttr>,
     #[serde(rename = "@attr")]
-    attr: EntryAttr,
+    pub attr: EntryAttr,
 }
 
 #[derive(Deserialize, SimpleObject)]
 pub struct WeeklyChart {
     #[serde(rename = "@attr")]
-    attr: WeeklyChartAttr,
+    pub attr: WeeklyChartAttr,
     #[serde(alias = "artist", alias = "album", alias = "track")]
-    chart: Vec<ChartEntry>,
+    pub chart: Vec<ChartEntry>,
 }
 
 #[derive(Deserialize, SimpleObject)]

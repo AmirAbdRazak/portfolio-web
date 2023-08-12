@@ -21,29 +21,16 @@ export type Scalars = {
 	Float: { input: number; output: number };
 };
 
-export type AlbumEntry = {
-	__typename?: 'AlbumEntry';
-	artist: ArtistAttr;
-	attr: EntryAttr;
-	name: Scalars['String']['output'];
-	playcount: Scalars['String']['output'];
+export type ChartDataConfig = {
+	__typename?: 'ChartDataConfig';
+	datasets: Array<DatasetResult>;
+	labels: Array<Scalars['Int']['output']>;
 };
 
-export type ArtistAttr = {
-	__typename?: 'ArtistAttr';
-	text: Scalars['String']['output'];
-};
-
-export type ArtistEntry = {
-	__typename?: 'ArtistEntry';
-	attr: EntryAttr;
-	name: Scalars['String']['output'];
-	playcount: Scalars['String']['output'];
-};
-
-export type EntryAttr = {
-	__typename?: 'EntryAttr';
-	rank: Scalars['String']['output'];
+export type DatasetResult = {
+	__typename?: 'DatasetResult';
+	chartEntry: Scalars['String']['output'];
+	playcount: Array<Scalars['Int']['output']>;
 };
 
 export type HistoryFmQuery = {
@@ -56,103 +43,55 @@ export type Query = {
 	historyFm: HistoryFmQuery;
 };
 
-export type TrackEntry = {
-	__typename?: 'TrackEntry';
-	artist: ArtistAttr;
-	attr: EntryAttr;
-	name: Scalars['String']['output'];
-	playcount: Scalars['String']['output'];
-};
-
-export type WeeklyAlbumChart = {
-	__typename?: 'WeeklyAlbumChart';
-	album: Array<AlbumEntry>;
-	attr: WeeklyChartAttr;
-};
-
-export type WeeklyArtistChart = {
-	__typename?: 'WeeklyArtistChart';
-	artist: Array<ArtistEntry>;
-	attr: WeeklyChartAttr;
-};
-
-export type WeeklyChartAttr = {
-	__typename?: 'WeeklyChartAttr';
-	from: Scalars['String']['output'];
-	to: Scalars['String']['output'];
-};
-
 export type WeeklyChartsQuery = {
 	__typename?: 'WeeklyChartsQuery';
-	album: Array<WeeklyAlbumChart>;
-	artist: Array<WeeklyArtistChart>;
-	track: Array<WeeklyTrackChart>;
+	chart: ChartDataConfig;
 };
 
-export type WeeklyChartsQueryAlbumArgs = {
+export type WeeklyChartsQueryChartArgs = {
+	chartType: Scalars['String']['input'];
 	lastfmUsername: Scalars['String']['input'];
+	limit: Scalars['Int']['input'];
 };
 
-export type WeeklyChartsQueryArtistArgs = {
-	lastfmUsername: Scalars['String']['input'];
-};
-
-export type WeeklyChartsQueryTrackArgs = {
-	lastfmUsername: Scalars['String']['input'];
-};
-
-export type WeeklyTrackChart = {
-	__typename?: 'WeeklyTrackChart';
-	attr: WeeklyChartAttr;
-	track: Array<TrackEntry>;
-};
-
-export type ArtistChartQueryVariables = Exact<{
+export type ChartQueryVariables = Exact<{
 	username: Scalars['String']['input'];
+	chartType: Scalars['String']['input'];
+	limit: Scalars['Int']['input'];
 }>;
 
-export type ArtistChartQuery = {
+export type ChartQuery = {
 	__typename?: 'Query';
 	historyFm: {
 		__typename?: 'HistoryFMQuery';
 		getWeeklyCharts: {
 			__typename?: 'WeeklyChartsQuery';
-			artist: Array<{
-				__typename?: 'WeeklyArtistChart';
-				attr: { __typename?: 'WeeklyChartAttr'; from: string; to: string };
-				artist: Array<{
-					__typename?: 'ArtistEntry';
-					name: string;
-					playcount: string;
-					attr: { __typename?: 'EntryAttr'; rank: string };
+			chart: {
+				__typename?: 'ChartDataConfig';
+				labels: Array<number>;
+				datasets: Array<{
+					__typename?: 'DatasetResult';
+					chartEntry: string;
+					playcount: Array<number>;
 				}>;
-			}>;
+			};
 		};
 	};
 };
 
-export const ArtistChartDocument = gql`
-	query artistChart($username: String!) {
+export const ChartDocument = gql`
+	query artistChart($username: String!, $chartType: String!, $limit: Int!) {
 		historyFm {
 			getWeeklyCharts {
-				artist(lastfmUsername: $username) {
-					attr {
-						from
-						to
-					}
-					artist {
-						name
+				chart(lastfmUsername: $username, chartType: $chartType, limit: $limit) {
+					labels
+					datasets {
+						chartEntry
 						playcount
-						attr {
-							rank
-						}
 					}
 				}
 			}
 		}
 	}
 `;
-export type ArtistChartQueryStore = OperationResultStore<
-	ArtistChartQuery,
-	ArtistChartQueryVariables
->;
+export type ChartQueryStore = OperationResultStore<ChartQuery, ChartQueryVariables>;

@@ -1,10 +1,11 @@
 pub mod chart;
 pub mod user_info;
-use std::{env, time::Instant};
+use std::{collections::HashMap, env, time::Instant};
 
-use async_graphql::{Context, Object};
+use async_graphql::{Context, Object, SimpleObject};
 use chrono::{DateTime, Datelike, Duration, NaiveDateTime, Utc};
 use dotenv::dotenv;
+use serde::Serialize;
 use sqlx::{Pool, Postgres};
 use tracing::info;
 
@@ -12,6 +13,25 @@ use self::{
     chart::{get_weekly_chart_list, WeeklyChart, WeeklyChartEntry},
     user_info::get_user_info,
 };
+
+#[derive(Serialize)]
+struct PlaycountData {
+    playcount: Vec<u32>,
+    prev_total: u32,
+    last_iteration_update: u32,
+}
+
+#[derive(Serialize, SimpleObject)]
+struct DatasetResult {
+    chart_entry: String,
+    playcount: Vec<u32>,
+}
+
+#[derive(Serialize, SimpleObject)]
+struct ChartDataConfig {
+    labels: Vec<u64>,
+    datasets: Vec<DatasetResult>,
+}
 
 async fn get_chart_timestamp_list(start_timestamp: u64) -> Vec<WeeklyChartEntry> {
     let start = Instant::now();
@@ -58,9 +78,10 @@ impl WeeklyChartsQuery {
         ctx: &Context<'ctx>,
         lastfm_username: String,
         chart_type: String,
-    ) -> Vec<WeeklyChart> {
+        limit: usize,
+    ) -> ChartDataConfig {
         dotenv().ok();
-        let artist_start = Instant::now();
+        let fetch_start = Instant::now();
 
         let api_key = env::var("LASTFM_API_KEY").expect("LASTFM_API_KEY is not set");
         let pool = ctx
@@ -83,7 +104,7 @@ impl WeeklyChartsQuery {
         .await
         .await;
 
-        let weeklychart = join_all_result
+        let weekly_chart_list: Vec<WeeklyChart> = join_all_result
             .into_iter()
             .filter_map(|result| {
                 if let Ok(res) = result {
@@ -97,9 +118,90 @@ impl WeeklyChartsQuery {
         info!(
             "Time Elapsed from running chart fetch of type {}: {:?}",
             &chart_type,
-            artist_start.elapsed()
+            fetch_start.elapsed()
         );
 
-        weeklychart
+        let chart_start = Instant::now();
+
+        let mut chart_dataset: HashMap<String, PlaycountData> = HashMap::new();
+
+        weekly_chart_list
+            .into_iter()
+            .enumerate()
+            .for_each(|(iteration, weekly_charts)| {
+                for chart in weekly_charts.chart {
+                    let current_playcount = chart
+                        .playcount
+                        .parse::<u32>()
+                        .expect("Expected u64 in attribute Chart Playcount");
+
+                    chart_dataset
+                        .entry(chart.name.clone())
+                        .and_modify(|chart_map| {
+                            let prev_total = chart_map.prev_total;
+                            chart_map.prev_total += current_playcount;
+
+                            if iteration > chart_map.last_iteration_update as usize + 1 {
+                                let vec_fill =
+                                    vec![
+                                        prev_total;
+                                        iteration - chart_map.last_iteration_update as usize - 1
+                                    ];
+                                chart_map.playcount.extend_from_slice(&vec_fill);
+                            }
+
+                            chart_map.playcount.push(current_playcount + prev_total);
+                            chart_map.last_iteration_update = iteration as u32;
+                        })
+                        .or_insert({
+                            let mut init_chart = vec![0; iteration];
+                            init_chart.push(current_playcount);
+
+                            PlaycountData {
+                                playcount: init_chart,
+                                prev_total: current_playcount,
+                                last_iteration_update: iteration as u32,
+                            }
+                        });
+                }
+            });
+
+        info!(
+            "Time Elapsed from running chart dataset parsing : {:?}",
+            chart_start.elapsed()
+        );
+
+        let mut playcount_list = Vec::new();
+
+        for dataset in &chart_dataset {
+            playcount_list.push(dataset.1.prev_total);
+        }
+        playcount_list.sort_by(|a, b| b.cmp(a));
+
+        let benchmark_index;
+
+        if limit > playcount_list.len() {
+            benchmark_index = playcount_list.len() - 1;
+        } else {
+            benchmark_index = limit;
+        }
+
+        let benchmark = playcount_list[benchmark_index];
+
+        ChartDataConfig {
+            labels: get_chart_timestamp_list(user_info.registered_unixtime)
+                .await
+                .into_iter()
+                .map(|t| t.to as u64)
+                .collect(),
+            datasets: chart_dataset
+                .into_iter()
+                .filter(|chart_entry| chart_entry.1.prev_total > benchmark)
+                .map(|(chart_entry, playcount_data)| DatasetResult {
+                    chart_entry,
+                    playcount: playcount_data.playcount,
+                })
+                .collect(),
+        }
     }
 }

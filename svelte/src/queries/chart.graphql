@@ -1,0 +1,13 @@
+query artistChart($username: String!, $chartType: String!, $limit: Int!) {
+	historyFm {
+		getWeeklyCharts {
+			chart(lastfmUsername: $username, chartType: $chartType, limit: $limit) {
+				labels
+				datasets {
+					chartEntry
+					playcount
+				}
+			}
+		}
+	}
+}

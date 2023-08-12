@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import { getContextClient, queryStore, type OperationResultStore } from '@urql/svelte';
-	import { ArtistChartDocument, type ArtistChartQuery } from '../../../../generated/graphql';
+	import { ChartDocument, type ChartQueryStore } from '../../../../generated/graphql';
 	import {
 		Chart,
 		type ChartConfiguration,
@@ -14,92 +14,25 @@
 		CategoryScale
 	} from 'chart.js';
 	import { onMount } from 'svelte';
+	import { split } from 'postcss/lib/list';
 
 	export let data: PageData;
+	let queryData: ChartQueryStore;
 	let username = data.username;
+	let locale = 'en-us';
 
-	type ArtistPlaycountMapping = {
-		[artistName: string]: {
-			playcount: number[];
-			prevTotal: number;
-			lastIterationUpdated: number;
-		};
-	};
-	let queryData: OperationResultStore;
+	$: isMounted = false;
 	$: queryData = queryStore({
 		client: getContextClient(),
-		query: ArtistChartDocument,
-		variables: { username }
+		query: ChartDocument,
+		variables: { username, chartType: 'artist', limit: 10 }
 	});
 
-	let artistPlaycountMapping: ArtistPlaycountMapping = {};
+	let chart_dataset;
 
-	function generateChart(): ChartConfiguration<keyof ChartTypeRegistry, number[]> {
-		const rawArtistData: ArtistChartQuery = $queryData.data;
-		const artistData = rawArtistData.historyFm.getWeeklyCharts.artist;
-
-		artistData.forEach((artistEntry, iteration) => {
-			artistEntry.artist.forEach((artist) => {
-				if (!(artist.name in artistPlaycountMapping)) {
-					artistPlaycountMapping[artist.name] = {
-						playcount: new Array(iteration).fill(0),
-						prevTotal: 0,
-						lastIterationUpdated: iteration
-					};
-				}
-
-				const artistMap = artistPlaycountMapping[artist.name];
-
-				const prevTotal = artistMap['prevTotal'];
-				const currentPlaycount = parseInt(artist.playcount);
-				artistMap['prevTotal'] += currentPlaycount;
-
-				if (iteration > artistMap['lastIterationUpdated'] + 1) {
-					artistMap['playcount'].push(
-						...new Array(iteration - artistMap['lastIterationUpdated'] - 1).fill(
-							artistMap['prevTotal']
-						)
-					);
-				}
-
-				artistMap['playcount'].push(currentPlaycount + prevTotal);
-				artistMap['lastIterationUpdated'] = iteration;
-			});
-		});
-
-		const data = {
-			labels: artistData.map((artistEntry) => artistEntry.attr.to),
-			datasets: Object.entries(artistPlaycountMapping).map(
-				([artistName, { playcount }]: [string, { playcount: number[] }]) => ({
-					label: artistName,
-					data: playcount
-					// borderColor: '#005550',
-					// backgroundColor: '#005550',
-					// yAxisID: artistName
-				})
-			)
-		};
-
-		return {
-			type: 'line',
-			data: data,
-			options: {
-				responsive: true,
-				interaction: {
-					mode: 'index',
-					intersect: false
-				},
-				plugins: {
-					title: {
-						display: true,
-						text: 'Artist All Time Chart'
-					}
-				}
-			}
-		};
+	if (isMounted && !$queryData.fetching && !$queryData.error) {
+		chart_dataset = $queryData.data?.historyFm.getWeeklyCharts.chart;
 	}
-
-	let isMounted = false;
 	let ctx: HTMLCanvasElement;
 
 	onMount(() => {
@@ -118,6 +51,34 @@
 	<p>Loading...</p>
 {:else if $queryData.error}
 	<p>{$queryData.error.message}</p>
-{:else if isMounted}
-	{new Chart(ctx, generateChart())}
+{:else if isMounted && $queryData.data}
+	{new Chart(ctx, {
+		type: 'line',
+		data: {
+			labels: $queryData.data.historyFm.getWeeklyCharts.chart.labels.map((timestamp) =>
+				new Date(timestamp * 1000).toLocaleDateString(locale, {
+					year: '2-digit',
+					month: 'short',
+					day: 'numeric'
+				})
+			),
+			datasets: $queryData.data.historyFm.getWeeklyCharts.chart.datasets.map((dataset) => ({
+				label: dataset.chartEntry,
+				data: dataset.playcount
+			}))
+		},
+		options: {
+			responsive: true,
+			interaction: {
+				mode: 'index',
+				intersect: false
+			},
+			plugins: {
+				title: {
+					display: true,
+					text: 'Artist All Time Chart'
+				}
+			}
+		}
+	})}
 {/if}
