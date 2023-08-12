@@ -2,40 +2,16 @@ pub mod chart;
 pub mod user_info;
 use std::{env, time::Instant};
 
-use async_graphql::{Context, Object, SimpleObject};
+use async_graphql::{Context, Object};
 use chrono::{DateTime, Datelike, Duration, NaiveDateTime, Utc};
 use dotenv::dotenv;
-use serde::Deserialize;
 use sqlx::{Pool, Postgres};
 use tracing::info;
 
 use self::{
-    chart::{get_weekly_chart_list, WeeklyChart},
+    chart::{get_weekly_chart_list, WeeklyChart, WeeklyChartEntry},
     user_info::get_user_info,
 };
-
-#[derive(Deserialize, SimpleObject)]
-struct ArtistAttr {
-    #[serde(rename = "#text")]
-    text: String,
-}
-
-#[derive(Deserialize, SimpleObject)]
-struct EntryAttr {
-    rank: String,
-}
-
-#[derive(Deserialize, SimpleObject)]
-struct WeeklyChartAttr {
-    from: String,
-    to: String,
-}
-
-#[derive(Debug, Deserialize)]
-struct WeeklyChartEntry {
-    from: i64,
-    to: i64,
-}
 
 async fn get_chart_timestamp_list(start_timestamp: u64) -> Vec<WeeklyChartEntry> {
     let start = Instant::now();

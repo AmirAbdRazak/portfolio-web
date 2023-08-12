@@ -6,8 +6,29 @@ use serde::Deserialize;
 use tokio::task::JoinHandle;
 use tracing::info;
 
-use super::{get_chart_timestamp_list, ArtistAttr, EntryAttr, WeeklyChartAttr};
+use super::get_chart_timestamp_list;
 
+#[derive(Deserialize, SimpleObject)]
+struct EntryAttr {
+    rank: String,
+}
+
+#[derive(Deserialize, SimpleObject)]
+struct WeeklyChartAttr {
+    from: String,
+    to: String,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct WeeklyChartEntry {
+    pub from: i64,
+    pub to: i64,
+}
+#[derive(Deserialize, SimpleObject)]
+struct ArtistAttr {
+    #[serde(rename = "#text")]
+    text: String,
+}
 #[derive(Deserialize, SimpleObject)]
 struct ChartEntry {
     name: String,
