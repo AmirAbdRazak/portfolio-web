@@ -1,6 +1,4 @@
-pub mod album;
-pub mod artist;
-pub mod track;
+pub mod chart;
 pub mod user_info;
 use std::{env, time::Instant};
 
@@ -12,9 +10,7 @@ use sqlx::{Pool, Postgres};
 use tracing::info;
 
 use self::{
-    album::{get_album_chart_list, WeeklyAlbumChart},
-    artist::{get_artist_chart_list, WeeklyArtistChart},
-    track::{get_track_chart_list, WeeklyTrackChart},
+    chart::{get_weekly_chart_list, WeeklyChart},
     user_info::get_user_info,
 };
 
@@ -41,7 +37,7 @@ struct WeeklyChartEntry {
     to: i64,
 }
 
-async fn get_chart_list(start_timestamp: u64) -> Vec<WeeklyChartEntry> {
+async fn get_chart_timestamp_list(start_timestamp: u64) -> Vec<WeeklyChartEntry> {
     let start = Instant::now();
     let current_naive = NaiveDateTime::from_timestamp_opt(start_timestamp as i64, 0)
         .expect("Failed to parse start timestamp");
@@ -81,11 +77,12 @@ pub struct WeeklyChartsQuery;
 
 #[Object]
 impl WeeklyChartsQuery {
-    async fn artist<'ctx>(
+    async fn chart<'ctx>(
         &self,
         ctx: &Context<'ctx>,
         lastfm_username: String,
-    ) -> Vec<WeeklyArtistChart> {
+        chart_type: String,
+    ) -> Vec<WeeklyChart> {
         dotenv().ok();
         let artist_start = Instant::now();
 
@@ -101,67 +98,32 @@ impl WeeklyChartsQuery {
             start.elapsed()
         );
 
-        let join_all_result =
-            get_artist_chart_list(&lastfm_username, &api_key, user_info.registered_unixtime)
-                .await
-                .await;
+        let join_all_result = get_weekly_chart_list(
+            &lastfm_username,
+            &api_key,
+            &chart_type,
+            user_info.registered_unixtime,
+        )
+        .await
+        .await;
 
-        let res = join_all_result
+        let weeklychart = join_all_result
             .into_iter()
-            .filter_map(|result| result.ok())
+            .filter_map(|result| {
+                if let Ok(res) = result {
+                    Some(res.weeklychart)
+                } else {
+                    None
+                }
+            })
             .collect();
 
         info!(
-            "Time Elapsed from running artist fetch: {:?}",
+            "Time Elapsed from running chart fetch of type {}: {:?}",
+            &chart_type,
             artist_start.elapsed()
         );
 
-        res
-    }
-
-    async fn album<'ctx>(
-        &self,
-        ctx: &Context<'ctx>,
-        lastfm_username: String,
-    ) -> Vec<WeeklyAlbumChart> {
-        let api_key = env::var("LASTFM_API_KEY").expect("LASTFM_API_KEY is not set");
-        let pool = ctx
-            .data::<Pool<Postgres>>()
-            .expect("Error connecting to Postgres pool connection");
-
-        let user_info = get_user_info(&lastfm_username, &api_key, pool).await;
-
-        let join_all_result =
-            get_album_chart_list(&lastfm_username, &api_key, user_info.registered_unixtime)
-                .await
-                .await;
-
-        join_all_result
-            .into_iter()
-            .filter_map(|result| result.ok())
-            .collect()
-    }
-
-    async fn track<'ctx>(
-        &self,
-        ctx: &Context<'ctx>,
-        lastfm_username: String,
-    ) -> Vec<WeeklyTrackChart> {
-        let api_key = env::var("LASTFM_API_KEY").expect("LASTFM_API_KEY is not set");
-        let pool = ctx
-            .data::<Pool<Postgres>>()
-            .expect("Error connecting to Postgres pool connection");
-
-        let user_info = get_user_info(&lastfm_username, &api_key, pool).await;
-
-        let join_all_result =
-            get_track_chart_list(&lastfm_username, &api_key, user_info.registered_unixtime)
-                .await
-                .await;
-
-        join_all_result
-            .into_iter()
-            .filter_map(|result| result.ok())
-            .collect()
+        weeklychart
     }
 }
