@@ -125,6 +125,8 @@ impl WeeklyChartsQuery {
 
         let mut chart_dataset: HashMap<String, PlaycountData> = HashMap::new();
 
+        let chart_len = weekly_chart_list.len() - 1;
+
         weekly_chart_list
             .into_iter()
             .enumerate()
@@ -197,9 +199,19 @@ impl WeeklyChartsQuery {
             datasets: chart_dataset
                 .into_iter()
                 .filter(|chart_entry| chart_entry.1.prev_total > benchmark)
-                .map(|(chart_entry, playcount_data)| DatasetResult {
-                    chart_entry,
-                    playcount: playcount_data.playcount,
+                .map(|(chart_entry, mut playcount_data)| {
+                    if playcount_data.last_iteration_update as usize <= chart_len {
+                        let vec_fill = vec![
+                            playcount_data.prev_total;
+                            chart_len
+                                - playcount_data.last_iteration_update as usize
+                        ];
+                        playcount_data.playcount.extend_from_slice(&vec_fill);
+                    }
+                    DatasetResult {
+                        chart_entry,
+                        playcount: playcount_data.playcount,
+                    }
                 })
                 .collect(),
         }
