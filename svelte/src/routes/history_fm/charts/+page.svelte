@@ -19,15 +19,30 @@
 				Compare and observe how your music taste evolved over time, tracks you've been (or had been)
 				obsessed with, artists you've been a number one fan of and more!
 			</p>
-			<input
-				class="inline-flex items-center justify-center px-5 py-3 mr-3 text-slate-900 font-medium drop-shadow-lg text-center bg-slate-100 border-2 border-slate-700 rounded-lg bg-primary-700 focus:ring-3 focus:ring-slate-800 focus:outline-none"
-				bind:value={username}
-			/>
-			<button
-				class="inline-flex items-center justify-center px-5 py-3 text-base font-semibold text-center text-slate-900 bg-rose-400 border rounded-lg hover:bg-slate-100 focus:ring-4 focus:ring-slate-100 dark:text-slate-100 dark:border-rose-700 dark:hover:bg-rose-700 dark:focus:ring-slate-800 focus:outline-none"
-			>
-				Generate chart
-			</button>
+			<form method="POST" action="/history_fm/charts/{username}">
+				<div class="flex pb-5">
+					<input
+						class="inline-flex items-center justify-center pr-5 py-3 mr-3 text-slate-900 font-medium drop-shadow-lg text-center bg-slate-100 border-2 border-slate-700 rounded-lg focus:ring-3 focus:ring-slate-800 focus:outline-none"
+						bind:value={username}
+						placeholder="Enter your username"
+					/>
+					<div class="group inline-flex focus-within:ring-4 focus-within:ring-slate-800 rounded-lg">
+						<button
+							class="items-center justify-center px-5 py-3 text-base font-semibold text-center bg-rose-400 border rounded-l-lg text-slate-100 border-rose-700 hover:bg-rose-500 focus:outline-none"
+						>
+							Generate chart
+						</button>
+						<select
+							id="chart_type"
+							class="items-center justify-center px-5 py-3 text-base font-semibold text-center bg-rose-400 border-y border-r rounded-r-lg text-slate-100 border-rose-700 hover:bg-rose-500 focus:outline-none cursor-pointer"
+						>
+							<option selected value="artist">Artist</option>
+							<option value="album">Album</option>
+							<option value="track">Track</option>
+						</select>
+					</div>
+				</div>
+			</form>
 		</div>
 		<div class="hidden lg:mt-0 lg:col-span-5 lg:flex">
 			<img src={chart_image} alt="temp chart" class="object-contain" />
