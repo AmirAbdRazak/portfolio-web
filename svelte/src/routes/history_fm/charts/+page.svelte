@@ -1,7 +1,16 @@
 <script lang="ts">
 	import chart_image from '$lib/assets/chart_image.png';
+	import { formDataStore } from './FormDataStore';
+	import { goto } from '$app/navigation';
 
 	let username: string;
+	let chart_type: string;
+
+	function handleSubmit(event: Event) {
+		event.preventDefault();
+		formDataStore.set({ chart_type });
+		goto(`charts/${username}`, { replaceState: false });
+	}
 </script>
 
 <section class="bg-white dark:bg-slate-900 p-10">
@@ -19,7 +28,7 @@
 				Compare and observe how your music taste evolved over time, tracks you've been (or had been)
 				obsessed with, artists you've been a number one fan of and more!
 			</p>
-			<form method="POST" action="/history_fm/charts/{username}">
+			<form method="POST" on:submit={handleSubmit}>
 				<div class="flex pb-5">
 					<input
 						class="inline-flex items-center justify-center pr-5 py-3 mr-3 text-slate-900 font-medium drop-shadow-lg text-center bg-slate-100 border-2 border-slate-700 rounded-lg focus:ring-3 focus:ring-slate-800 focus:outline-none"
@@ -29,16 +38,18 @@
 					<div class="group inline-flex focus-within:ring-4 focus-within:ring-slate-800 rounded-lg">
 						<button
 							class="items-center justify-center px-5 py-3 text-base font-semibold text-center bg-rose-400 border rounded-l-lg text-slate-100 border-rose-700 hover:bg-rose-500 focus:outline-none"
+							type="submit"
 						>
 							Generate chart
 						</button>
 						<select
 							id="chart_type"
 							class="items-center justify-center px-5 py-3 text-base font-semibold text-center bg-rose-400 border-y border-r rounded-r-lg text-slate-100 border-rose-700 hover:bg-rose-500 focus:outline-none cursor-pointer"
+							bind:value={chart_type}
 						>
-							<option selected value="artist">Artist</option>
-							<option value="album">Album</option>
-							<option value="track">Track</option>
+							<option selected value="Artist">Artist</option>
+							<option value="Album">Album</option>
+							<option value="Track">Track</option>
 						</select>
 					</div>
 				</div>

@@ -14,20 +14,40 @@
 		LinearScale,
 		Title,
 		CategoryScale,
-		Tooltip
+		Tooltip,
+		Legend
 	} from 'chart.js';
 	import { onMount } from 'svelte';
+	import { formDataStore, type ChartFormData } from '../FormDataStore';
 
 	export let data: PageData;
 	let queryData: ChartQueryStore;
 	let username = data.username;
 	let locale = 'en-us';
 
+	let formData: {
+		chart_type: string;
+		limit: number;
+		offset: number;
+	};
+
+	formDataStore.subscribe((data) => {
+		formData = {
+			chart_type: data.chart_type,
+			limit: data.limit || 10,
+			offset: data.offset || 0
+		};
+	});
+
 	$: isMounted = false;
 	$: queryData = queryStore({
 		client: getContextClient(),
 		query: ChartDocument,
-		variables: { username, chartType: 'album', limit: 20 }
+		variables: {
+			username,
+			chartType: formData['chart_type'].toLowerCase(),
+			limit: formData['limit']
+		}
 	});
 
 	let ctx: HTMLCanvasElement;
@@ -43,7 +63,8 @@
 			LinearScale,
 			Title,
 			CategoryScale,
-			Tooltip
+			Tooltip,
+			Legend
 		);
 	});
 
@@ -69,11 +90,13 @@
 						data: dataset.playcount,
 						borderColor: rand_color,
 						backgroundColor: rand_color,
-						pointHoverBackgroundColor: rand_color,
+						pointHoverBackgroundColor: '#1e293b',
 						pointHoverBorderColor: rand_color,
+						pointStyle: 'rectRot',
 						pointRadius: 0,
-						pointHoverRadius: 4,
-						borderWidth: 2
+						pointHoverRadius: 6,
+						borderWidth: 2,
+						tension: 0.15
 					};
 				})
 			},
@@ -106,7 +129,7 @@
 				plugins: {
 					title: {
 						display: true,
-						text: 'Artist All Time Chart',
+						text: `${formData.chart_type} All Time Chart`,
 						color: '#ffffff',
 						font: {
 							family: 'Montserrat'
@@ -124,6 +147,16 @@
 						},
 						bodyFont: {
 							family: 'Montserrat'
+						}
+					},
+					legend: {
+						display: true,
+						position: 'bottom',
+						labels: {
+							font: {
+								family: 'Montserrat'
+							},
+							color: '#ffffff'
 						}
 					}
 				}
