@@ -202,7 +202,7 @@ impl WeeklyChartsQuery {
                 .into_iter()
                 .filter(|chart_entry| {
                     (chart_entry.1.prev_total > lower_benchmark)
-                        & (chart_entry.1.prev_total < upper_benchmark)
+                        & (chart_entry.1.prev_total <= upper_benchmark)
                 })
                 .map(|(chart_entry, mut playcount_data)| {
                     if playcount_data.last_iteration_update as usize <= chart_len {

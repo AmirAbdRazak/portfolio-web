@@ -19,11 +19,19 @@
 	} from 'chart.js';
 	import { onMount } from 'svelte';
 	import { formDataStore, type ChartFormData } from '../FormDataStore';
+	import Loader from './Loader.svelte';
+	import { goto } from '$app/navigation';
 
 	export let data: PageData;
 	let queryData: ChartQueryStore;
 	let username = data.username;
 	let locale = 'en-us';
+	let current_chart: Chart;
+
+	let reenter_username: string;
+	let reenter_limit: number = 10;
+	let reenter_offset: number = 0;
+	let reenter_chart_type: string = 'Artist';
 
 	let formData: {
 		chart_type: string;
@@ -38,6 +46,17 @@
 			offset: data.offset || 5
 		};
 	});
+
+	function handleSubmit(event: Event) {
+		event.preventDefault();
+		formDataStore.set({
+			chart_type: reenter_chart_type,
+			limit: reenter_limit,
+			offset: reenter_offset
+		});
+		current_chart.destroy();
+		goto(`${reenter_username}`, { replaceState: true });
+	}
 
 	$: isMounted = false;
 	$: isFetched = false;
@@ -83,7 +102,7 @@
 
 	function generateChart(chart_data: ChartDataConfig) {
 		isFetched = true;
-		new Chart(ctx, {
+		current_chart = new Chart(ctx, {
 			type: 'line',
 			data: {
 				labels: chart_data.labels.map((timestamp) =>
@@ -176,13 +195,88 @@
 	}
 </script>
 
-<div class="{isFetched ? 'flex' : 'hidden'} bg-slate-800 p-40 text-white">
+<div class="{isFetched ? 'flex' : 'hidden'} bg-slate-800 pt-10 px-5 text-white">
 	<canvas id="chart" />
 </div>
+<div
+	class="flex flex-col items-center justify-center sm:flex-row pb-52 bg-slate-800 mx-auto place-self-center lg:col-span-7"
+>
+	<form method="POST" on:submit={handleSubmit}>
+		<input
+			class="flex sm:inline-flex items-center justify-center py-3 mb-5 mt-10 sm:mb-0 md:pr-5 md:py-3 mr-3 w-80 text-slate-100 font-medium drop-shadow-lg text-center bg-slate-700 border-2 border-slate-700 rounded-lg focus:ring-3 focus:ring-slate-800 focus:outline-none"
+			bind:value={reenter_username}
+			placeholder="Enter your username"
+		/>
+		<div class="flex flex-col py-5">
+			<div class="pb-2">
+				<label for="limit-range" class="inline-flex mb-2 text-sm font-medium text-white"
+					>Data Limit:
+				</label>
+				<input
+					bind:value={reenter_limit}
+					class="inline-flex mb-2 text-md border-none bg-transparent text-white focus:outline-none pl-1 pr-5"
+				/>
+			</div>
+			<input
+				id="limit-range"
+				type="range"
+				bind:value={reenter_limit}
+				class="w-full h-1 mb-6 rounded-lg appearance-none cursor-pointer range-sm bg-slate-700"
+			/>
+			<div class="pb-2">
+				<label for="offset-range" class="inline-flex mb-2 text-sm font-medium text-white"
+					>Data Offset:
+				</label>
+				<input
+					bind:value={reenter_offset}
+					class="inline-flex mb-2 text-md border-none bg-transparent text-white focus:outline-none pl-1 pr-5"
+				/>
+			</div>
+			<input
+				id="offset-range"
+				type="range"
+				bind:value={reenter_offset}
+				class="w-full h-1 mb-6 rounded-lg appearance-none cursor-pointer range-sm bg-slate-700"
+			/>
+			<div
+				class="group pt-5 flex sm:inline-flex focus-within:ring-4 mx-auto focus-within:ring-slate-800 rounded-lg sm:ml-auto"
+			>
+				<button
+					class="hidden md:block items-center justify-center px-5 py-2 md:py-3 text-sm md:text-base font-semibold text-center bg-rose-400 border rounded-l-lg text-slate-100 border-rose-700 hover:bg-rose-500 focus:outline-none"
+					type="submit"
+				>
+					Generate chart
+				</button>
+				<button
+					class="md:hidden items-center justify-center px-5 py-2 md:py-3 text-base font-semibold text-center bg-rose-400 border rounded-l-lg text-slate-100 border-rose-700 hover:bg-rose-500 focus:outline-none"
+					type="submit"
+				>
+					Generate
+				</button>
+				<select
+					id="chart_type"
+					class="items-center justify-center px-5 py-2 md:py-3 text-base font-semibold text-center bg-rose-400 border-y border-r rounded-r-lg text-slate-100 border-rose-700 hover:bg-rose-500 focus:outline-none cursor-pointer"
+					bind:value={reenter_chart_type}
+				>
+					<option selected value="Artist">Artist</option>
+					<option value="Album">Album</option>
+					<option value="Track">Track</option>
+				</select>
+			</div>
+		</div>
+	</form>
+</div>
 {#if $queryData.fetching}
-	<p>Loading...</p>
+	<Loader {username} />
 {:else if $queryData.error}
-	<p>{$queryData.error.message}</p>
+	<div
+		class="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden bg-slate-800 flex flex-col items-center justify-center"
+	>
+		<p class="w-1/3 text-center text-white">
+			Some error occurred, either check your username, or its on our side. Eitherway, here's the
+			error: <b>{$queryData.error.name}: {$queryData.error.message}</b>
+		</p>
+	</div>
 {:else if isMounted && $queryData.data}
 	{generateChart($queryData.data.historyFm.getWeeklyCharts.chart)}
 {/if}
