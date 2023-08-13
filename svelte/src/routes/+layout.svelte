@@ -2,8 +2,10 @@
 	import '../app.css';
 	import { Client, cacheExchange, fetchExchange, setContextClient } from '@urql/svelte';
 
+	const backend_url = process.env['AXUM_GRAPHQL_URL'] || 'http://localhost:8000/graphql';
+
 	const client = new Client({
-		url: 'http://localhost:8000/graphql',
+		url: backend_url,
 		exchanges: [cacheExchange, fetchExchange]
 	});
 

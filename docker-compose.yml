@@ -27,6 +27,8 @@ services:
       - ./svelte:/app
     ports:
       - '3000:3000'
+    environment:
+      AXUM_GRAPHQL_URL: "http://axum:8000/graphql"
 
   postgres:
     container_name: postgres

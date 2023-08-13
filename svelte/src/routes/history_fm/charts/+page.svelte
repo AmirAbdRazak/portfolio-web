@@ -8,6 +8,7 @@
 	let limit: number = 10;
 	let offset: number = 0;
 
+
 	function handleSubmit(event: Event) {
 		event.preventDefault();
 		formDataStore.set({ chart_type, limit, offset });

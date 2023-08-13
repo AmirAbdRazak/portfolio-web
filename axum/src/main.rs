@@ -22,6 +22,8 @@ fn cors_layer() -> CorsLayer {
         "http://localhost:5173".parse().unwrap(),
         "http://127.0.0.1:5173".parse().unwrap(),
         "http://127.0.0.1:8000".parse().unwrap(),
+        "http://svelte:3000".parse().unwrap(),
+        "https://svelte:3000".parse().unwrap(),
     ];
     let allowed_methods = vec![Method::GET, Method::POST, Method::OPTIONS];
 

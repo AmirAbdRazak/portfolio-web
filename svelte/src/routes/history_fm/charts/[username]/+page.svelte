@@ -58,6 +58,8 @@
 		goto(`${reenter_username}`, { replaceState: true });
 	}
 
+	// why is this not working 
+
 	$: isMounted = false;
 	$: isFetched = false;
 	$: queryData = queryStore({
