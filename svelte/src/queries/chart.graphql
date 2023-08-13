@@ -1,7 +1,7 @@
-query artistChart($username: String!, $chartType: String!, $limit: Int!) {
+query chart($username: String!, $chartType: String!, $limit: Int!, $offset: Int!) {
 	historyFm {
 		getWeeklyCharts {
-			chart(lastfmUsername: $username, chartType: $chartType, limit: $limit) {
+			chart(lastfmUsername: $username, chartType: $chartType, limit: $limit, offset: $offset) {
 				labels
 				datasets {
 					chartEntry

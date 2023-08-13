@@ -52,12 +52,14 @@ export type WeeklyChartsQueryChartArgs = {
 	chartType: Scalars['String']['input'];
 	lastfmUsername: Scalars['String']['input'];
 	limit: Scalars['Int']['input'];
+	offset: Scalars['Int']['input'];
 };
 
 export type ChartQueryVariables = Exact<{
 	username: Scalars['String']['input'];
 	chartType: Scalars['String']['input'];
 	limit: Scalars['Int']['input'];
+	offset: Scalars['Int']['input'];
 }>;
 
 export type ChartQuery = {
@@ -80,10 +82,10 @@ export type ChartQuery = {
 };
 
 export const ChartDocument = gql`
-	query artistChart($username: String!, $chartType: String!, $limit: Int!) {
+	query chart($username: String!, $chartType: String!, $limit: Int!, $offset: Int!) {
 		historyFm {
 			getWeeklyCharts {
-				chart(lastfmUsername: $username, chartType: $chartType, limit: $limit) {
+				chart(lastfmUsername: $username, chartType: $chartType, limit: $limit, offset: $offset) {
 					labels
 					datasets {
 						chartEntry

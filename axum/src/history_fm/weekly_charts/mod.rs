@@ -79,6 +79,7 @@ impl WeeklyChartsQuery {
         lastfm_username: String,
         chart_type: String,
         limit: usize,
+        offset: usize,
     ) -> ChartDataConfig {
         dotenv().ok();
         let fetch_start = Instant::now();
@@ -182,13 +183,14 @@ impl WeeklyChartsQuery {
 
         let benchmark_index;
 
-        if limit > playcount_list.len() {
+        if limit + offset > playcount_list.len() {
             benchmark_index = playcount_list.len() - 1;
         } else {
-            benchmark_index = limit;
+            benchmark_index = limit + offset;
         }
 
-        let benchmark = playcount_list[benchmark_index];
+        let upper_benchmark = playcount_list[offset];
+        let lower_benchmark = playcount_list[benchmark_index];
 
         ChartDataConfig {
             labels: get_chart_timestamp_list(user_info.registered_unixtime)
@@ -198,7 +200,10 @@ impl WeeklyChartsQuery {
                 .collect(),
             datasets: chart_dataset
                 .into_iter()
-                .filter(|chart_entry| chart_entry.1.prev_total > benchmark)
+                .filter(|chart_entry| {
+                    (chart_entry.1.prev_total > lower_benchmark)
+                        & (chart_entry.1.prev_total < upper_benchmark)
+                })
                 .map(|(chart_entry, mut playcount_data)| {
                     if playcount_data.last_iteration_update as usize <= chart_len {
                         let vec_fill = vec![

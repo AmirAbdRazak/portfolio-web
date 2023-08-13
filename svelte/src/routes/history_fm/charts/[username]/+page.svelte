@@ -35,18 +35,20 @@
 		formData = {
 			chart_type: data.chart_type,
 			limit: data.limit || 10,
-			offset: data.offset || 0
+			offset: data.offset || 5
 		};
 	});
 
 	$: isMounted = false;
+	$: isFetched = false;
 	$: queryData = queryStore({
 		client: getContextClient(),
 		query: ChartDocument,
 		variables: {
 			username,
 			chartType: formData['chart_type'].toLowerCase(),
-			limit: formData['limit']
+			limit: formData['limit'],
+			offset: formData['offset']
 		}
 	});
 
@@ -69,10 +71,18 @@
 	});
 
 	function getRandomColor() {
-		return '#' + Math.floor(Math.random() * 16777215).toString(16);
+		const red = Math.floor(Math.random() * 128) + 128; // Bias towards higher values (128-255)
+		const green = Math.floor(Math.random() * 128) + 128; // Bias towards higher values (128-255)
+		const blue = Math.floor(Math.random() * 128) + 128; // Bias towards higher values (128-255)
+
+		// Convert the RGB components to a hexadecimal color code
+		const color = `#${((red << 16) | (green << 8) | blue).toString(16).padStart(6, '0')}`;
+
+		return color;
 	}
 
 	function generateChart(chart_data: ChartDataConfig) {
+		isFetched = true;
 		new Chart(ctx, {
 			type: 'line',
 			data: {
@@ -166,7 +176,7 @@
 	}
 </script>
 
-<div class="bg-slate-800 p-4 text-white">
+<div class="{isFetched ? 'flex' : 'hidden'} bg-slate-800 p-40 text-white">
 	<canvas id="chart" />
 </div>
 {#if $queryData.fetching}
