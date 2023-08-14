@@ -16,7 +16,9 @@
 </script>
 
 <section class="bg-white dark:bg-slate-800 px-4 py-10 lg:px-10 lg:py-20">
-	<div class="grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
+	<div
+		class="flex flex-col md:grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12"
+	>
 		<div class="mr-auto place-self-center lg:col-span-7">
 			<h1
 				class="max-w-2xl mb-4 text-4xl text-center md:text-left font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl dark:text-white"
@@ -30,6 +32,25 @@
 				Compare and observe how your music taste evolved over time, tracks you've been (or had been)
 				obsessed with, artists you've been a number one fan of and more!
 			</p>
+			<div class="flex px-5 pb-10 lg:hidden">
+				<!-- svelte-ignore a11y-click-events-have-key-events -->
+				<!-- svelte-ignore a11y-no-static-element-interactions -->
+				<div
+					class="lg:hidden transform transition-transform duration-300 ease-in-out hover:scale-110"
+					on:click={() => {
+						goto('charts/ryzlesalt');
+					}}
+				>
+					<img
+						src={chart_image}
+						alt="temp chart"
+						class="pt-7 pb-5 object-contain drop-shadow-2xl"
+					/>
+					<p class="text-center text-slate-100 text-sm font-light">
+						If you want to try out without a LastFM account, click here!
+					</p>
+				</div>
+			</div>
 			<form method="POST" on:submit={handleSubmit}>
 				<div class="flex flex-col">
 					<div class="flex flex-col sm:flex-row pb-5">
