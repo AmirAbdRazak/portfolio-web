@@ -5,6 +5,7 @@
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
+		"start": "node build",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json --watch",
@@ -13,6 +14,7 @@
 		"generate": "graphql-codegen --config codegen.yml"
 	},
 	"devDependencies": {
+		"@flydotio/dockerfile": "^0.4.3",
 		"@graphql-codegen/cli": "^5.0.0",
 		"@graphql-codegen/introspection": "^4.0.0",
 		"@graphql-codegen/named-operations-object": "^2.3.1",
@@ -22,7 +24,6 @@
 		"@graphql-codegen/urql-introspection": "^2.2.1",
 		"@graphql-codegen/urql-svelte-operations-store": "^1.3.3",
 		"@sveltejs/adapter-auto": "^2.0.0",
-		"@sveltejs/adapter-node": "^1.3.1",
 		"@sveltejs/kit": "^1.20.4",
 		"autoprefixer": "^10.4.14",
 		"eslint": "^8.28.0",
@@ -31,14 +32,15 @@
 		"postcss": "^8.4.27",
 		"prettier": "^2.8.8",
 		"prettier-plugin-svelte": "^2.10.1",
-		"svelte": "^4.0.5",
-		"svelte-check": "^3.4.3",
 		"tailwindcss": "^3.3.3",
-		"typescript": "^5.0.0",
-		"vite": "^4.4.2"
+		"vite": "^4.4.2",
+		"svelte-check": "^3.4.3",
+		"typescript": "^5.0.0"
 	},
 	"type": "module",
 	"dependencies": {
+		"svelte": "^4.0.5",
+		"@sveltejs/adapter-node": "^1.3.1",
 		"@urql/svelte": "^4.0.4",
 		"chart.js": "^4.3.3",
 		"cors": "^2.8.5",

@@ -8,7 +8,6 @@
 	let limit: number = 10;
 	let offset: number = 0;
 
-
 	function handleSubmit(event: Event) {
 		event.preventDefault();
 		formDataStore.set({ chart_type, limit, offset });
@@ -16,17 +15,17 @@
 	}
 </script>
 
-<section class="bg-white dark:bg-slate-800 px-4 py-20 md:py-20 lg:px-10 lg:py-40">
+<section class="bg-white dark:bg-slate-800 px-4 py-10 lg:px-10 lg:py-20">
 	<div class="grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
 		<div class="mr-auto place-self-center lg:col-span-7">
 			<h1
-				class="max-w-2xl mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl dark:text-white"
+				class="max-w-2xl mb-4 text-4xl text-center md:text-left font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl dark:text-white"
 			>
 				<!-- svelte-ignore a11y-missing-attribute -->
 				Check out your listening trends for <a class="text-rose-400">LastFM</a> users
 			</h1>
 			<p
-				class="max-w-2xl mb-6 font-light text-slate-700 lg:mb-8 md:text-lg lg:text-xl dark:text-slate-200"
+				class="max-w-2xl mb-6 text-center md:text-left font-light text-slate-700 lg:mb-8 md:text-lg lg:text-xl dark:text-slate-200"
 			>
 				Compare and observe how your music taste evolved over time, tracks you've been (or had been)
 				obsessed with, artists you've been a number one fan of and more!
@@ -35,12 +34,12 @@
 				<div class="flex flex-col">
 					<div class="flex flex-col sm:flex-row pb-5">
 						<input
-							class="flex sm:inline-flex items-center justify-center py-2 mb-5 sm:mb-0 md:pr-5 md:py-3 mr-3 w-80 text-slate-800 font-medium drop-shadow-lg text-center bg-slate-100 border-2 border-slate-700 rounded-lg focus:ring-3 focus:ring-slate-800 focus:outline-none"
+							class="flex sm:inline-flex items-center justify-center mx-auto py-2 mb-5 sm:mb-0 md:mr-3 md:pr-5 md:py-3 w-80 text-slate-800 font-medium drop-shadow-lg text-center bg-slate-100 border-2 border-slate-700 rounded-lg focus:ring-3 focus:ring-slate-800 focus:outline-none"
 							bind:value={username}
 							placeholder="Enter your username"
 						/>
 						<div
-							class="group flex sm:inline-flex focus-within:ring-4 focus-within:ring-slate-800 rounded-lg sm:ml-auto"
+							class="group flex sm:inline-flex mx-auto focus-within:ring-4 focus-within:ring-slate-800 rounded-lg sm:ml-auto"
 						>
 							<button
 								class="hidden md:block items-center justify-center px-5 py-2 md:py-3 text-sm md:text-base font-semibold text-center bg-rose-400 border rounded-l-lg text-slate-100 border-rose-700 hover:bg-rose-500 focus:outline-none"

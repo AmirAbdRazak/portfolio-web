@@ -1,11 +1,12 @@
 <script lang="ts">
 	import '../app.css';
 	import { Client, cacheExchange, fetchExchange, setContextClient } from '@urql/svelte';
+	import type { LayoutData } from './$types';
 
-	const backend_url = process.env['AXUM_GRAPHQL_URL'] || 'http://localhost:8000/graphql';
+	export let data: LayoutData;
 
 	const client = new Client({
-		url: backend_url,
+		url: data.backend_url + 'graphql',
 		exchanges: [cacheExchange, fetchExchange]
 	});
 
@@ -20,6 +21,7 @@
 			font-family: 'Montserrat';
 			font-style: 'normal';
 			font-weight: 400;
+			background-color: #1e293b;
 		}
 	</style>
 </svelte:head>

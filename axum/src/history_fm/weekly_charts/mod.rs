@@ -191,6 +191,11 @@ impl WeeklyChartsQuery {
 
         let upper_benchmark = playcount_list[offset];
         let lower_benchmark = playcount_list[benchmark_index];
+        info!("offset: {}", offset);
+        info!("limit: {}", limit);
+        info!("benchmark index: {}", benchmark_index);
+        info!("lower_benchmark: {}", lower_benchmark);
+        info!("upper_benchmark: {}", upper_benchmark);
 
         ChartDataConfig {
             labels: get_chart_timestamp_list(user_info.registered_unixtime)

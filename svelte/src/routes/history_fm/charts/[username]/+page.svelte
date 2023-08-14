@@ -43,7 +43,7 @@
 		formData = {
 			chart_type: data.chart_type,
 			limit: data.limit || 10,
-			offset: data.offset || 5
+			offset: data.offset || 0
 		};
 	});
 
@@ -58,7 +58,7 @@
 		goto(`${reenter_username}`, { replaceState: true });
 	}
 
-	// why is this not working 
+	// why is this not working
 
 	$: isMounted = false;
 	$: isFetched = false;
@@ -74,6 +74,7 @@
 	});
 
 	let ctx: HTMLCanvasElement;
+	let screenSize: number = 768;
 
 	onMount(() => {
 		isMounted = true;
@@ -104,6 +105,7 @@
 
 	function generateChart(chart_data: ChartDataConfig) {
 		isFetched = true;
+
 		current_chart = new Chart(ctx, {
 			type: 'line',
 			data: {
@@ -133,6 +135,7 @@
 			},
 			options: {
 				responsive: true,
+				aspectRatio: screenSize >= 768 ? 2 : screenSize >= 640 ? 1.5 : screenSize >= 300 ? 1 : 0.5,
 				interaction: {
 					mode: 'index',
 					intersect: false
@@ -197,11 +200,13 @@
 	}
 </script>
 
-<div class="{isFetched ? 'flex' : 'hidden'} bg-slate-800 pt-10 px-5 text-white">
+<svelte:window bind:innerWidth={screenSize} class="hidden" />
+
+<div class="{isFetched ? 'flex' : 'hidden'} h-100 md:h-full bg-slate-800 pt-10 px-5 text-white">
 	<canvas id="chart" />
 </div>
 <div
-	class="flex flex-col items-center justify-center sm:flex-row pb-52 bg-slate-800 mx-auto place-self-center lg:col-span-7"
+	class="flex flex-col items-center justify-center sm:flex-row bg-slate-800 mx-auto place-self-center lg:col-span-7"
 >
 	<form method="POST" on:submit={handleSubmit}>
 		<input
