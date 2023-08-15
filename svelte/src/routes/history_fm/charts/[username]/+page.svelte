@@ -20,12 +20,13 @@
 		TimeSeriesScale
 	} from 'chart.js';
 	import 'chartjs-adapter-date-fns';
-	import CustomLogScale from './CustomLogScale';
 
 	import { onMount } from 'svelte';
-	import { formDataStore, type ChartFormData } from '../FormDataStore';
+	import { formDataStore } from '../FormDataStore';
 	import Loader from './Loader.svelte';
 	import { goto } from '$app/navigation';
+	import zoomPlugin from 'chartjs-plugin-zoom';
+	import { scale } from 'svelte/transition';
 
 	export let data: PageData;
 	let queryData: ChartQueryStore;
@@ -33,37 +34,39 @@
 	let locale = 'en-us';
 	let current_chart: Chart;
 
-	let reenter_username: string;
-	let reenter_limit: number = 10;
-	let reenter_offset: number = 0;
-	let reenter_chart_type: string = 'Artist';
-
 	let formData: {
 		chart_type: string;
 		limit: number;
 		offset: number;
+		chart_scale: 'linear' | 'logarithmic';
 	};
 
 	formDataStore.subscribe((data) => {
 		formData = {
 			chart_type: data.chart_type,
 			limit: data.limit || 10,
-			offset: data.offset || 0
+			offset: data.offset || 0,
+			chart_scale: data.chart_scale || 'linear'
 		};
 	});
+
+	let reenter_username: string = username;
+	let reenter_limit: number = 10;
+	let reenter_offset: number = 0;
+	let reenter_chart_type: string = 'Artist';
+	let reenter_chart_scale: 'linear' | 'logarithmic' = 'linear';
 
 	function handleSubmit(event: Event) {
 		event.preventDefault();
 		formDataStore.set({
 			chart_type: reenter_chart_type,
 			limit: reenter_limit,
-			offset: reenter_offset
+			offset: reenter_offset,
+			chart_scale: reenter_chart_scale
 		});
 		current_chart.destroy();
 		goto(`${reenter_username}`, { replaceState: true });
 	}
-
-	// why is this not working
 
 	$: isMounted = false;
 	$: isFetched = false;
@@ -91,12 +94,12 @@
 			PointElement,
 			LinearScale,
 			LogarithmicScale,
-			CustomLogScale,
 			TimeSeriesScale,
 			Title,
 			CategoryScale,
 			Tooltip,
-			Legend
+			Legend,
+			zoomPlugin
 		);
 	});
 
@@ -105,14 +108,9 @@
 		const green = Math.floor(Math.random() * 128) + 128; // Bias towards higher values (128-255)
 		const blue = Math.floor(Math.random() * 128) + 128; // Bias towards higher values (128-255)
 
-		// Convert the RGB components to a hexadecimal color code
 		const color = `#${((red << 16) | (green << 8) | blue).toString(16).padStart(6, '0')}`;
 
 		return color;
-	}
-
-	function getBaseLog(x: number, y: number) {
-		return Math.log(y) / Math.log(x);
 	}
 
 	function generateChart(chart_data: ChartDataConfig) {
@@ -169,9 +167,10 @@
 						}
 					},
 					y: {
-						//@ts-ignore
-						type: 'customLog',
+						type: formData.chart_scale,
+						min: formData.chart_scale == 'linear' ? 0 : 1,
 						ticks: {
+							maxTicksLimit: 15,
 							color: '#ffffff',
 							font: {
 								family: 'Montserrat'
@@ -212,6 +211,23 @@
 							},
 							color: '#ffffff'
 						}
+					},
+					zoom: {
+						limits: {
+							y: { min: 'original', max: 'original' },
+							x: { min: 'original', max: 'original' }
+						},
+						zoom: {
+							wheel: {
+								enabled: true,
+								modifierKey: 'ctrl'
+							},
+							mode: 'xy'
+						},
+						pan: {
+							enabled: true,
+							mode: 'xy'
+						}
 					}
 				}
 			}
@@ -229,12 +245,12 @@
 	class="flex flex-col items-center justify-center sm:flex-row bg-slate-800 mx-auto place-self-center lg:col-span-7"
 >
 	<form method="POST" on:submit={handleSubmit}>
-		<input
-			class="flex sm:inline-flex items-center justify-center py-3 mb-5 mt-10 sm:mb-0 md:pr-5 md:py-3 mr-3 w-80 text-slate-100 font-medium drop-shadow-lg text-center bg-slate-700 border-2 border-slate-700 rounded-lg focus:ring-3 focus:ring-slate-800 focus:outline-none"
-			bind:value={reenter_username}
-			placeholder="Enter your username"
-		/>
 		<div class="flex flex-col py-5">
+			<input
+				class="flex sm:inline-flex items-center justify-center py-3 mb-5 mt-5 md:pr-5 md:py-3 w-full text-slate-100 font-medium text-center bg-slate-700 border-2 border-slate-700 rounded-lg focus:ring-3 focus:ring-slate-800 focus:outline-none"
+				bind:value={reenter_username}
+				placeholder="Enter your username"
+			/>
 			<div class="pb-2">
 				<label for="limit-range" class="inline-flex mb-2 text-sm font-medium text-white"
 					>Data Limit:
@@ -269,17 +285,25 @@
 				class="group pt-5 flex sm:inline-flex focus-within:ring-4 mx-auto focus-within:ring-slate-800 rounded-lg sm:ml-auto"
 			>
 				<button
-					class="hidden md:block items-center justify-center px-5 py-2 md:py-3 text-sm md:text-base font-semibold text-center bg-rose-400 border rounded-l-lg text-slate-100 border-rose-700 hover:bg-rose-500 focus:outline-none"
+					class="hidden md:block items-center justify-center px-5 py-2 md:py-3 text-sm md:text-base font-semibold text-center bg-rose-400 border-y border-l rounded-l-lg text-slate-100 border-rose-700 hover:bg-rose-500 focus:outline-none"
 					type="submit"
 				>
 					Generate chart
 				</button>
 				<button
-					class="md:hidden items-center justify-center px-5 py-2 md:py-3 text-base font-semibold text-center bg-rose-400 border rounded-l-lg text-slate-100 border-rose-700 hover:bg-rose-500 focus:outline-none"
+					class="md:hidden items-center justify-center px-5 py-2 md:py-3 text-base font-semibold text-center bg-rose-400 border-y border-l rounded-l-lg text-slate-100 border-rose-700 hover:bg-rose-500 focus:outline-none"
 					type="submit"
 				>
 					Generate
 				</button>
+				<select
+					id="chart_type"
+					class="items-center justify-center px-5 py-2 md:py-3 text-base font-semibold text-center bg-rose-400 border text-slate-100 border-rose-700 hover:bg-rose-500 focus:outline-none cursor-pointer"
+					bind:value={reenter_chart_scale}
+				>
+					<option selected value="linear">Linear</option>
+					<option value="logarithmic">Log</option>
+				</select>
 				<select
 					id="chart_type"
 					class="items-center justify-center px-5 py-2 md:py-3 text-base font-semibold text-center bg-rose-400 border-y border-r rounded-r-lg text-slate-100 border-rose-700 hover:bg-rose-500 focus:outline-none cursor-pointer"

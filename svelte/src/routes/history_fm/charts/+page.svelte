@@ -7,10 +7,11 @@
 	let chart_type: string;
 	let limit: number = 10;
 	let offset: number = 0;
+	let chart_scale: 'linear' | 'logarithmic';
 
 	function handleSubmit(event: Event) {
 		event.preventDefault();
-		formDataStore.set({ chart_type, limit, offset });
+		formDataStore.set({ chart_type, limit, offset, chart_scale });
 		goto(`charts/${username}`, { replaceState: false });
 	}
 </script>
@@ -55,7 +56,7 @@
 				<div class="flex flex-col">
 					<div class="flex flex-col sm:flex-row pb-5">
 						<input
-							class="flex sm:inline-flex items-center justify-center mx-auto py-2 mb-5 sm:mb-0 md:mr-3 md:pr-5 md:py-3 w-80 text-slate-800 font-medium drop-shadow-lg text-center bg-slate-100 border-2 border-slate-700 rounded-lg focus:ring-3 focus:ring-slate-800 focus:outline-none"
+							class="flex sm:inline-flex items-center justify-center mx-auto py-2 mb-5 sm:mb-0 md:mr-auto md:pr-5 md:py-3 w-80 text-slate-800 font-medium drop-shadow-lg text-center bg-slate-100 border-2 border-slate-700 rounded-lg focus:ring-3 focus:ring-slate-800 focus:outline-none"
 							bind:value={username}
 							placeholder="Enter your username"
 						/>
@@ -63,17 +64,25 @@
 							class="group flex sm:inline-flex mx-auto focus-within:ring-4 focus-within:ring-slate-800 rounded-lg sm:ml-auto"
 						>
 							<button
-								class="hidden md:block items-center justify-center px-5 py-2 md:py-3 text-sm md:text-base font-semibold text-center bg-rose-400 border rounded-l-lg text-slate-100 border-rose-700 hover:bg-rose-500 focus:outline-none"
+								class="hidden md:block items-center justify-center px-5 py-2 md:py-3 text-sm md:text-base font-semibold text-center bg-rose-400 border-y border-l rounded-l-lg text-slate-100 border-rose-700 hover:bg-rose-500 focus:outline-none"
 								type="submit"
 							>
 								Generate chart
 							</button>
 							<button
-								class="md:hidden items-center justify-center px-5 py-2 md:py-3 text-base font-semibold text-center bg-rose-400 border rounded-l-lg text-slate-100 border-rose-700 hover:bg-rose-500 focus:outline-none"
+								class="md:hidden items-center justify-center px-5 py-2 md:py-3 text-base font-semibold text-center bg-rose-400 border-y border-l rounded-l-lg text-slate-100 border-rose-700 hover:bg-rose-500 focus:outline-none"
 								type="submit"
 							>
 								Generate
 							</button>
+							<select
+								id="chart_type"
+								class="items-center justify-center px-5 py-2 md:py-3 text-base font-semibold text-center bg-rose-400 border text-slate-100 border-rose-700 hover:bg-rose-500 focus:outline-none cursor-pointer"
+								bind:value={chart_scale}
+							>
+								<option selected value="linear">Linear</option>
+								<option value="logarithmic">Log</option>
+							</select>
 							<select
 								id="chart_type"
 								class="items-center justify-center px-5 py-2 md:py-3 text-base font-semibold text-center bg-rose-400 border-y border-r rounded-r-lg text-slate-100 border-rose-700 hover:bg-rose-500 focus:outline-none cursor-pointer"

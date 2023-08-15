@@ -9,7 +9,12 @@
 		class="loader ease-linear rounded-full border-4 border-t-4 border-slate-100 h-12 w-12 mb-4"
 	/>
 	<h2 class="text-center text-white text-xl font-semibold">Loading...</h2>
-	<p class="w-1/3 text-center text-white">Preparing your chart {username}</p>
+	<p class="w-1/3 py-2 text-center text-white">Preparing your chart {username}</p>
+	<p class="w-1/2 py-2 text-center text-slate-200 text-sm">
+		Tip: Hold down your <b class="text-rose-400">CTRL</b> key and
+		<b class="text-rose-400">scroll down</b> to zoom in the chart
+		<i class="text-slate-400">(you can also click and drag :D)</i>
+	</p>
 </div>
 
 <style>
