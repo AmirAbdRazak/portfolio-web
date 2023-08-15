@@ -11,12 +11,17 @@
 		LineController,
 		LineElement,
 		PointElement,
+		LogarithmicScale,
 		LinearScale,
 		Title,
 		CategoryScale,
 		Tooltip,
-		Legend
+		Legend,
+		TimeSeriesScale
 	} from 'chart.js';
+	import 'chartjs-adapter-date-fns';
+	import CustomLogScale from './CustomLogScale';
+
 	import { onMount } from 'svelte';
 	import { formDataStore, type ChartFormData } from '../FormDataStore';
 	import Loader from './Loader.svelte';
@@ -85,6 +90,9 @@
 			LineElement,
 			PointElement,
 			LinearScale,
+			LogarithmicScale,
+			CustomLogScale,
+			TimeSeriesScale,
 			Title,
 			CategoryScale,
 			Tooltip,
@@ -103,19 +111,17 @@
 		return color;
 	}
 
+	function getBaseLog(x: number, y: number) {
+		return Math.log(y) / Math.log(x);
+	}
+
 	function generateChart(chart_data: ChartDataConfig) {
 		isFetched = true;
 
 		current_chart = new Chart(ctx, {
 			type: 'line',
 			data: {
-				labels: chart_data.labels.map((timestamp) =>
-					new Date(timestamp * 1000).toLocaleDateString(locale, {
-						year: '2-digit',
-						month: 'short',
-						day: 'numeric'
-					})
-				),
+				labels: chart_data.labels.map((timestamp) => new Date(timestamp * 1000)),
 				datasets: chart_data.datasets.map((dataset) => {
 					const rand_color = getRandomColor();
 					return {
@@ -142,15 +148,29 @@
 				},
 				scales: {
 					x: {
+						type: 'timeseries',
+						time: {
+							displayFormats: {
+								quarter: 'MMM YYYY'
+							}
+						},
 						ticks: {
-							maxTicksLimit: 10,
 							color: '#ffffff',
 							font: {
 								family: 'Montserrat'
-							}
+							},
+							callback: (value, index) =>
+								index % 12 == 0 || index == 0
+									? new Date(value).toLocaleDateString(locale, {
+											year: 'numeric',
+											month: 'short'
+									  })
+									: null
 						}
 					},
 					y: {
+						//@ts-ignore
+						type: 'customLog',
 						ticks: {
 							color: '#ffffff',
 							font: {
