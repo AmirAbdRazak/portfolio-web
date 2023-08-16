@@ -45,7 +45,7 @@
 			chart_type: data.chart_type,
 			limit: data.limit || 10,
 			offset: data.offset || 0,
-			chart_scale: data.chart_scale || 'linear'
+			chart_scale: data.chart_scale
 		};
 	});
 
@@ -220,6 +220,9 @@
 							wheel: {
 								enabled: true,
 								modifierKey: 'ctrl'
+							},
+							pinch: {
+								enabled: true
 							},
 							mode: 'xy'
 						},

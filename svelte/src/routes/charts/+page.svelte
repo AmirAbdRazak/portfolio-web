@@ -3,12 +3,14 @@
 	import { formDataStore } from './FormDataStore';
 	import { goto } from '$app/navigation';
 
+
 	let username: string;
 	let chart_type: string;
 	let limit: number = 10;
 	let offset: number = 0;
 	let chart_scale: 'linear' | 'logarithmic';
 
+	
 	function handleSubmit(event: Event) {
 		event.preventDefault();
 		formDataStore.set({ chart_type, limit, offset, chart_scale });

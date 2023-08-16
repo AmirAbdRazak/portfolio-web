@@ -1,5 +1,6 @@
 <script lang="ts">
 	export let username: string;
+	import Device from 'svelte-device-info';
 </script>
 
 <div
@@ -10,11 +11,17 @@
 	/>
 	<h2 class="text-center text-white text-xl font-semibold">Loading...</h2>
 	<p class="w-1/3 py-2 text-center text-white">Preparing your chart {username}</p>
-	<p class="w-1/2 py-2 text-center text-slate-200 text-sm">
-		Tip: Hold down your <b class="text-rose-400">CTRL</b> key and
-		<b class="text-rose-400">scroll down</b> to zoom in the chart
-		<i class="text-slate-400">(you can also click and drag :D)</i>
-	</p>
+	{#if Device.isPhone || Device.isTablet}
+		<p class="w-1/2 py-2 text-center text-slate-200 text-sm">
+			Tip: You can pinch the screen to zoom on the chart :D
+		</p>
+	{:else}
+		<p class="w-1/2 py-2 text-center text-slate-200 text-sm">
+			Tip: Hold down your <b class="text-rose-400">CTRL</b> key and
+			<b class="text-rose-400">scroll down</b> to zoom in the chart
+			<i class="text-slate-400">(you can also click and drag :D)</i>
+		</p>
+	{/if}
 </div>
 
 <style>
