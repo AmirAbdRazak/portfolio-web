@@ -1,5 +1,5 @@
 <script lang="ts">
-	import '../app.css';
+	import '../../app.css';
 	import { Client, cacheExchange, fetchExchange, setContextClient } from '@urql/svelte';
 	import type { LayoutData } from './$types';
 

@@ -5,7 +5,7 @@
 		ChartDocument,
 		type ChartDataConfig,
 		type ChartQueryStore
-	} from '../../../../generated/graphql';
+	} from '../../../generated/graphql';
 	import {
 		Chart,
 		LineController,
@@ -26,7 +26,6 @@
 	import Loader from './Loader.svelte';
 	import { goto } from '$app/navigation';
 	import zoomPlugin from 'chartjs-plugin-zoom';
-	import { scale } from 'svelte/transition';
 
 	export let data: PageData;
 	let queryData: ChartQueryStore;
@@ -76,8 +75,8 @@
 		variables: {
 			username,
 			chartType: formData['chart_type'].toLowerCase(),
-			limit: formData['limit'],
-			offset: formData['offset']
+			limit: parseInt(formData['limit'] + ''),
+			offset: parseInt(formData['offset'] + '')
 		}
 	});
 

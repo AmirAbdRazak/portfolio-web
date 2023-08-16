@@ -12,11 +12,19 @@ use dotenv::dotenv;
 use schema::Query;
 use sqlx::postgres::PgPoolOptions;
 use std::{env, net::SocketAddr};
-use tower_http::cors::{Any, CorsLayer};
+use tower_http::cors::CorsLayer;
 use tower_http::trace::TraceLayer;
 use tracing::info;
 
 fn cors_layer() -> CorsLayer {
+    let allowed_origins = vec![
+        "http://localhost:8000".parse().unwrap(),
+        "http://localhost:5173".parse().unwrap(),
+        "http://127.0.0.1:5173".parse().unwrap(),
+        "http://127.0.0.1:8000".parse().unwrap(),
+        "https://amirrazak.com".parse().unwrap(),
+        "https://amrrzk.fly.dev".parse().unwrap(),
+    ];
     let allowed_methods = vec![Method::GET, Method::POST, Method::OPTIONS];
 
     let allowed_headers = vec![
@@ -29,9 +37,10 @@ fn cors_layer() -> CorsLayer {
     ];
 
     CorsLayer::new()
-        .allow_origin(Any)
+        .allow_origin(allowed_origins)
         .allow_methods(allowed_methods)
         .allow_headers(allowed_headers)
+        .allow_credentials(true)
 }
 
 #[tokio::main]
