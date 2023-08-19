@@ -3,6 +3,8 @@ query chart(
 	$chartType: String!
 	$limit: Int!
 	$offset: Int!
+	$startTimestamp: Int!
+	$endTimestamp: Int!
 ) {
 	historyFm {
 		getWeeklyCharts {
@@ -11,6 +13,8 @@ query chart(
 				chartType: $chartType
 				limit: $limit
 				offset: $offset
+				startTimestamp: $startTimestamp
+				endTimestamp: $endTimestamp
 			) {
 				labels
 				datasets {

@@ -1,25 +1,25 @@
 <script lang="ts">
-	import chart_image from '$lib/assets/chartexample.png';
+	import chartImage from '$lib/assets/chartexample.png';
 	import { START_TIMESTAMP, formDataStore } from './FormDataStore';
 	import { goto } from '$app/navigation';
 
 	let username: string;
-	let chart_type: string;
+	let chartType: string;
 	let limit: number = 10;
 	let offset: number = 0;
-	let chart_scale: 'linear' | 'logarithmic';
-	let start_timestamp = START_TIMESTAMP;
-	let end_timestamp = Date.now() * 1000;
+	let chartScale: 'linear' | 'logarithmic';
+	let startTimestamp = START_TIMESTAMP;
+	let endTimestamp = Date.now() * 1000;
 
 	function handleSubmit(event: Event) {
 		event.preventDefault();
 		formDataStore.set({
-			chart_type,
+			chartType,
 			limit,
 			offset,
-			chart_scale,
-			start_timestamp,
-			end_timestamp
+			chartScale,
+			startTimestamp,
+			endTimestamp
 		});
 		goto(`charts/${username}`, { replaceState: false });
 	}
@@ -53,7 +53,7 @@
 					}}
 				>
 					<img
-						src={chart_image}
+						src={chartImage}
 						alt="temp chart"
 						class="object-contain pb-5 pt-7 drop-shadow-2xl"
 					/>
@@ -86,17 +86,17 @@
 								Generate
 							</button>
 							<select
-								id="chart_type"
+								id="chartScale"
 								class="cursor-pointer items-center justify-center border border-rose-700 bg-rose-400 px-5 py-2 text-center text-base font-semibold text-slate-100 hover:bg-rose-500 focus:outline-none md:py-3"
-								bind:value={chart_scale}
+								bind:value={chartScale}
 							>
 								<option selected value="linear">Linear</option>
 								<option value="logarithmic">Log</option>
 							</select>
 							<select
-								id="chart_type"
+								id="chartType"
 								class="cursor-pointer items-center justify-center rounded-r-lg border-y border-r border-rose-700 bg-rose-400 px-5 py-2 text-center text-base font-semibold text-slate-100 hover:bg-rose-500 focus:outline-none md:py-3"
-								bind:value={chart_type}
+								bind:value={chartType}
 							>
 								<option selected value="Artist">Artist</option>
 								<option value="Album">Album</option>
@@ -155,7 +155,7 @@
 				}}
 			>
 				<img
-					src={chart_image}
+					src={chartImage}
 					alt="temp chart"
 					class="object-contain pb-5 pt-7 drop-shadow-2xl"
 				/>

@@ -14,9 +14,7 @@ export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
 export type MakeEmpty<
 	T extends { [key: string]: unknown },
 	K extends keyof T
-> = {
-	[_ in K]?: never;
-};
+> = { [_ in K]?: never };
 export type Incremental<T> =
 	| T
 	| {
@@ -61,9 +59,11 @@ export type WeeklyChartsQuery = {
 
 export type WeeklyChartsQueryChartArgs = {
 	chartType: Scalars['String']['input'];
+	endTimestamp: Scalars['Int']['input'];
 	lastfmUsername: Scalars['String']['input'];
 	limit: Scalars['Int']['input'];
 	offset: Scalars['Int']['input'];
+	startTimestamp: Scalars['Int']['input'];
 };
 
 export type ChartQueryVariables = Exact<{
@@ -71,6 +71,8 @@ export type ChartQueryVariables = Exact<{
 	chartType: Scalars['String']['input'];
 	limit: Scalars['Int']['input'];
 	offset: Scalars['Int']['input'];
+	startTimestamp: Scalars['Int']['input'];
+	endTimestamp: Scalars['Int']['input'];
 }>;
 
 export type ChartQuery = {
@@ -98,6 +100,8 @@ export const ChartDocument = gql`
 		$chartType: String!
 		$limit: Int!
 		$offset: Int!
+		$startTimestamp: Int!
+		$endTimestamp: Int!
 	) {
 		historyFm {
 			getWeeklyCharts {
@@ -106,6 +110,8 @@ export const ChartDocument = gql`
 					chartType: $chartType
 					limit: $limit
 					offset: $offset
+					startTimestamp: $startTimestamp
+					endTimestamp: $endTimestamp
 				) {
 					labels
 					datasets {

@@ -31,48 +31,48 @@
 	let queryData: ChartQueryStore;
 	let username = data.username;
 	let locale = 'en-us';
-	let current_chart: Chart;
+	let currentChart: Chart;
 
 	let formData: {
-		chart_type: string;
+		chartType: string;
 		limit: number;
 		offset: number;
-		start_timestamp: number;
-		end_timestamp: number;
-		chart_scale: 'linear' | 'logarithmic';
+		startTimestamp: number;
+		endTimestamp: number;
+		chartScale: 'linear' | 'logarithmic';
 	};
 
 	formDataStore.subscribe((data) => {
 		formData = {
-			chart_type: data.chart_type,
+			chartType: data.chartType,
 			limit: data.limit || 10,
 			offset: data.offset || 0,
-			start_timestamp: data.start_timestamp,
-			end_timestamp: data.end_timestamp,
-			chart_scale: data.chart_scale
+			startTimestamp: data.startTimestamp,
+			endTimestamp: data.endTimestamp,
+			chartScale: data.chartScale
 		};
 	});
 
-	let reenter_username: string = username;
-	let reenter_limit: number = 10;
-	let reenter_offset: number = 0;
-	let reenter_chart_type: string = 'Artist';
-	let reenter_chart_scale: 'linear' | 'logarithmic' = 'linear';
-	let reenter_start_timestamp = START_TIMESTAMP;
-	let reenter_end_timestamp = Date.now() * 1000;
+	let reenterUsername: string = username;
+	let reenterLimit: number = 10;
+	let reenterOffset: number = 0;
+	let reenterChartType: string = 'Artist';
+	let reenterChartScale: 'linear' | 'logarithmic' = 'linear';
+	let reenterStartTimestamp = START_TIMESTAMP;
+	let reenterEndTimestamp = Date.now() * 1000;
 
 	function handleSubmit(event: Event) {
 		event.preventDefault();
 		formDataStore.set({
-			chart_type: reenter_chart_type,
-			limit: reenter_limit,
-			offset: reenter_offset,
-			start_timestamp: reenter_start_timestamp,
-			end_timestamp: reenter_end_timestamp,
-			chart_scale: reenter_chart_scale
+			chartType: reenterChartType,
+			limit: reenterLimit,
+			offset: reenterOffset,
+			startTimestamp: reenterStartTimestamp,
+			endTimestamp: reenterEndTimestamp,
+			chartScale: reenterChartScale
 		});
-		current_chart.destroy();
-		goto(`${reenter_username}`, { replaceState: true });
+		currentChart.destroy();
+		goto(`${reenterUsername}`, { replaceState: true });
 	}
 
 	$: isMounted = false;
@@ -82,11 +82,11 @@
 		query: ChartDocument,
 		variables: {
 			username,
-			chartType: formData['chart_type'].toLowerCase(),
+			chartType: formData['chartType'].toLowerCase(),
 			limit: parseInt(formData['limit'] + ''),
 			offset: parseInt(formData['offset'] + ''),
-			start_timestamp: 165424,
-			end_timestamp: 1654
+			startTimestamp: parseInt(formData['startTimestamp'] + ''),
+			endTimestamp: parseInt(formData['endTimestamp'] + '')
 		}
 	});
 
@@ -124,24 +124,22 @@
 		return color;
 	}
 
-	function generateChart(chart_data: ChartDataConfig) {
+	function generateChart(chartData: ChartDataConfig) {
 		isFetched = true;
 
-		current_chart = new Chart(ctx, {
+		currentChart = new Chart(ctx, {
 			type: 'line',
 			data: {
-				labels: chart_data.labels.map(
-					(timestamp) => new Date(timestamp * 1000)
-				),
-				datasets: chart_data.datasets.map((dataset) => {
-					const rand_color = getRandomColor();
+				labels: chartData.labels.map((timestamp) => new Date(timestamp * 1000)),
+				datasets: chartData.datasets.map((dataset) => {
+					const randColor = getRandomColor();
 					return {
 						label: dataset.chartEntry,
 						data: dataset.playcount,
-						borderColor: rand_color,
-						backgroundColor: rand_color,
+						borderColor: randColor,
+						backgroundColor: randColor,
 						pointHoverBackgroundColor: '#1e293b',
-						pointHoverBorderColor: rand_color,
+						pointHoverBorderColor: randColor,
 						pointStyle: 'rectRot',
 						pointRadius: 0,
 						pointHoverRadius: 6,
@@ -187,8 +185,8 @@
 						}
 					},
 					y: {
-						type: formData.chart_scale,
-						min: formData.chart_scale == 'linear' ? 0 : 1,
+						type: formData.chartScale,
+						min: formData.chartScale == 'linear' ? 0 : 1,
 						ticks: {
 							maxTicksLimit: 15,
 							color: '#ffffff',
@@ -202,7 +200,7 @@
 				plugins: {
 					title: {
 						display: true,
-						text: `${formData.chart_type} All Time Chart`,
+						text: `${formData.chartType} All Time Chart`,
 						color: '#ffffff',
 						font: {
 							family: 'Montserrat'
@@ -275,7 +273,7 @@
 		<div class="flex flex-col py-5">
 			<input
 				class="focus:ring-3 mb-5 mt-5 flex w-full items-center justify-center rounded-lg border-2 border-slate-700 bg-slate-700 py-3 text-center font-medium text-slate-100 focus:outline-none focus:ring-slate-800 sm:inline-flex md:py-3 md:pr-5"
-				bind:value={reenter_username}
+				bind:value={reenterUsername}
 				placeholder="Enter your username"
 			/>
 			<div class="pb-2">
@@ -285,14 +283,14 @@
 					>Data Limit:
 				</label>
 				<input
-					bind:value={reenter_limit}
+					bind:value={reenterLimit}
 					class="text-md mb-2 inline-flex border-none bg-transparent pl-1 pr-5 text-white focus:outline-none"
 				/>
 			</div>
 			<input
 				id="limit-range"
 				type="range"
-				bind:value={reenter_limit}
+				bind:value={reenterLimit}
 				class="range-sm mb-6 h-1 w-full cursor-pointer appearance-none rounded-lg bg-slate-700"
 			/>
 			<div class="pb-2">
@@ -302,14 +300,14 @@
 					>Data Offset:
 				</label>
 				<input
-					bind:value={reenter_offset}
+					bind:value={reenterOffset}
 					class="text-md mb-2 inline-flex border-none bg-transparent pl-1 pr-5 text-white focus:outline-none"
 				/>
 			</div>
 			<input
 				id="offset-range"
 				type="range"
-				bind:value={reenter_offset}
+				bind:value={reenterOffset}
 				class="range-sm mb-6 h-1 w-full cursor-pointer appearance-none rounded-lg bg-slate-700"
 			/>
 			<div
@@ -328,17 +326,17 @@
 					Generate
 				</button>
 				<select
-					id="chart_type"
+					id="chartScale"
 					class="cursor-pointer items-center justify-center border border-rose-700 bg-rose-400 px-5 py-2 text-center text-base font-semibold text-slate-100 hover:bg-rose-500 focus:outline-none md:py-3"
-					bind:value={reenter_chart_scale}
+					bind:value={reenterChartScale}
 				>
 					<option selected value="linear">Linear</option>
 					<option value="logarithmic">Log</option>
 				</select>
 				<select
-					id="chart_type"
+					id="chartType"
 					class="cursor-pointer items-center justify-center rounded-r-lg border-y border-r border-rose-700 bg-rose-400 px-5 py-2 text-center text-base font-semibold text-slate-100 hover:bg-rose-500 focus:outline-none md:py-3"
-					bind:value={reenter_chart_type}
+					bind:value={reenterChartType}
 				>
 					<option selected value="Artist">Artist</option>
 					<option value="Album">Album</option>
