@@ -1,12 +1,12 @@
 overwrite: true
 schema: ${AXUM_GRAPHQL_URL}
-documents: "src/**/*.graphql"
+documents: 'src/**/*.graphql'
 config:
   withHooks: false
 generates:
   src/generated/graphql.ts:
     plugins:
-      - "typescript"
-      - "typescript-operations"
-      - "typescript-urql"
-      - "urql-svelte-operations-store"
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-urql'
+      - 'urql-svelte-operations-store'

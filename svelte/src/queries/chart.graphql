@@ -1,7 +1,17 @@
-query chart($username: String!, $chartType: String!, $limit: Int!, $offset: Int!) {
+query chart(
+	$username: String!
+	$chartType: String!
+	$limit: Int!
+	$offset: Int!
+) {
 	historyFm {
 		getWeeklyCharts {
-			chart(lastfmUsername: $username, chartType: $chartType, limit: $limit, offset: $offset) {
+			chart(
+				lastfmUsername: $username
+				chartType: $chartType
+				limit: $limit
+				offset: $offset
+			) {
 				labels
 				datasets {
 					chartEntry

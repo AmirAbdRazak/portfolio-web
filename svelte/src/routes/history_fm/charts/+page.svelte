@@ -8,7 +8,7 @@
 </script>
 
 <div
-	class="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden bg-slate-800 flex flex-col items-center justify-center"
+	class="fixed bottom-0 left-0 right-0 top-0 z-50 flex h-screen w-full flex-col items-center justify-center overflow-hidden bg-slate-800"
 >
 	<p class="w-1/3 text-center text-white">Page is deprecated. Redirecting...</p>
 </div>
