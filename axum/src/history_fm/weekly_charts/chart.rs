@@ -1,12 +1,7 @@
-use std::time::Instant;
-
 use async_graphql::SimpleObject;
 use futures::future::JoinAll;
 use serde::Deserialize;
 use tokio::task::JoinHandle;
-use tracing::info;
-
-use super::get_chart_timestamp_list;
 
 #[derive(Deserialize, SimpleObject)]
 pub struct EntryAttr {
@@ -61,15 +56,8 @@ pub async fn get_weekly_chart_list<'a>(
     lastfm_username: &'a str,
     api_key: &'a str,
     chart_type: &'a str,
-    registered_unixtime: u64,
+    chart_list: &Vec<WeeklyChartEntry>,
 ) -> JoinAll<JoinHandle<WeeklyChartResponse>> {
-    let start = Instant::now();
-    let chart_list = get_chart_timestamp_list(registered_unixtime).await;
-    info!(
-        "Time Elapsed from fetching chart_list: {:?}",
-        start.elapsed()
-    );
-
     let results: Vec<JoinHandle<WeeklyChartResponse>> = chart_list.into_iter().map(|chart| {
             let api_url = format!("http://ws.audioscrobbler.com/2.0/?method=user.getweekly{}chart&username={}&api_key={}&from={}&to={}&format=json&limit=200",chart_type, lastfm_username, api_key, chart.from, chart.to);
 

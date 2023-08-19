@@ -33,9 +33,12 @@ struct ChartDataConfig {
     datasets: Vec<DatasetResult>,
 }
 
-async fn get_chart_timestamp_list(start_timestamp: u64) -> Vec<WeeklyChartEntry> {
+async fn get_chart_timestamp_list(
+    start_timestamp: i64,
+    end_timestamp: i64,
+) -> Vec<WeeklyChartEntry> {
     let start = Instant::now();
-    let current_naive = NaiveDateTime::from_timestamp_opt(start_timestamp as i64, 0)
+    let current_naive = NaiveDateTime::from_timestamp_opt(start_timestamp, 0)
         .expect("Failed to parse start timestamp");
     let current_datetime: DateTime<Utc> = DateTime::from_utc(current_naive, Utc);
     let days_to_sunday = current_datetime.weekday().num_days_from_sunday();
@@ -48,7 +51,6 @@ async fn get_chart_timestamp_list(start_timestamp: u64) -> Vec<WeeklyChartEntry>
         .timestamp();
 
     let mut current_timestamp = start_of_nearest_sunday + 43200;
-    let end_timestamp = Utc::now().timestamp();
     let mut results: Vec<WeeklyChartEntry> = Vec::new();
 
     while current_timestamp < end_timestamp {
@@ -80,6 +82,8 @@ impl WeeklyChartsQuery {
         chart_type: String,
         limit: usize,
         offset: usize,
+        start_timestamp: usize,
+        end_timestamp: usize,
     ) -> ChartDataConfig {
         dotenv().ok();
         let fetch_start = Instant::now();
@@ -96,14 +100,18 @@ impl WeeklyChartsQuery {
             start.elapsed()
         );
 
-        let join_all_result = get_weekly_chart_list(
-            &lastfm_username,
-            &api_key,
-            &chart_type,
-            user_info.registered_unixtime,
-        )
-        .await
-        .await;
+        let start;
+        if user_info.registered_unixtime > start_timestamp as u64 {
+            start = user_info.registered_unixtime
+        } else {
+            start = start_timestamp as u64
+        }
+        let chart_list = get_chart_timestamp_list(start as i64, end_timestamp as i64).await;
+
+        let join_all_result =
+            get_weekly_chart_list(&lastfm_username, &api_key, &chart_type, &chart_list)
+                .await
+                .await;
 
         let weekly_chart_list: Vec<WeeklyChart> = join_all_result
             .into_iter()
@@ -191,18 +199,9 @@ impl WeeklyChartsQuery {
 
         let upper_benchmark = playcount_list[offset];
         let lower_benchmark = playcount_list[benchmark_index];
-        info!("offset: {}", offset);
-        info!("limit: {}", limit);
-        info!("benchmark index: {}", benchmark_index);
-        info!("lower_benchmark: {}", lower_benchmark);
-        info!("upper_benchmark: {}", upper_benchmark);
 
         ChartDataConfig {
-            labels: get_chart_timestamp_list(user_info.registered_unixtime)
-                .await
-                .into_iter()
-                .map(|t| t.to as u64)
-                .collect(),
+            labels: chart_list.into_iter().map(|t| t.to as u64).collect(),
             datasets: chart_dataset
                 .into_iter()
                 .filter(|chart_entry| {
