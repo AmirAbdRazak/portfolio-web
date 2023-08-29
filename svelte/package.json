@@ -29,6 +29,8 @@
 		"@typescript-eslint/eslint-plugin": "^6.5.0",
 		"@typescript-eslint/parser": "^6.5.0",
 		"autoprefixer": "^10.4.14",
+		"class-variance-authority": "^0.7.0",
+		"clsx": "^2.0.0",
 		"eslint": "^8.28.0",
 		"eslint-config-prettier": "^8.10.0",
 		"eslint-plugin-svelte": "^2.33.0",
@@ -37,7 +39,9 @@
 		"prettier-plugin-svelte": "^2.10.1",
 		"prettier-plugin-tailwindcss": "^0.4.0",
 		"svelte-check": "^3.4.3",
+		"tailwind-merge": "^1.14.0",
 		"tailwindcss": "^3.3.3",
+		"tailwindcss-animate": "^1.0.7",
 		"typescript": "^5.0.0",
 		"vite": "^4.4.2"
 	},
@@ -52,6 +56,7 @@
 		"date-fns": "^2.30.0",
 		"graphql": "^16.7.1",
 		"hammerjs": "^2.0.8",
+		"lucide-react": "^0.271.0",
 		"svelte": "^4.0.5",
 		"svelte-device-info": "^1.0.0",
 		"urql": "^4.0.5"
