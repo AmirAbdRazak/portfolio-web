@@ -3,23 +3,28 @@
 	import { START_TIMESTAMP, formDataStore } from './FormDataStore';
 	import { goto } from '$app/navigation';
 	import * as Popover from '$lib/components/ui/popover';
-	import { Settings } from 'lucide-svelte';
 	import * as Select from '$lib/components/ui/select';
+	import { Slider } from '$lib/components/ui/slider';
+	import { Input } from '$lib/components/ui/input';
+	import { Settings } from 'lucide-svelte';
+	import { Label } from '$lib/components/ui/label';
 
 	let username: string;
-	let chartType: string;
-	let limit: number = 10;
-	let offset: number = 0;
-	let chartScale: 'linear' | 'logarithmic';
+	let chartType: string = 'Artist';
+	let limit: number[] = [10];
+	let offset: number[] = [0];
+	let chartScale: 'linear' | 'logarithmic' = 'linear';
 	let startTimestamp = START_TIMESTAMP;
 	let endTimestamp = Date.now() / 1000;
+
+	let displayChartScale = 'Linear';
 
 	function handleSubmit(event: Event) {
 		event.preventDefault();
 		formDataStore.set({
 			chartType,
-			limit,
-			offset,
+			limit: limit[0],
+			offset: offset[0],
 			chartScale,
 			startTimestamp,
 			endTimestamp
@@ -69,7 +74,7 @@
 				<div class="flex flex-col">
 					<div class="flex flex-col pb-5 sm:flex-row">
 						<input
-							class="focus:ring-3 mb-5 mr-auto flex w-80 items-center justify-center rounded-lg border-2 border-slate-700 bg-slate-100 py-2 text-center font-medium text-slate-800 drop-shadow-lg focus:outline-none focus:ring-slate-800 sm:mb-0 sm:inline-flex md:mr-auto md:py-3 md:pr-5"
+							class="focus:ring-3 mb-5 mr-auto flex w-80 items-center justify-center rounded-lg border-2 border-slate-700 bg-slate-400 py-2 text-center font-medium text-slate-800 drop-shadow-lg placeholder:text-slate-700 focus:outline-none focus:ring-slate-800 sm:mb-0 sm:inline-flex md:mr-auto md:py-3 md:pr-5"
 							bind:value={username}
 							placeholder="Enter your username"
 						/>
@@ -98,12 +103,18 @@
 								</Popover.Trigger>
 								<Popover.Content class="space-y-5 border-0 bg-slate-900">
 									<div class="flex flex-row justify-between">
-										<Select.Root>
+										<Select.Root
+											onSelectedChange={(e) => {
+												const val = e?.value;
+												if (typeof val == 'string') {
+													chartType = val;
+												}
+											}}
+										>
 											<Select.Trigger
 												class="w-50 min-w-[7.5rem] text-slate-200"
-												bind:value={chartType}
 											>
-												<Select.Value placeholder="Search Type" />
+												<Select.Value bind:placeholder={chartType} />
 											</Select.Trigger>
 											<Select.Content
 												class="border-0 bg-slate-700 text-slate-200"
@@ -113,11 +124,23 @@
 												<Select.Item value="Track">Track</Select.Item>
 											</Select.Content>
 										</Select.Root>
-										<Select.Root>
+										<Select.Root
+											onSelectedChange={(e) => {
+												const val = e?.value;
+												if (
+													typeof val == 'string' &&
+													(val == 'linear' || val == 'logarithmic')
+												) {
+													chartScale = val;
+													displayChartScale =
+														val == 'linear' ? 'Linear' : 'Log';
+												}
+											}}
+										>
 											<Select.Trigger
 												class="w-50 min-w-[7.5rem] text-slate-200"
 											>
-												<Select.Value placeholder="Increment" />
+												<Select.Value bind:placeholder={displayChartScale} />
 											</Select.Trigger>
 											<Select.Content
 												class="w-50 border-0 bg-slate-700 text-slate-200"
@@ -126,6 +149,72 @@
 												<Select.Item value="logarithmic">Log</Select.Item>
 											</Select.Content>
 										</Select.Root>
+									</div>
+									<div class="space-y-2">
+										<Label for="limitSlider" class="text-slate-200"
+											>Number of Entries: {limit}</Label
+										>
+										<Slider
+											class="mx-auto w-60"
+											bind:value={limit}
+											max={100}
+											step={1}
+										/>
+									</div>
+									<div class="space-y-2">
+										<Label for="limitSlider" class="text-slate-200"
+											>Offset by: {offset}</Label
+										>
+										<Slider
+											class="mx-auto w-60"
+											bind:value={offset}
+											max={100}
+											step={1}
+										/>
+									</div>
+									<div class="flex flex-row justify-between">
+										<div class="grid w-full max-w-sm items-center gap-1.5">
+											<Label for="year" class="text-slate-200">Start Year</Label
+											>
+											<Input
+												class="remove-arrow w-28 text-slate-200"
+												placeholder="Year"
+												type="number"
+												value={2002}
+											/>
+										</div>
+										<div class="grid w-full max-w-sm gap-1.5">
+											<Label for="month" class="text-slate-200"
+												>Start Month</Label
+											>
+											<Input
+												class="remove-arrow w-28 text-slate-200"
+												placeholder="Month"
+												type="number"
+												value={1}
+											/>
+										</div>
+									</div>
+									<div class="flex flex-row justify-between">
+										<div class="grid w-full max-w-sm items-center gap-1.5">
+											<Label for="year" class="text-slate-200">End Year</Label>
+											<Input
+												class="remove-arrow w-28 text-slate-200"
+												placeholder="Year"
+												type="number"
+												value={new Date().getFullYear()}
+											/>
+										</div>
+										<div class="grid w-full max-w-sm gap-1.5">
+											<Label for="month" class="text-slate-200">End Month</Label
+											>
+											<Input
+												class="remove-arrow w-28 text-slate-200"
+												placeholder="Month"
+												type="number"
+												value={new Date().getMonth()}
+											/>
+										</div>
 									</div>
 								</Popover.Content>
 							</Popover.Root>
