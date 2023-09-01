@@ -3,8 +3,8 @@
 	import { START_TIMESTAMP, formDataStore } from './FormDataStore';
 	import { goto } from '$app/navigation';
 	import * as Popover from '$lib/components/ui/popover';
-	import Fa from 'svelte-fa';
-	import { faGear } from '@fortawesome/free-solid-svg-icons';
+	import { Settings } from 'lucide-svelte';
+	import * as Select from '$lib/components/ui/select';
 
 	let username: string;
 	let chartType: string;
@@ -94,9 +94,40 @@
 									type="button"
 									class="cursor-pointer items-center justify-center rounded-r-lg border-y border-r border-rose-700 bg-rose-400 px-5 py-2 text-center text-xl font-semibold text-slate-100 hover:bg-rose-500 focus:outline-none md:py-3"
 								>
-									<Fa icon={faGear} />
+									<Settings />
 								</Popover.Trigger>
-								<Popover.Content />
+								<Popover.Content class="space-y-5 border-0 bg-slate-900">
+									<div class="flex flex-row justify-between">
+										<Select.Root>
+											<Select.Trigger
+												class="w-50 min-w-[7.5rem] text-slate-200"
+												bind:value={chartType}
+											>
+												<Select.Value placeholder="Search Type" />
+											</Select.Trigger>
+											<Select.Content
+												class="border-0 bg-slate-700 text-slate-200"
+											>
+												<Select.Item value="Artist">Artist</Select.Item>
+												<Select.Item value="Album">Album</Select.Item>
+												<Select.Item value="Track">Track</Select.Item>
+											</Select.Content>
+										</Select.Root>
+										<Select.Root>
+											<Select.Trigger
+												class="w-50 min-w-[7.5rem] text-slate-200"
+											>
+												<Select.Value placeholder="Increment" />
+											</Select.Trigger>
+											<Select.Content
+												class="w-50 border-0 bg-slate-700 text-slate-200"
+											>
+												<Select.Item value="linear">Linear</Select.Item>
+												<Select.Item value="logarithmic">Log</Select.Item>
+											</Select.Content>
+										</Select.Root>
+									</div>
+								</Popover.Content>
 							</Popover.Root>
 						</div>
 					</div>

@@ -44,9 +44,6 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@fortawesome/fontawesome-free": "^6.4.2",
-		"@fortawesome/free-brands-svg-icons": "^6.4.2",
-		"@fortawesome/free-solid-svg-icons": "^6.4.2",
 		"@sveltejs/adapter-node": "^1.3.1",
 		"@urql/svelte": "^4.0.4",
 		"bits-ui": "^0.5.5",
@@ -58,10 +55,9 @@
 		"date-fns": "^2.30.0",
 		"graphql": "^16.7.1",
 		"hammerjs": "^2.0.8",
-		"lucide-svelte": "^0.274.0",
+		"lucide-svelte": "^0.275.0-beta.0",
 		"svelte": "^4.0.5",
 		"svelte-device-info": "^1.0.0",
-		"svelte-fa": "^3.0.4",
 		"tailwind-merge": "^1.14.0",
 		"tailwind-variants": "^0.1.13",
 		"urql": "^4.0.5"
