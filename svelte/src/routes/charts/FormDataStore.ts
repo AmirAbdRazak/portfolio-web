@@ -15,6 +15,6 @@ export const formDataStore: Writable<ChartFormData> = writable({
 	offset: 0,
 	limit: 10,
 	startTimestamp: START_TIMESTAMP,
-	endTimestamp: Date.now() * 1000,
+	endTimestamp: Date.now() / 1000,
 	chartScale: 'linear'
 });

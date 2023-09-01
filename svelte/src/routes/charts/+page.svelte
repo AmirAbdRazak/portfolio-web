@@ -2,6 +2,9 @@
 	import chartImage from '$lib/assets/chartexample.png';
 	import { START_TIMESTAMP, formDataStore } from './FormDataStore';
 	import { goto } from '$app/navigation';
+	import * as Popover from '$lib/components/ui/popover';
+	import Fa from 'svelte-fa';
+	import { faGear } from '@fortawesome/free-solid-svg-icons';
 
 	let username: string;
 	let chartType: string;
@@ -9,7 +12,7 @@
 	let offset: number = 0;
 	let chartScale: 'linear' | 'logarithmic';
 	let startTimestamp = START_TIMESTAMP;
-	let endTimestamp = Date.now() * 1000;
+	let endTimestamp = Date.now() / 1000;
 
 	function handleSubmit(event: Event) {
 		event.preventDefault();
@@ -66,7 +69,7 @@
 				<div class="flex flex-col">
 					<div class="flex flex-col pb-5 sm:flex-row">
 						<input
-							class="focus:ring-3 mx-auto mb-5 flex w-80 items-center justify-center rounded-lg border-2 border-slate-700 bg-slate-100 py-2 text-center font-medium text-slate-800 drop-shadow-lg focus:outline-none focus:ring-slate-800 sm:mb-0 sm:inline-flex md:mr-auto md:py-3 md:pr-5"
+							class="focus:ring-3 mb-5 mr-auto flex w-80 items-center justify-center rounded-lg border-2 border-slate-700 bg-slate-100 py-2 text-center font-medium text-slate-800 drop-shadow-lg focus:outline-none focus:ring-slate-800 sm:mb-0 sm:inline-flex md:mr-auto md:py-3 md:pr-5"
 							bind:value={username}
 							placeholder="Enter your username"
 						/>
@@ -85,62 +88,17 @@
 							>
 								Generate
 							</button>
-							<select
-								id="chartScale"
-								class="cursor-pointer items-center justify-center border border-rose-700 bg-rose-400 px-5 py-2 text-center text-base font-semibold text-slate-100 hover:bg-rose-500 focus:outline-none md:py-3"
-								bind:value={chartScale}
-							>
-								<option selected value="linear">Linear</option>
-								<option value="logarithmic">Log</option>
-							</select>
-							<select
-								id="chartType"
-								class="cursor-pointer items-center justify-center rounded-r-lg border-y border-r border-rose-700 bg-rose-400 px-5 py-2 text-center text-base font-semibold text-slate-100 hover:bg-rose-500 focus:outline-none md:py-3"
-								bind:value={chartType}
-							>
-								<option selected value="Artist">Artist</option>
-								<option value="Album">Album</option>
-								<option value="Track">Track</option>
-							</select>
+
+							<Popover.Root>
+								<Popover.Trigger
+									type="button"
+									class="cursor-pointer items-center justify-center rounded-r-lg border-y border-r border-rose-700 bg-rose-400 px-5 py-2 text-center text-xl font-semibold text-slate-100 hover:bg-rose-500 focus:outline-none md:py-3"
+								>
+									<Fa icon={faGear} />
+								</Popover.Trigger>
+								<Popover.Content />
+							</Popover.Root>
 						</div>
-					</div>
-					<div class="flex flex-col">
-						<div class="pb-2">
-							<label
-								for="limit-range"
-								class="mb-2 inline-flex text-sm font-medium text-white"
-								>Data Limit:
-							</label>
-							<input
-								bind:value={limit}
-								type="number"
-								class="text-md mb-2 inline-flex w-24 justify-center rounded-lg border-slate-200 bg-slate-700 px-3 text-white focus:outline-none"
-							/>
-						</div>
-						<input
-							id="limit-range"
-							type="range"
-							bind:value={limit}
-							class="range-sm mb-6 h-1 w-full cursor-pointer appearance-none rounded-lg bg-slate-700"
-						/>
-						<div class="pb-2">
-							<label
-								for="offset-range"
-								class="mb-2 inline-flex text-sm font-medium text-white"
-								>Data Offset:
-							</label>
-							<input
-								bind:value={offset}
-								type="number"
-								class="text-md mb-2 inline-flex w-24 rounded-lg border-none bg-slate-700 px-3 text-white focus:outline-none"
-							/>
-						</div>
-						<input
-							id="offset-range"
-							type="range"
-							bind:value={offset}
-							class="range-sm mb-6 h-1 w-full cursor-pointer appearance-none rounded-lg bg-slate-700"
-						/>
 					</div>
 				</div>
 			</form>
