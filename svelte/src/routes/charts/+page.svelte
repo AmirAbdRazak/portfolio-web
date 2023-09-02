@@ -32,7 +32,7 @@
 	}
 </script>
 
-<section class="bg-slate-800 px-4 py-10 lg:px-10 lg:py-20">
+<section class="bg-slate-800 px-4 py-6 lg:px-10 lg:pb-20">
 	{#if invalidDateAlert}
 		<Alert.Root
 			class="mx-auto w-fit whitespace-nowrap border-0 bg-rose-400 text-slate-800"
