@@ -236,27 +236,32 @@
 											step={1}
 										/>
 									</div>
-									<Select.Root
-										onSelectedChange={(e) => {
-											const val = e?.value;
-											if (typeof val == 'string') {
-												dateRange = val;
-											}
-										}}
-									>
-										<Select.Trigger class="w-50 min-w-[9rem] text-slate-200">
-											<Select.Value bind:placeholder={dateRange} />
-										</Select.Trigger>
-										<Select.Content
-											class="border-0 bg-slate-700 text-slate-200"
+									<div class="space-y-2">
+										<Label for="dateRangeSelect" class="text-slate-200"
+											>Date Range</Label
 										>
-											<Select.Item value="Week">Weekly</Select.Item>
-											<Select.Item value="Month">Monthly</Select.Item>
-											<Select.Item value="Quarter">Quarterly</Select.Item>
-											<Select.Item value="Year">Annually</Select.Item>
-											<Select.Item value="Custom">Custom</Select.Item>
-										</Select.Content>
-									</Select.Root>
+										<Select.Root
+											onSelectedChange={(e) => {
+												const val = e?.value;
+												if (typeof val == 'string') {
+													dateRange = val;
+												}
+											}}
+										>
+											<Select.Trigger class="w-50 min-w-[9rem] text-slate-200">
+												<Select.Value bind:placeholder={dateRange} />
+											</Select.Trigger>
+											<Select.Content
+												class="border-0 bg-slate-700 text-slate-200"
+											>
+												<Select.Item value="Week">Weekly</Select.Item>
+												<Select.Item value="Month">Monthly</Select.Item>
+												<Select.Item value="Quarter">Quarterly</Select.Item>
+												<Select.Item value="Year">Annually</Select.Item>
+												<Select.Item value="Custom">Custom</Select.Item>
+											</Select.Content>
+										</Select.Root>
+									</div>
 									<div
 										class="{dateRange == 'Custom'
 											? 'flex'
