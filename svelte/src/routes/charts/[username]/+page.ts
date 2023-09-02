@@ -105,10 +105,12 @@ export function _getChartConfig(
 									  })
 									: null;
 							} else if (formData.dateRange == 'Quarter') {
-								return new Date(value).toLocaleDateString(locale, {
-									year: '2-digit',
-									month: 'short'
-								});
+								return index % 4 == 0 || index == 0
+									? new Date(value).toLocaleDateString(locale, {
+											year: '2-digit',
+											month: 'short'
+									  })
+									: null;
 							} else {
 								return new Date(value).toLocaleDateString(locale, {
 									year: '2-digit',
