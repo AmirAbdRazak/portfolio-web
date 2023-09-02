@@ -23,6 +23,7 @@
 		"./*.cjs",
 		"./.svelte-kit/types/**/$types.d.ts",
 		"vite.config.ts",
+		"lib/**/*.ts",
 		"src/**/*.js",
 		"src/**/*.ts",
 		"src/**/*.svelte",
