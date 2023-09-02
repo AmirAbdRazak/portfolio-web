@@ -4,6 +4,7 @@
 	import { goto } from '$app/navigation';
 	import * as Popover from '$lib/components/ui/popover';
 	import * as Select from '$lib/components/ui/select';
+	import * as Alert from '$lib/components/ui/alert';
 	import { Slider } from '$lib/components/ui/slider';
 	import { Input } from '$lib/components/ui/input';
 	import { Settings } from 'lucide-svelte';
@@ -17,7 +18,62 @@
 	let startTimestamp = START_TIMESTAMP;
 	let endTimestamp = Date.now() / 1000;
 
+	let startYear = 2002;
+	let startMonth = 1;
+	let endYear = new Date().getFullYear();
+	let endMonth = new Date().getMonth();
+	let dateRange = 'Month';
+	let invalidDateAlert = false;
+
 	let displayChartScale = 'Linear';
+
+	$: {
+		invalidDateAlert = false;
+		endTimestamp = Date.now() / 1000;
+		if (dateRange === 'Week') {
+			let dateNow = new Date();
+			dateNow.setDate(dateNow.getDate() - 7);
+			startTimestamp = dateNow.getTime() / 1000;
+		} else if (dateRange === 'Month') {
+			let dateNow = new Date();
+			dateNow.setMonth(dateNow.getMonth() - 1);
+			startTimestamp = dateNow.getTime() / 1000;
+		} else if (dateRange === 'Quarter') {
+			let dateNow = new Date();
+			const currMonth = dateNow.getMonth();
+			if (currMonth < 4) {
+				dateNow.setFullYear(dateNow.getFullYear() - 1);
+				dateNow.setMonth(dateNow.getMonth() + 9);
+			} else {
+				dateNow.setMonth(dateNow.getMonth() - 3);
+			}
+			startTimestamp = dateNow.getTime() / 1000;
+		} else if (dateRange === 'Year') {
+			let dateNow = new Date();
+			dateNow.setFullYear(dateNow.getFullYear() - 1);
+			startTimestamp = dateNow.getTime() / 1000;
+		} else if (dateRange === 'Custom') {
+			const customStart = new Date(`${startYear}-${startMonth}-01`);
+			const customEnd = new Date(`${endYear}-${endMonth}-01`);
+			if (!isNaN(customStart.getTime()) && !isNaN(customEnd.getTime())) {
+				startTimestamp = customStart.getTime() / 1000;
+				endTimestamp = customEnd.getTime() / 1000;
+			} else if (!startYear || !startMonth || !endYear || !endMonth) {
+				const fixedStart = new Date(
+					`${startYear || 2002}-${startMonth || 1}-01`
+				);
+				const fixedEnd = new Date(
+					`${endYear || new Date().getFullYear()}-${
+						endMonth || new Date().getMonth()
+					}-01`
+				);
+				startTimestamp = fixedStart.getTime() / 1000;
+				endTimestamp = fixedEnd.getTime() / 1000;
+			} else {
+				invalidDateAlert = true;
+			}
+		}
+	}
 
 	function handleSubmit(event: Event) {
 		event.preventDefault();
@@ -27,13 +83,25 @@
 			offset: offset[0],
 			chartScale,
 			startTimestamp,
-			endTimestamp
+			endTimestamp,
+			dateRange
 		});
 		goto(`charts/${username}`, { replaceState: false });
 	}
 </script>
 
 <section class="bg-slate-800 px-4 py-10 lg:px-10 lg:py-20">
+	{#if invalidDateAlert}
+		<Alert.Root class="border-0 bg-rose-400 text-slate-800">
+			<Alert.Title class="font-semibold"
+				>Invalid date input detected!</Alert.Title
+			>
+			<Alert.Description>
+				Your custom date input is invalid, please make sure that the year and
+				month inputs are valid.
+			</Alert.Description>
+		</Alert.Root>
+	{/if}
 	<div
 		class="lgs:gap-8 mx-auto flex max-w-screen-xl flex-col px-4 py-8 md:grid lg:grid-cols-12 lg:py-16 xl:gap-0"
 	>
@@ -168,7 +236,32 @@
 											step={1}
 										/>
 									</div>
-									<div class="flex flex-row justify-between">
+									<Select.Root
+										onSelectedChange={(e) => {
+											const val = e?.value;
+											if (typeof val == 'string') {
+												dateRange = val;
+											}
+										}}
+									>
+										<Select.Trigger class="w-50 min-w-[9rem] text-slate-200">
+											<Select.Value bind:placeholder={dateRange} />
+										</Select.Trigger>
+										<Select.Content
+											class="border-0 bg-slate-700 text-slate-200"
+										>
+											<Select.Item value="Week">Weekly</Select.Item>
+											<Select.Item value="Month">Monthly</Select.Item>
+											<Select.Item value="Quarter">Quarterly</Select.Item>
+											<Select.Item value="Year">Annually</Select.Item>
+											<Select.Item value="Custom">Custom</Select.Item>
+										</Select.Content>
+									</Select.Root>
+									<div
+										class="{dateRange == 'Custom'
+											? 'flex'
+											: 'hidden'} flex-row justify-between"
+									>
 										<div class="grid w-full max-w-sm items-center gap-1.5">
 											<Label for="year" class="text-slate-200">Start Year</Label
 											>
@@ -176,7 +269,7 @@
 												class="remove-arrow w-28 text-slate-200"
 												placeholder="Year"
 												type="number"
-												value={2002}
+												bind:value={startYear}
 											/>
 										</div>
 										<div class="grid w-full max-w-sm gap-1.5">
@@ -187,18 +280,22 @@
 												class="remove-arrow w-28 text-slate-200"
 												placeholder="Month"
 												type="number"
-												value={1}
+												bind:value={startMonth}
 											/>
 										</div>
 									</div>
-									<div class="flex flex-row justify-between">
+									<div
+										class="{dateRange == 'Custom'
+											? 'flex'
+											: 'hidden'} flex-row justify-between"
+									>
 										<div class="grid w-full max-w-sm items-center gap-1.5">
 											<Label for="year" class="text-slate-200">End Year</Label>
 											<Input
 												class="remove-arrow w-28 text-slate-200"
 												placeholder="Year"
 												type="number"
-												value={new Date().getFullYear()}
+												bind:value={endYear}
 											/>
 										</div>
 										<div class="grid w-full max-w-sm gap-1.5">
@@ -208,7 +305,7 @@
 												class="remove-arrow w-28 text-slate-200"
 												placeholder="Month"
 												type="number"
-												value={new Date().getMonth()}
+												bind:value={endMonth}
 											/>
 										</div>
 									</div>

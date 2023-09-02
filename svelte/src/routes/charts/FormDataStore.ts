@@ -8,6 +8,7 @@ export interface ChartFormData {
 	startTimestamp: number;
 	endTimestamp: number;
 	chartScale: 'linear' | 'logarithmic';
+	dateRange: string;
 }
 
 export const formDataStore: Writable<ChartFormData> = writable({
@@ -16,5 +17,6 @@ export const formDataStore: Writable<ChartFormData> = writable({
 	limit: 10,
 	startTimestamp: START_TIMESTAMP,
 	endTimestamp: Date.now() / 1000,
-	chartScale: 'linear'
+	chartScale: 'linear',
+	dateRange: 'Month'
 });

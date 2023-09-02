@@ -45,7 +45,8 @@
 			offset: data.offset || 0,
 			startTimestamp: data.startTimestamp,
 			endTimestamp: data.endTimestamp,
-			chartScale: data.chartScale
+			chartScale: data.chartScale,
+			dateRange: data.dateRange
 		};
 	});
 
@@ -56,6 +57,7 @@
 	let reenterChartScale: 'linear' | 'logarithmic' = 'linear';
 	let reenterStartTimestamp = START_TIMESTAMP;
 	let reenterEndTimestamp = Date.now() * 1000;
+	let reenterDateRange = 'Month';
 
 	function handleSubmit(event: Event) {
 		event.preventDefault();
@@ -65,7 +67,8 @@
 			offset: reenterOffset,
 			startTimestamp: reenterStartTimestamp,
 			endTimestamp: reenterEndTimestamp,
-			chartScale: reenterChartScale
+			chartScale: reenterChartScale,
+			dateRange: reenterDateRange
 		});
 		currentChart.destroy();
 		goto(`${reenterUsername}`, { replaceState: true });

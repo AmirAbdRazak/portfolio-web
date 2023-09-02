@@ -9,6 +9,7 @@ export type formDataType = {
 	startTimestamp: number;
 	endTimestamp: number;
 	chartScale: 'linear' | 'logarithmic';
+	dateRange: string;
 };
 
 export const load: PageLoad = ({ params }) => {
@@ -82,13 +83,30 @@ export function _getChartConfig(
 						font: {
 							family: 'Montserrat'
 						},
-						callback: (value, index) =>
-							index % 12 == 0 || index == 0
-								? new Date(value).toLocaleDateString(locale, {
-										year: 'numeric',
-										month: 'short'
-								  })
-								: null
+						callback: (value, index) => {
+							if (
+								formData.dateRange == 'Year' ||
+								formData.dateRange == 'Custom'
+							) {
+								return index % 12 == 0 || index == 0
+									? new Date(value).toLocaleDateString(locale, {
+											year: 'numeric',
+											month: 'short'
+									  })
+									: null;
+							} else if (formData.dateRange == 'Quarter') {
+								return new Date(value).toLocaleDateString(locale, {
+									year: '2-digit',
+									month: 'short'
+								});
+							} else {
+								return new Date(value).toLocaleDateString(locale, {
+									year: '2-digit',
+									month: 'short',
+									day: '2-digit'
+								});
+							}
+						}
 					}
 				},
 				y: {
