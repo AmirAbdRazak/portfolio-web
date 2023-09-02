@@ -71,8 +71,10 @@ export function _getChartConfig(
 					? 2
 					: screenSize >= 640
 					? 1.5
-					: screenSize >= 300
+					: screenSize >= 420
 					? 1
+					: screenSize >= 300
+					? 0.75
 					: 0.5,
 			interaction: {
 				mode: 'index',
