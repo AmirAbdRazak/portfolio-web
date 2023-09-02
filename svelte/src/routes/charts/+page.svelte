@@ -34,7 +34,9 @@
 
 <section class="bg-slate-800 px-4 py-10 lg:px-10 lg:py-20">
 	{#if invalidDateAlert}
-		<Alert.Root class="border-0 bg-rose-400 text-slate-800">
+		<Alert.Root
+			class="mx-auto w-fit whitespace-nowrap border-0 bg-rose-400 text-slate-800"
+		>
 			<Alert.Title class="font-semibold"
 				>Invalid date input detected!</Alert.Title
 			>

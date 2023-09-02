@@ -17,6 +17,14 @@ export const load: PageLoad = ({ params }) => {
 	return { username };
 };
 
+const dateRangeMap = {
+	Week: 'Weekly',
+	Month: 'Monthly',
+	Quarter: 'Quarterly',
+	Year: 'Annually',
+	Custom: 'Custom'
+};
+
 function getRandomColor() {
 	const red = Math.floor(Math.random() * 128) + 128; // Bias towards higher values (128-255)
 	const green = Math.floor(Math.random() * 128) + 128; // Bias towards higher values (128-255)
@@ -125,7 +133,19 @@ export function _getChartConfig(
 			plugins: {
 				title: {
 					display: true,
-					text: `${formData.chartType} All Time Chart`,
+					text: `${
+						formData.dateRange != 'Custom'
+							? dateRangeMap[formData.dateRange]
+							: new Date(chartData.labels[0] * 1000).toLocaleDateString(
+									locale,
+									{ year: 'numeric', month: 'short' }
+							  ) +
+							  ' to ' +
+							  new Date(formData.endTimestamp * 1000).toLocaleDateString(
+									locale,
+									{ year: 'numeric', month: 'short' }
+							  )
+					} ${formData.chartType} Chart`,
 					color: '#ffffff',
 					font: {
 						family: 'Montserrat'

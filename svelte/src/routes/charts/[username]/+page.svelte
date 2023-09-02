@@ -143,8 +143,17 @@
 
 <svelte:window bind:innerWidth={screenSize} class="hidden" />
 
+<div
+	class="{isFetched
+		? 'flex'
+		: 'hidden'} h-100 bg-slate-800 px-5 pt-10 text-white md:h-full"
+>
+	<canvas id="chart" />
+</div>
 {#if invalidDateAlert}
-	<Alert.Root class="border-0 bg-rose-400 text-slate-800">
+	<Alert.Root
+		class="mx-auto mt-10 w-fit whitespace-nowrap border-0 bg-rose-400 text-slate-800"
+	>
 		<Alert.Title class="font-semibold">Invalid date input detected!</Alert.Title
 		>
 		<Alert.Description>
@@ -153,13 +162,6 @@
 		</Alert.Description>
 	</Alert.Root>
 {/if}
-<div
-	class="{isFetched
-		? 'flex'
-		: 'hidden'} h-100 bg-slate-800 px-5 pt-10 text-white md:h-full"
->
-	<canvas id="chart" />
-</div>
 <div
 	class="mx-auto flex flex-col items-center justify-center place-self-center bg-slate-800 py-10 sm:flex-row lg:col-span-7"
 >
