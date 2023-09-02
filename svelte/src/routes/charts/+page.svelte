@@ -1,6 +1,6 @@
 <script lang="ts">
 	import chartImage from '$lib/assets/chartexample.png';
-	import { START_TIMESTAMP, formDataStore } from './FormDataStore';
+	import { formDataStore } from './FormDataStore';
 	import { goto } from '$app/navigation';
 	import GenerateOptions from './GenerateOptions.svelte';
 	import * as Alert from '$lib/components/ui/alert';
@@ -10,9 +10,11 @@
 	let limit: number[] = [10];
 	let offset: number[] = [0];
 	let chartScale: 'linear' | 'logarithmic' = 'linear';
-	let startTimestamp = START_TIMESTAMP;
+	let oneMonthAgo = new Date();
+	oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+	let startTimestamp = oneMonthAgo.getTime() / 1000;
 	let endTimestamp = Date.now() / 1000;
-	let dateRange = 'Month';
+	let dateRange: 'Week' | 'Month' | 'Quarter' | 'Year' | 'Custom' = 'Month';
 	let invalidDateAlert = false;
 
 	function handleSubmit(event: Event) {

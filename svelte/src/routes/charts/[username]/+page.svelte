@@ -22,12 +22,14 @@
 	import 'chartjs-adapter-date-fns';
 
 	import { onMount } from 'svelte';
-	import { START_TIMESTAMP, formDataStore } from '../FormDataStore';
+	import { formDataStore } from '../FormDataStore';
 	import Loader from './Loader.svelte';
 	import { goto } from '$app/navigation';
 	import zoomPlugin from 'chartjs-plugin-zoom';
 	import { _getChartConfig } from './+page';
 	import type { formDataType } from './+page';
+	import GenerateOptions from '../GenerateOptions.svelte';
+	import * as Alert from '$lib/components/ui/alert';
 
 	export let data: PageData;
 
@@ -50,28 +52,28 @@
 		};
 	});
 
-	let reenterUsername: string = username;
-	let reenterLimit: number = 10;
-	let reenterOffset: number = 0;
-	let reenterChartType: string = 'Artist';
-	let reenterChartScale: 'linear' | 'logarithmic' = 'linear';
-	let reenterStartTimestamp = START_TIMESTAMP;
-	let reenterEndTimestamp = Date.now() * 1000;
-	let reenterDateRange = 'Month';
+	let limit: number[] = [10];
+	let offset: number[] = [0];
+	let chartType: string = 'Artist';
+	let chartScale: 'linear' | 'logarithmic' = 'linear';
+	let startTimestamp: number;
+	let endTimestamp: number;
+	let dateRange: 'Week' | 'Month' | 'Quarter' | 'Year' | 'Custom' = 'Custom';
+	let invalidDateAlert = false;
 
 	function handleSubmit(event: Event) {
 		event.preventDefault();
 		formDataStore.set({
-			chartType: reenterChartType,
-			limit: reenterLimit,
-			offset: reenterOffset,
-			startTimestamp: reenterStartTimestamp,
-			endTimestamp: reenterEndTimestamp,
-			chartScale: reenterChartScale,
-			dateRange: reenterDateRange
+			chartType,
+			limit: limit[0],
+			offset: offset[0],
+			startTimestamp,
+			endTimestamp,
+			chartScale,
+			dateRange
 		});
 		currentChart.destroy();
-		goto(`${reenterUsername}`, { replaceState: true });
+		goto(`${username}`, { replaceState: true });
 	}
 
 	$: isMounted = false;
@@ -95,6 +97,23 @@
 	onMount(() => {
 		isMounted = true;
 		ctx = document.getElementById('chart') as HTMLCanvasElement;
+
+		chartType = formData['chartType'];
+		limit = [parseInt(formData['limit'] + '')];
+		offset = [parseInt(formData['offset'] + '')];
+		startTimestamp = parseInt(formData['startTimestamp'] + '');
+		endTimestamp = parseInt(formData['endTimestamp'] + '');
+		dateRange = formData['dateRange'];
+
+		formDataStore.set({
+			chartType,
+			limit: limit[0],
+			offset: offset[0],
+			startTimestamp,
+			endTimestamp,
+			chartScale,
+			dateRange
+		});
 
 		Chart.register(
 			LineController,
@@ -124,6 +143,16 @@
 
 <svelte:window bind:innerWidth={screenSize} class="hidden" />
 
+{#if invalidDateAlert}
+	<Alert.Root class="border-0 bg-rose-400 text-slate-800">
+		<Alert.Title class="font-semibold">Invalid date input detected!</Alert.Title
+		>
+		<Alert.Description>
+			Your custom date input is invalid, please make sure that the year and
+			month inputs are valid.
+		</Alert.Description>
+	</Alert.Root>
+{/if}
 <div
 	class="{isFetched
 		? 'flex'
@@ -132,81 +161,34 @@
 	<canvas id="chart" />
 </div>
 <div
-	class="mx-auto flex flex-col items-center justify-center place-self-center bg-slate-800 sm:flex-row lg:col-span-7"
+	class="mx-auto flex flex-col items-center justify-center place-self-center bg-slate-800 py-10 sm:flex-row lg:col-span-7"
 >
 	<form method="POST" on:submit={handleSubmit}>
-		<div class="flex flex-col py-5">
+		<div class="space-x-10">
 			<input
-				class="focus:ring-3 mb-5 mt-5 flex w-full items-center justify-center rounded-lg border-2 border-slate-700 bg-slate-700 py-3 text-center font-medium text-slate-100 focus:outline-none focus:ring-slate-800 sm:inline-flex md:py-3 md:pr-5"
-				bind:value={reenterUsername}
+				class="focus:ring-3 mb-5 flex w-full items-center justify-center rounded-lg border-2 border-slate-700 bg-slate-400 py-2 text-center font-medium text-slate-800 drop-shadow-lg placeholder:text-slate-700 focus:outline-none focus:ring-slate-800 sm:mb-0 sm:inline-flex sm:w-80 md:mr-auto md:py-3 md:pr-5"
+				bind:value={username}
 				placeholder="Enter your username"
 			/>
-			<div class="pb-2">
-				<label
-					for="limit-range"
-					class="mb-2 inline-flex text-sm font-medium text-white"
-					>Data Limit:
-				</label>
-				<input
-					bind:value={reenterLimit}
-					class="text-md mb-2 inline-flex border-none bg-transparent pl-1 pr-5 text-white focus:outline-none"
-				/>
-			</div>
-			<input
-				id="limit-range"
-				type="range"
-				bind:value={reenterLimit}
-				class="range-sm mb-6 h-1 w-full cursor-pointer appearance-none rounded-lg bg-slate-700"
-			/>
-			<div class="pb-2">
-				<label
-					for="offset-range"
-					class="mb-2 inline-flex text-sm font-medium text-white"
-					>Data Offset:
-				</label>
-				<input
-					bind:value={reenterOffset}
-					class="text-md mb-2 inline-flex border-none bg-transparent pl-1 pr-5 text-white focus:outline-none"
-				/>
-			</div>
-			<input
-				id="offset-range"
-				type="range"
-				bind:value={reenterOffset}
-				class="range-sm mb-6 h-1 w-full cursor-pointer appearance-none rounded-lg bg-slate-700"
-			/>
 			<div
-				class="group mx-auto flex rounded-lg pt-5 focus-within:ring-4 focus-within:ring-slate-800 sm:ml-auto sm:inline-flex"
+				class="group flex w-full rounded-lg focus-within:ring-4 focus-within:ring-slate-800 sm:mr-10 sm:inline-flex sm:w-48"
 			>
 				<button
-					class="hidden items-center justify-center rounded-l-lg border-y border-l border-rose-700 bg-rose-400 px-5 py-2 text-center text-sm font-semibold text-slate-100 hover:bg-rose-500 focus:outline-none md:block md:py-3 md:text-base"
+					class="w-full items-center justify-center whitespace-nowrap rounded-l-lg border-y border-l border-rose-700 bg-rose-400 px-5 py-2 text-center text-sm font-semibold text-slate-100 hover:bg-rose-500 focus:outline-none md:w-48 md:py-3 md:text-base"
 					type="submit"
 				>
 					Generate chart
 				</button>
-				<button
-					class="items-center justify-center rounded-l-lg border-y border-l border-rose-700 bg-rose-400 px-5 py-2 text-center text-base font-semibold text-slate-100 hover:bg-rose-500 focus:outline-none md:hidden md:py-3"
-					type="submit"
-				>
-					Generate
-				</button>
-				<select
-					id="chartScale"
-					class="cursor-pointer items-center justify-center border border-rose-700 bg-rose-400 px-5 py-2 text-center text-base font-semibold text-slate-100 hover:bg-rose-500 focus:outline-none md:py-3"
-					bind:value={reenterChartScale}
-				>
-					<option selected value="linear">Linear</option>
-					<option value="logarithmic">Log</option>
-				</select>
-				<select
-					id="chartType"
-					class="cursor-pointer items-center justify-center rounded-r-lg border-y border-r border-rose-700 bg-rose-400 px-5 py-2 text-center text-base font-semibold text-slate-100 hover:bg-rose-500 focus:outline-none md:py-3"
-					bind:value={reenterChartType}
-				>
-					<option selected value="Artist">Artist</option>
-					<option value="Album">Album</option>
-					<option value="Track">Track</option>
-				</select>
+				<GenerateOptions
+					bind:chartType
+					bind:chartScale
+					bind:limit
+					bind:offset
+					bind:startTimestamp
+					bind:endTimestamp
+					bind:dateRange
+					bind:invalidDateAlert
+				/>
 			</div>
 		</div>
 	</form>

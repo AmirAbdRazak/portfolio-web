@@ -9,7 +9,7 @@ export type formDataType = {
 	startTimestamp: number;
 	endTimestamp: number;
 	chartScale: 'linear' | 'logarithmic';
-	dateRange: string;
+	dateRange: 'Week' | 'Month' | 'Quarter' | 'Year' | 'Custom';
 };
 
 export const load: PageLoad = ({ params }) => {

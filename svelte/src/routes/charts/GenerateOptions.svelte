@@ -10,7 +10,7 @@
 	export let chartScale: 'linear' | 'logarithmic';
 	export let limit: number[];
 	export let offset: number[];
-	export let dateRange: string;
+	export let dateRange: 'Week' | 'Month' | 'Quarter' | 'Year' | 'Custom';
 	export let startTimestamp: number;
 	export let endTimestamp: number;
 	export let invalidDateAlert: boolean;
@@ -20,6 +20,14 @@
 	let startMonth = 1;
 	let endYear = new Date().getFullYear();
 	let endMonth = new Date().getMonth();
+
+	const dateRangeMap = {
+		Week: 'Weekly',
+		Month: 'Monthly',
+		Quarter: 'Quarterly',
+		Year: 'Annually',
+		Custom: 'Custom'
+	};
 
 	$: {
 		invalidDateAlert = false;
@@ -140,13 +148,20 @@
 			<Select.Root
 				onSelectedChange={(e) => {
 					const val = e?.value;
-					if (typeof val == 'string') {
+					if (
+						typeof val == 'string' &&
+						(val == 'Week' ||
+							val == 'Month' ||
+							val == 'Quarter' ||
+							val == 'Year' ||
+							val == 'Custom')
+					) {
 						dateRange = val;
 					}
 				}}
 			>
 				<Select.Trigger class="w-50 min-w-[9rem] text-slate-200">
-					<Select.Value bind:placeholder={dateRange} />
+					<Select.Value bind:placeholder={dateRangeMap[dateRange]} />
 				</Select.Trigger>
 				<Select.Content class="border-0 bg-slate-700 text-slate-200">
 					<Select.Item value="Week">Weekly</Select.Item>
