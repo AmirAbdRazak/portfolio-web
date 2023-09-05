@@ -56,8 +56,10 @@
 	let offset: number[] = [0];
 	let chartType: string = 'Artist';
 	let chartScale: 'linear' | 'logarithmic' = 'linear';
-	let startTimestamp: number;
-	let endTimestamp: number;
+	let oneMonthAgo = new Date();
+	oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+	let startTimestamp = oneMonthAgo.getTime() / 1000;
+	let endTimestamp = Date.now() / 1000;
 	let dateRange: 'Week' | 'Month' | 'Quarter' | 'Year' | 'Custom' = 'Custom';
 	let invalidDateAlert = false;
 
