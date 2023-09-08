@@ -2,6 +2,8 @@ import type { ChartConfiguration } from 'chart.js';
 import type { PageLoad } from './$types';
 import type { ChartDataConfig } from '@/src/generated/graphql';
 
+export const ssr = false;
+
 export type formDataType = {
 	chartType: string;
 	limit: number;

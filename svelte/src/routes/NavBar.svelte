@@ -1,7 +1,6 @@
 <script>
 	import { page } from '$app/stores';
 	let showMobileMenu = false;
-	console.log($page.route.id);
 </script>
 
 <nav class="bg-zinc-950 drop-shadow-md">
@@ -66,14 +65,15 @@
 				<div
 					class="flex flex-shrink-0 items-center rounded-md px-2 text-lg text-zinc-300"
 				>
-					<p class="font-semibold">
+					<a class="font-semibold" href="/">
 						Amir <i
-							class="not-italic {$page.route.id == '/charts'
+							class="not-italic {$page.route.id == '/charts' ||
+							$page.route.id == '/charts/[username]'
 								? 'text-rose-400'
 								: 'text-violet-400'}"
 							>Razak
 						</i>
-					</p>
+					</a>
 				</div>
 				<div class="hidden sm:ml-6 sm:block">
 					<div class="flex space-x-4">
