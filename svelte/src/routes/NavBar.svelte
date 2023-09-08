@@ -67,8 +67,9 @@
 				>
 					<a class="font-semibold" href="/">
 						Amir <i
-							class="not-italic {$page.route.id == '/charts' ||
-							$page.route.id == '/charts/[username]'
+							class="not-italic {$page.route.id &&
+							$page.route.id.split('/').length > 0 &&
+							$page.route.id.split('/')[1] == 'charts'
 								? 'text-rose-400'
 								: 'text-violet-400'}"
 							>Razak
