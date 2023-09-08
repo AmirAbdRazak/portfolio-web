@@ -32,10 +32,10 @@
 	}
 </script>
 
-<section class="bg-slate-800 px-4 py-6 lg:px-10 lg:pb-20">
+<section class="bg-zinc-800 px-4 py-6 lg:px-10 lg:pb-20">
 	{#if invalidDateAlert}
 		<Alert.Root
-			class="mx-auto w-fit whitespace-nowrap border-0 bg-rose-400 text-slate-800"
+			class="mx-auto w-fit whitespace-nowrap border-0 bg-rose-400 text-zinc-800"
 		>
 			<Alert.Title class="font-semibold"
 				>Invalid date input detected!</Alert.Title
@@ -57,7 +57,7 @@
 				Check out your listening trends for <a class="text-rose-400">LastFM</a> users
 			</h1>
 			<p
-				class="mb-6 max-w-2xl text-center font-light text-slate-200 md:text-left md:text-lg lg:mb-8 lg:text-xl"
+				class="mb-6 max-w-2xl text-center font-light text-zinc-200 md:text-left md:text-lg lg:mb-8 lg:text-xl"
 			>
 				Compare and observe how your music taste evolved over time, tracks
 				you've been (or had been) obsessed with, artists you've been a number
@@ -77,7 +77,7 @@
 						alt="temp chart"
 						class="object-contain pb-5 pt-7 drop-shadow-2xl"
 					/>
-					<p class="text-center text-sm font-light text-slate-100">
+					<p class="text-center text-sm font-light text-zinc-100">
 						If you want to try out without a LastFM account, click here!
 					</p>
 				</div>
@@ -88,15 +88,15 @@
 						class="flex flex-col items-center pb-5 sm:flex-row sm:justify-between"
 					>
 						<input
-							class="focus:ring-3 mb-5 flex w-full items-center justify-center rounded-lg border-2 border-slate-700 bg-slate-400 py-2 text-center font-medium text-slate-800 drop-shadow-lg placeholder:text-slate-700 focus:outline-none focus:ring-slate-800 sm:mb-0 sm:inline-flex sm:w-80 md:mr-auto md:py-3 md:pr-5"
+							class="focus:ring-3 mb-5 flex w-full items-center justify-center rounded-lg border-2 border-zinc-700 bg-zinc-400 py-2 text-center font-medium text-zinc-800 drop-shadow-lg placeholder:text-zinc-700 focus:outline-none focus:ring-zinc-800 sm:mb-0 sm:inline-flex sm:w-80 md:mr-auto md:py-3 md:pr-5"
 							bind:value={username}
 							placeholder="Enter your username"
 						/>
 						<div
-							class="group flex w-full rounded-lg focus-within:ring-4 focus-within:ring-slate-800 sm:mr-10 sm:inline-flex sm:w-48"
+							class="group flex w-full rounded-lg focus-within:ring-4 focus-within:ring-zinc-800 sm:mr-10 sm:inline-flex sm:w-48"
 						>
 							<button
-								class="w-full items-center justify-center whitespace-nowrap rounded-l-lg border-y border-l border-rose-700 bg-rose-400 px-5 py-2 text-center text-sm font-semibold text-slate-100 hover:bg-rose-500 focus:outline-none md:w-48 md:py-3 md:text-base"
+								class="w-full items-center justify-center whitespace-nowrap rounded-l-lg border-y border-l border-rose-700 bg-rose-400 px-5 py-2 text-center text-sm font-semibold text-zinc-100 hover:bg-rose-500 focus:outline-none md:w-48 md:py-3 md:text-base"
 								type="submit"
 							>
 								Generate chart
@@ -130,7 +130,7 @@
 					alt="temp chart"
 					class="object-contain pb-5 pt-7 drop-shadow-2xl"
 				/>
-				<p class="text-center text-sm font-light text-slate-100">
+				<p class="text-center text-sm font-light text-zinc-100">
 					If you want to try out without a LastFM account, click here!
 				</p>
 			</div>

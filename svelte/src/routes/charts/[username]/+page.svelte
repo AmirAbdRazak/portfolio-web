@@ -148,13 +148,13 @@
 <div
 	class="{isFetched
 		? 'flex'
-		: 'hidden'} h-100 bg-slate-800 px-5 pt-10 text-white md:h-full"
+		: 'hidden'} h-100 bg-zinc-800 px-5 pt-10 text-white md:h-full"
 >
 	<canvas id="chart" />
 </div>
 {#if invalidDateAlert}
 	<Alert.Root
-		class="mx-auto mt-10 w-fit whitespace-nowrap border-0 bg-rose-400 text-slate-800"
+		class="mx-auto mt-10 w-fit whitespace-nowrap border-0 bg-rose-400 text-zinc-800"
 	>
 		<Alert.Title class="font-semibold">Invalid date input detected!</Alert.Title
 		>
@@ -165,7 +165,7 @@
 	</Alert.Root>
 {/if}
 <div
-	class="mx-auto flex flex-col items-center justify-center place-self-center bg-slate-800 py-10 sm:flex-row lg:col-span-7"
+	class="mx-auto flex flex-col items-center justify-center place-self-center bg-zinc-800 py-10 sm:flex-row lg:col-span-7"
 >
 	<form method="POST" on:submit={handleSubmit}>
 		<div class="flex flex-col">
@@ -173,15 +173,15 @@
 				class="flex flex-col items-center pb-5 sm:flex-row sm:justify-between sm:space-x-10"
 			>
 				<input
-					class="focus:ring-3 mb-5 flex w-full items-center justify-center rounded-lg border-2 border-slate-700 bg-slate-400 py-2 text-center font-medium text-slate-800 drop-shadow-lg placeholder:text-slate-700 focus:outline-none focus:ring-slate-800 sm:mb-0 sm:inline-flex sm:w-80 md:mr-auto md:py-3 md:pr-5"
+					class="focus:ring-3 mb-5 flex w-full items-center justify-center rounded-lg border-2 border-zinc-700 bg-zinc-400 py-2 text-center font-medium text-zinc-800 drop-shadow-lg placeholder:text-zinc-700 focus:outline-none focus:ring-zinc-800 sm:mb-0 sm:inline-flex sm:w-80 md:mr-auto md:py-3 md:pr-5"
 					bind:value={username}
 					placeholder="Enter your username"
 				/>
 				<div
-					class="group flex w-full rounded-lg focus-within:ring-4 focus-within:ring-slate-800 sm:mr-10 sm:inline-flex sm:w-48"
+					class="group flex w-full rounded-lg focus-within:ring-4 focus-within:ring-zinc-800 sm:mr-10 sm:inline-flex sm:w-48"
 				>
 					<button
-						class="w-full items-center justify-center whitespace-nowrap rounded-l-lg border-y border-l border-rose-700 bg-rose-400 px-5 py-2 text-center text-sm font-semibold text-slate-100 hover:bg-rose-500 focus:outline-none md:w-48 md:py-3 md:text-base"
+						class="w-full items-center justify-center whitespace-nowrap rounded-l-lg border-y border-l border-rose-700 bg-rose-400 px-5 py-2 text-center text-sm font-semibold text-zinc-100 hover:bg-rose-500 focus:outline-none md:w-48 md:py-3 md:text-base"
 						type="submit"
 					>
 						Generate chart
@@ -205,7 +205,7 @@
 	<Loader {username} />
 {:else if $queryData.error}
 	<div
-		class="fixed bottom-0 left-0 right-0 top-0 z-50 flex h-screen w-full flex-col items-center justify-center overflow-hidden bg-slate-800"
+		class="fixed bottom-0 left-0 right-0 top-0 z-50 flex h-screen w-full flex-col items-center justify-center overflow-hidden bg-zinc-800"
 	>
 		<p class="w-1/3 text-center text-white">
 			Some error occurred, either check your username, or its on our side.
