@@ -11,7 +11,7 @@
 			font-family: 'Montserrat';
 			font-style: 'normal';
 			font-weight: 400;
-			background-color: {bgColor};
+			background-color: #18181b;
 		}
 	</style>
 </svelte:head>
