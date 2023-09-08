@@ -1,6 +1,9 @@
 <script lang="ts">
 	import * as Avatar from '$lib/components/ui/avatar';
 	import { Button } from '$lib/components/ui/button';
+	import * as Card from '$lib/components/ui/card';
+	import chartImage from '$lib/assets/chartexample.png';
+	import { Github, Globe2 } from 'lucide-svelte';
 </script>
 
 <section class="bg-zinc-900">
@@ -34,4 +37,41 @@
 	<h1 class="py-10 text-center text-4xl font-semibold text-violet-200">
 		Portfolio
 	</h1>
+	<div class="grid transform grid-cols-2 gap-10 px-10 pb-20">
+		<Card.Root
+			class="border-0 bg-zinc-900 text-zinc-200 transition-transform duration-300 ease-in-out hover:bg-neutral-900"
+		>
+			<Card.Header>
+				<Card.Title class="text-violet-200">LastFM Charts</Card.Title>
+				<Card.Description
+					>Listening history data visualization for LastFM users
+				</Card.Description>
+			</Card.Header>
+			<Card.Content>
+				<img src={chartImage} alt="Chart" />
+			</Card.Content>
+			<Card.Footer class="space-x-5">
+				<a href="https://github.com/AmirAbdRazak/portfolio-web">
+					<Button class="rounded-lg bg-zinc-700 hover:bg-zinc-800">
+						<div
+							class="flex-cols flex items-center space-x-2 whitespace-nowrap text-zinc-200"
+						>
+							<p>GitHub</p>
+							<Github />
+						</div>
+					</Button>
+				</a>
+				<a href="/charts">
+					<Button class="rounded-lg bg-violet-300 hover:bg-violet-200">
+						<div
+							class="flex-cols flex items-center space-x-2 whitespace-nowrap text-zinc-800"
+						>
+							<p>Live Demo</p>
+							<Globe2 />
+						</div>
+					</Button>
+				</a>
+			</Card.Footer>
+		</Card.Root>
+	</div>
 </section>

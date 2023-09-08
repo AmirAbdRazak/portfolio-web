@@ -117,23 +117,20 @@
 			</form>
 		</div>
 		<div class="hidden lg:col-span-5 lg:flex">
-			<!-- svelte-ignore a11y-click-events-have-key-events -->
-			<!-- svelte-ignore a11y-no-static-element-interactions -->
-			<div
-				class="hidden transform transition-transform duration-300 ease-in-out hover:scale-110 lg:mt-20 lg:flex lg:flex-col"
-				on:click={() => {
-					goto('charts/ryzlesalt');
-				}}
-			>
-				<img
-					src={chartImage}
-					alt="temp chart"
-					class="object-contain pb-5 pt-7 drop-shadow-2xl"
-				/>
-				<p class="text-center text-sm font-light text-zinc-100">
-					If you want to try out without a LastFM account, click here!
-				</p>
-			</div>
+			<a href="/charts/ryzlesalt">
+				<div
+					class="hidden transform transition-transform duration-300 ease-in-out hover:scale-110 lg:mt-20 lg:flex lg:flex-col"
+				>
+					<img
+						src={chartImage}
+						alt="temp chart"
+						class="object-contain pb-5 pt-7 drop-shadow-lg"
+					/>
+					<p class="text-center text-sm font-light text-zinc-100">
+						If you want to try out without a LastFM account, click here!
+					</p>
+				</div>
+			</a>
 		</div>
 	</div>
 </section>
