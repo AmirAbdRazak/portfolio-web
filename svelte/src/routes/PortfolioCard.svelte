@@ -13,7 +13,7 @@
 	export let techStack: string[];
 </script>
 
-<Tooltip.Root>
+<Tooltip.Root openDelay={2}>
 	<Tooltip.Trigger>
 		<Card.Root
 			class="border-0 bg-opacity-80 bg-gradient-to-br from-indigo-200 to-violet-300 text-zinc-200 transition-transform duration-300 ease-in-out"
@@ -51,7 +51,7 @@
 			</Card.Footer>
 		</Card.Root>
 	</Tooltip.Trigger>
-	<Tooltip.Content class="border-2 bg-zinc-700  text-violet-100">
+	<Tooltip.Content class=" border-2  bg-zinc-700 text-violet-100">
 		<p>Tech Stack:</p>
 		<ul>
 			{#each techStack as tech}

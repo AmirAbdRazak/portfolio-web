@@ -19,6 +19,7 @@
 	import nextLogo from '$lib/assets/nextjs.png';
 	import linuxLogo from '$lib/assets/linux.png';
 	import svelteLogo from '$lib/assets/svelte.png';
+	import { GithubIcon } from 'lucide-svelte';
 </script>
 
 <section class="bg-gradient-to-b from-indigo-200 to-violet-300">
@@ -62,7 +63,7 @@
 	>
 		<h1 class="text-center text-4xl font-semibold">Programming Languages</h1>
 		<div class="flex flex-row items-center space-x-2 opacity-70">
-			<Tooltip.Root>
+			<Tooltip.Root openDelay={2}>
 				<Tooltip.Trigger>
 					<Info class="" size={20} />
 				</Tooltip.Trigger>
@@ -97,10 +98,31 @@
 			imgSrc={svelteLogo}
 			imgAlt="SvelteKit Full Stack Framework"
 		/>
+		<TechStackImage
+			><GithubIcon
+				class="h-24 w-24 rounded-lg object-contain"
+			/></TechStackImage
+		>
 	</div>
 </section>
-<section class="bg-gradient-to-b from-indigo-200 to-violet-300">
-	Experience
+<section class="bg-gradient-to-br from-indigo-200 to-violet-300">
+	<h1 class="py-10 text-center text-4xl font-semibold text-zinc-800">
+		Experience
+	</h1>
+	<div class="px-10 pb-10 text-zinc-800">
+		<p>Feb 2023 - Aug 2023</p>
+		<p class="text-xl font-semibold">
+			Backend Engineer Intern @ Infin8co Sdn Bhd
+		</p>
+		<p class="pr-40">
+			Joined the team to work on an enterprise chat platform named Talkhub as a
+			Backend Engineer Intern. Primarily responsible for 2 different feature
+			sections, namely CSV Importing and Reporting Metrics within the respective
+			GraphQL endpoints, inside the Django and Docker ecosystem. Committed a few
+			thousand lines of code into production including rigorous test cases for
+			reliability.
+		</p>
+	</div>
 </section>
 <section class="bg-zinc-800">
 	<div
@@ -108,7 +130,7 @@
 	>
 		<h1 class="text-center text-4xl font-semibold">Portfolio</h1>
 		<div class="flex flex-row items-center space-x-2 opacity-70">
-			<Tooltip.Root>
+			<Tooltip.Root openDelay={2}>
 				<Tooltip.Trigger>
 					<Info class="" size={20} />
 				</Tooltip.Trigger>
