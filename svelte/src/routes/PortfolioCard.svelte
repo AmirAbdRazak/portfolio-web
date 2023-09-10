@@ -26,10 +26,12 @@
 				<img src={cardImage} alt={title} class="rounded-md object-cover" />
 			</Card.Content>
 			<Card.Footer
-				class="flex flex-col space-y-5 sm:flex-row md:space-x-5 md:space-y-0 "
+				class="flex flex-col space-y-5 sm:flex-row sm:space-x-5 sm:space-y-0 "
 			>
 				<a href={githubRepo}>
-					<Button class="rounded-lg bg-zinc-800 hover:bg-zinc-700 ">
+					<Button
+						class="w-64 rounded-lg bg-zinc-800 hover:bg-zinc-700 sm:w-full "
+					>
 						<div
 							class="flex flex-row items-center space-x-2 whitespace-nowrap text-violet-100"
 						>
@@ -40,7 +42,7 @@
 				</a>
 				<a href={cardLink}>
 					<Button
-						class="rounded-lg border-2 border-zinc-700 bg-transparent hover:bg-violet-200 "
+						class="w-64 rounded-lg border-2 border-zinc-700 bg-transparent hover:bg-violet-200 sm:w-full"
 					>
 						<div
 							class="flex flex-row items-center space-x-2 whitespace-nowrap font-semibold text-zinc-800"

@@ -1,12 +1,19 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import { Moon, Sun } from 'lucide-svelte';
+	import { Button } from '$lib/components/ui/button';
+	import { stateStore } from './StateStore';
 	let showMobileMenu = false;
+	let isDarkMode: boolean;
+	$: isDarkMode = true;
 </script>
 
 <nav
 	class={` drop-shadow-md ${
 		$page.route.id && $page.route.id == '/'
-			? 'bg-gradient-to-b from-indigo-100 to-indigo-200 drop-shadow-none'
+			? showMobileMenu
+				? 'bg-zinc-800'
+				: 'bg-gradient-to-b from-indigo-100 to-indigo-200 drop-shadow-none'
 			: 'bg-zinc-900'
 	}`}
 >
@@ -16,7 +23,7 @@
 				<!-- Mobile menu button-->
 				<button
 					type="button"
-					class="relative inline-flex items-center justify-center rounded-md p-2 text-zinc-400 hover:bg-zinc-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+					class="relative inline-flex items-center justify-center rounded-md p-2 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-zinc-800"
 					aria-controls="mobile-menu"
 					aria-expanded="false"
 					on:click={() => {
@@ -74,7 +81,9 @@
 					<a
 						class={`font-semibold ${
 							$page.route.id && $page.route.id == '/'
-								? 'text-zinc-800'
+								? showMobileMenu
+									? 'text-violet-100'
+									: 'text-zinc-800'
 								: 'text-zinc-300'
 						}`}
 						href="/"
@@ -89,17 +98,48 @@
 						</i>
 					</a>
 				</div>
-				<div class="hidden sm:ml-6 sm:block">
-					<div class="flex space-x-4">
+				<div
+					class="hidden w-full items-center sm:ml-6 sm:flex sm:flex-row sm:justify-between"
+				>
+					<div class="flex flex-row items-center space-x-4">
 						<a
 							href="/charts"
-							class={`rounded-md px-3 py-2 text-sm font-medium text-white ${
-								$page.route.id &&
-								$page.route.id == '/' &&
-								'border-2 border-zinc-800 bg-transparent font-semibold text-zinc-800 hover:bg-violet-100'
+							class={`text-md rounded-md px-3 py-2 font-medium text-white ${
+								$page.route.id && $page.route.id == '/'
+									? ' bg-transparent font-semibold text-zinc-800 hover:bg-violet-100'
+									: 'hover:bg-zinc-800'
 							}`}
 							aria-current="page">Charts</a
 						>
+						<a
+							href="/resume"
+							class={`text-md rounded-md px-3 py-2 font-medium text-white ${
+								$page.route.id && $page.route.id == '/'
+									? ' bg-transparent font-semibold text-zinc-800 hover:bg-violet-100'
+									: 'hover:bg-zinc-800'
+							}`}
+							aria-current="page">Resume</a
+						>
+					</div>
+					<div
+						class={$page.route.id && $page.route.id == '/resume'
+							? 'block'
+							: 'hidden'}
+					>
+						<Button
+							on:click={() => {
+								isDarkMode = !isDarkMode;
+								stateStore.set({
+									isDarkMode
+								});
+							}}
+						>
+							{#if isDarkMode}
+								<Moon class="text-zinc-200" size={28} />
+							{:else}
+								<Sun class="text-zinc-200" size={28} />
+							{/if}
+						</Button>
 					</div>
 				</div>
 			</div>
@@ -107,10 +147,18 @@
 	</div>
 
 	<div class="{showMobileMenu ? 'block' : 'hidden'} sm:hidden" id="mobile-menu">
-		<div class="w-full px-2 pb-3 pt-2">
+		<div
+			class={`w-full ${
+				$page.route.id && $page.route.id == '/' ? 'bg-zinc-800' : 'bg-zinc-900'
+			} px-2 pb-3 pt-2`}
+		>
 			<a
 				href="/charts"
-				class="mx-auto rounded-md bg-zinc-900 px-3 py-2 text-base font-medium text-white"
+				class={`rounded-md ${
+					$page.route.id && $page.route.id == '/'
+						? 'bg-violet-300 text-zinc-800'
+						: 'bg-zinc-800 text-zinc-200'
+				} px-3 py-2 text-base font-medium `}
 				aria-current="page">Charts</a
 			>
 		</div>

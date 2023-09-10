@@ -7,6 +7,8 @@
 	import PortfolioCard from './PortfolioCard.svelte';
 	import TechStackImage from './TechStackImage.svelte';
 
+	import resumePDF from '$lib/assets/Amir Razak SWE Resume .pdf';
+
 	import chartImage from '$lib/assets/chartexample.png';
 	import ecommImage from '$lib/assets/ecommfypexample.png';
 	import rustLogo from '$lib/assets/rust.png';
@@ -76,10 +78,13 @@
 				</ul>
 				<div class="flex flex-row items-center">
 					<Button
-						class="rounded-lg bg-zinc-800 px-5 text-lg font-semibold text-violet-200"
-						>Download Resume</Button
+						class="text-md rounded-lg bg-zinc-800 px-5 font-semibold text-violet-200 md:text-lg"
+						href={resumePDF}
+						download="Amir Razak SWE Resume">Download Resume</Button
 					>
-					<p class="px-5 text-zinc-800 underline">Or see it on the web</p>
+					<a href="/resume" class="px-5 text-zinc-800 underline"
+						>Or view it on the web</a
+					>
 				</div>
 			</div>
 			<Avatar.Root
@@ -146,16 +151,16 @@
 		>
 	</div>
 </section>
-<section class="bg-gradient-to-br from-indigo-200 to-violet-300">
+<section class="bg-gradient-to-br from-indigo-100 to-violet-300">
 	<h1 class="py-10 text-center text-4xl font-semibold text-zinc-800">
 		Professional Experience
 	</h1>
-	<div class="px-10 pb-10 text-zinc-800">
+	<div class="px-10 pb-10 text-zinc-800 md:pl-20 lg:pl-24">
 		<p>Feb 2023 - Aug 2023</p>
 		<p class="text-xl font-semibold">
 			Backend Engineer Intern @ Infin8co Sdn Bhd
 		</p>
-		<p class="md:pr-40 lg:pr-56 xl:pr-72">
+		<p class="md:pr-24 lg:pr-48 xl:pr-72">
 			Joined the team to work on an enterprise chat platform named Talkhub as a
 			Backend Engineer Intern. Primarily responsible for 2 different feature
 			sections, namely CSV Importing and Reporting Metrics within the respective

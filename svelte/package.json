@@ -56,6 +56,7 @@
 		"graphql": "^16.7.1",
 		"hammerjs": "^2.0.8",
 		"lucide-svelte": "^0.275.0-beta.0",
+		"pdfjs": "^2.5.2",
 		"svelte": "^4.0.5",
 		"svelte-device-info": "^1.0.0",
 		"tailwind-merge": "^1.14.0",
