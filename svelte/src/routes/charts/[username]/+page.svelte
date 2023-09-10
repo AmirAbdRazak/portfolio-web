@@ -173,7 +173,7 @@
 				class="flex flex-col items-center pb-5 sm:flex-row sm:justify-between sm:space-x-10"
 			>
 				<input
-					class="focus:ring-3 mb-5 flex w-full items-center justify-center rounded-lg border-2 border-zinc-700 bg-zinc-400 py-2 text-center font-medium text-zinc-800 drop-shadow-lg placeholder:text-zinc-700 focus:outline-none focus:ring-zinc-800 sm:mb-0 sm:inline-flex sm:w-80 md:mr-auto md:py-3 md:pr-5"
+					class="focus:ring-3 mb-5 flex w-full items-center justify-center rounded-lg border-2 border-rose-200 bg-rose-100 bg-transparent bg-opacity-0 py-2 text-center font-medium text-rose-200 drop-shadow-lg placeholder:text-rose-200 focus:bg-opacity-5 focus:outline-none focus:ring-zinc-800 sm:mb-0 sm:inline-flex sm:w-80 md:mr-auto md:py-3 md:pr-5"
 					bind:value={username}
 					placeholder="Enter your username"
 				/>
