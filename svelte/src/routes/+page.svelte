@@ -3,7 +3,7 @@
 	import { Button } from '$lib/components/ui/button';
 	import * as Tooltip from '$lib/components/ui/tooltip';
 
-	import { Info } from 'lucide-svelte';
+	import { Info, Linkedin, Mail, Phone } from 'lucide-svelte';
 	import PortfolioCard from './PortfolioCard.svelte';
 	import TechStackImage from './TechStackImage.svelte';
 
@@ -25,7 +25,7 @@
 <section class="bg-gradient-to-b from-indigo-200 to-violet-300">
 	<div class="mx-auto max-w-screen-xl px-4 py-8 text-left lg:px-12 lg:py-16">
 		<div class="flex-cols flex justify-around">
-			<div>
+			<div class="pl-5">
 				<h1
 					class="mb-4 text-3xl font-extrabold leading-none tracking-tight text-zinc-900 md:text-5xl lg:text-5xl"
 				>
@@ -37,6 +37,32 @@
 					from building robust RESTful APIs to seamlessly managing database
 					migrations.
 				</p>
+				<ul
+					class="text-md mb-8 grid grid-cols-2 items-baseline space-y-2 font-normal text-zinc-800 lg:text-lg"
+				>
+					<li class="flex flex-row space-x-2">
+						<Phone />
+						<p>: +60-175005516</p>
+					</li>
+					<li class=" flex flex-row space-x-2">
+						<Mail />
+						<p>: amrrzk02@gmail.com</p>
+					</li>
+					<li class="flex flex-row space-x-2">
+						<Linkedin />
+						<p>:</p>
+						<a href="https://www.linkedin.com/in/AmirAbdRazak" class="underline"
+							>@AmirAbdRazak</a
+						>
+					</li>
+					<li class="flex flex-row space-x-2">
+						<GithubIcon />
+						<p>:</p>
+						<a href="https://www.github.com/AmirAbdRazak" class="underline">
+							@AmirAbdRazak</a
+						>
+					</li>
+				</ul>
 				<div class="flex flex-row items-center">
 					<Button
 						class="rounded-lg bg-zinc-800 px-5 text-lg font-semibold text-violet-200"
