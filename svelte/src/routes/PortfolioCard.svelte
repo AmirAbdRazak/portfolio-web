@@ -18,7 +18,7 @@
 		<Card.Root
 			class="border-0 bg-opacity-80 bg-gradient-to-br from-indigo-200 to-violet-300 text-zinc-200 transition-transform duration-300 ease-in-out"
 		>
-			<Card.Header>
+			<Card.Header class="text-left">
 				<Card.Title class="text-zinc-800">{title}</Card.Title>
 				<Card.Description class="text-zinc-700">{description}</Card.Description>
 			</Card.Header>

@@ -83,7 +83,7 @@
 							$page.route.id.split('/').length > 0 &&
 							$page.route.id.split('/')[1] == 'charts'
 								? 'text-rose-400'
-								: 'text-violet-400'}"
+								: 'text-violet-600'}"
 							>Razak
 						</i>
 					</a>
