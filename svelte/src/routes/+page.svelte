@@ -2,7 +2,10 @@
 	import * as Avatar from '$lib/components/ui/avatar';
 	import { Button } from '$lib/components/ui/button';
 	import chartImage from '$lib/assets/chartexample.png';
+	import ecommImage from '$lib/assets/ecommfypexample.png';
 	import PortfolioCard from './PortfolioCard.svelte';
+	import * as Tooltip from '$lib/components/ui/tooltip';
+	import { Info } from 'lucide-svelte';
 </script>
 
 <section class="bg-gradient-to-b from-indigo-200 to-violet-300">
@@ -35,22 +38,60 @@
 					src="https://github.com/amirabdrazak.png"
 					alt="@amirabdrazak"
 				/>
-				<Avatar.Fallback>AR</Avatar.Fallback>
+				<Avatar.Fallback class="bg-transparent">Amir Razak</Avatar.Fallback>
 			</Avatar.Root>
 		</div>
 	</div>
 </section>
 <section class="bg-zinc-800">
-	<h1 class="py-10 text-center text-4xl font-semibold text-violet-100">
-		Portfolio
-	</h1>
+	<div
+		class="mx-auto flex flex-row items-center justify-center space-x-5 py-10 text-violet-100"
+	>
+		<h1 class="text-center text-4xl font-semibold">Portfolio</h1>
+		<div class="flex flex-row items-center space-x-2 opacity-70">
+			<Tooltip.Root>
+				<Tooltip.Trigger>
+					<Info class="" size={20} />
+				</Tooltip.Trigger>
+				<Tooltip.Content class="border-2 bg-zinc-700 text-violet-100">
+					<p>
+						Hover over portfolio card for more info about the tech stack used
+					</p>
+				</Tooltip.Content>
+			</Tooltip.Root>
+		</div>
+	</div>
 	<div class="grid transform grid-cols-2 gap-10 px-10 pb-20">
 		<PortfolioCard
 			title="LastFM Chart"
 			description="Listening history data visualization for LastFM users"
-			{chartImage}
+			cardImage={chartImage}
 			githubRepo="https://github.com/AmirAbdRazak/portfolio-web"
-			chartLink="/charts"
+			cardLink="/charts"
+			techStack={[
+				'Rust',
+				'TypeScript',
+				'JavaScript',
+				'Svelte',
+				'Axum',
+				'Docker',
+				'GraphQL API',
+				'PostgreSQL'
+			]}
+		/>
+		<PortfolioCard
+			title="Mock E-Commerce FYP"
+			description="Mock website for showcasing recommendation algorithm (deprecated) during my Final Year Project"
+			cardImage={ecommImage}
+			githubRepo="https://github.com/AmirAbdRazak/ecomm-fyp"
+			cardLink="https://ecomm-fyp.vercel.app/"
+			techStack={[
+				'TypeScript',
+				'NextJS',
+				'RESTful API',
+				'Python',
+				'PostgreSQL'
+			]}
 		/>
 	</div>
 </section>
