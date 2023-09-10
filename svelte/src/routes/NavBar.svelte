@@ -1,9 +1,21 @@
-<script>
+<script lang="ts">
 	import { page } from '$app/stores';
 	let showMobileMenu = false;
+	import { cn } from '$lib/utils';
+	let navBarClassName: string;
+	let navBarAmir: string;
+	let navBarButton: string;
+
+	if ($page.route.id && $page.route.id == '/') {
+		navBarClassName =
+			'bg-gradient-to-b from-indigo-100 to-indigo-200 drop-shadow-none';
+		navBarAmir = 'text-zinc-800';
+		navBarButton =
+			'bg-transparent border-2 border-zinc-800 text-zinc-800 font-semibold hover:bg-violet-100';
+	}
 </script>
 
-<nav class="bg-zinc-950 drop-shadow-md">
+<nav class={cn('bg-zinc-900 drop-shadow-md', navBarClassName)}>
 	<div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
 		<div class="relative flex h-16 items-center justify-between">
 			<div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -65,7 +77,7 @@
 				<div
 					class="flex flex-shrink-0 items-center rounded-md px-2 text-lg text-zinc-300"
 				>
-					<a class="font-semibold" href="/">
+					<a class={cn('font-semibold', navBarAmir)} href="/">
 						Amir <i
 							class="not-italic {$page.route.id &&
 							$page.route.id.split('/').length > 0 &&
@@ -80,7 +92,10 @@
 					<div class="flex space-x-4">
 						<a
 							href="/charts"
-							class="rounded-md bg-zinc-800 px-3 py-2 text-sm font-medium text-white"
+							class={cn(
+								'rounded-md px-3 py-2 text-sm font-medium text-white',
+								navBarButton
+							)}
 							aria-current="page">Charts</a
 						>
 					</div>

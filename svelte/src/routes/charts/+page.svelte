@@ -67,7 +67,7 @@
 				<!-- svelte-ignore a11y-click-events-have-key-events -->
 				<!-- svelte-ignore a11y-no-static-element-interactions -->
 				<div
-					class="transform transition-transform duration-300 ease-in-out hover:scale-110 lg:hidden"
+					class="transform transition-transform duration-300 ease-in-out hover:scale-105 lg:hidden"
 					on:click={() => {
 						goto('charts/ryzlesalt');
 					}}
