@@ -24,7 +24,16 @@
 
 <section class="bg-gradient-to-b from-indigo-200 to-violet-300">
 	<div class="mx-auto max-w-screen-xl px-4 py-8 text-left lg:px-12 lg:py-16">
-		<div class="flex-cols flex justify-around">
+		<div class="flex flex-col justify-around lg:flex-row">
+			<Avatar.Root
+				class="mx-auto mb-10 block h-40 w-40 border-4 border-zinc-800 lg:hidden"
+			>
+				<Avatar.Image
+					src="https://github.com/amirabdrazak.png"
+					alt="@amirabdrazak"
+				/>
+				<Avatar.Fallback class="bg-transparent">Amir Razak</Avatar.Fallback>
+			</Avatar.Root>
 			<div class="pl-5">
 				<h1
 					class="mb-4 text-3xl font-extrabold leading-none tracking-tight text-zinc-900 md:text-5xl lg:text-5xl"
@@ -42,22 +51,24 @@
 				>
 					<li class="flex flex-row space-x-2">
 						<Phone />
-						<p>: +60-175005516</p>
+						<p class="hidden sm:block">:</p>
+						<p>+60-175005516</p>
 					</li>
 					<li class=" flex flex-row space-x-2">
 						<Mail />
-						<p>: amrrzk02@gmail.com</p>
+						<p class="hidden sm:block">:</p>
+						<p>amrrzk02@gmail.com</p>
 					</li>
 					<li class="flex flex-row space-x-2">
 						<Linkedin />
-						<p>:</p>
+						<p class="hidden sm:block">:</p>
 						<a href="https://www.linkedin.com/in/AmirAbdRazak" class="underline"
 							>@AmirAbdRazak</a
 						>
 					</li>
 					<li class="flex flex-row space-x-2">
 						<GithubIcon />
-						<p>:</p>
+						<p class="hidden sm:block">:</p>
 						<a href="https://www.github.com/AmirAbdRazak" class="underline">
 							@AmirAbdRazak</a
 						>
@@ -72,7 +83,7 @@
 				</div>
 			</div>
 			<Avatar.Root
-				class="my-auto ml-20 mr-20 h-52 w-52 border-4 border-zinc-800"
+				class="my-auto ml-20 mr-20 hidden h-52 w-52 border-4 border-zinc-800 lg:block"
 			>
 				<Avatar.Image
 					src="https://github.com/amirabdrazak.png"
@@ -101,7 +112,9 @@
 			</Tooltip.Root>
 		</div>
 	</div>
-	<div class="mx-auto flex flex-row justify-center space-x-10">
+	<div
+		class="grid grid-cols-2 gap-10 md:mx-auto md:flex md:flex-row md:justify-center md:space-x-10"
+	>
 		<TechStackImage imgSrc={pyLogo} imgAlt="Python Programming Language" />
 		<TechStackImage imgSrc={tsLogo} imgAlt="TypeScript Programming Language" />
 		<TechStackImage imgSrc={jsLogo} imgAlt="JavaScript Programming Language" />
@@ -114,7 +127,9 @@
 			Backend & Infra Technology
 		</h1>
 	</div>
-	<div class="mx-auto flex flex-row justify-center space-x-10 pb-10">
+	<div
+		class="grid grid-cols-2 gap-10 pb-10 md:grid-cols-3 lg:mx-auto lg:flex lg:flex-row lg:justify-center lg:space-x-10"
+	>
 		<TechStackImage imgSrc={dockerLogo} imgAlt="Docker" />
 		<TechStackImage imgSrc={djangoLogo} imgAlt="Django Backend Framework" />
 		<TechStackImage imgSrc={gqlLogo} imgAlt="GraphQL API Server" />
@@ -126,21 +141,21 @@
 		/>
 		<TechStackImage
 			><GithubIcon
-				class="h-24 w-24 rounded-lg object-contain"
+				class="mx-auto h-24 w-24 rounded-lg object-contain"
 			/></TechStackImage
 		>
 	</div>
 </section>
 <section class="bg-gradient-to-br from-indigo-200 to-violet-300">
 	<h1 class="py-10 text-center text-4xl font-semibold text-zinc-800">
-		Experience
+		Professional Experience
 	</h1>
 	<div class="px-10 pb-10 text-zinc-800">
 		<p>Feb 2023 - Aug 2023</p>
 		<p class="text-xl font-semibold">
 			Backend Engineer Intern @ Infin8co Sdn Bhd
 		</p>
-		<p class="pr-40">
+		<p class="md:pr-40 lg:pr-56 xl:pr-72">
 			Joined the team to work on an enterprise chat platform named Talkhub as a
 			Backend Engineer Intern. Primarily responsible for 2 different feature
 			sections, namely CSV Importing and Reporting Metrics within the respective
@@ -168,7 +183,7 @@
 			</Tooltip.Root>
 		</div>
 	</div>
-	<div class="grid transform grid-cols-2 gap-10 px-10 pb-20">
+	<div class="grid transform grid-cols-1 gap-10 px-10 pb-20 md:grid-cols-2">
 		<PortfolioCard
 			title="LastFM Chart"
 			description="Listening history data visualization for LastFM users"

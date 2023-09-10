@@ -25,11 +25,13 @@
 			<Card.Content>
 				<img src={cardImage} alt={title} class="rounded-md object-cover" />
 			</Card.Content>
-			<Card.Footer class="space-x-5">
+			<Card.Footer
+				class="flex flex-col space-y-5 sm:flex-row md:space-x-5 md:space-y-0 "
+			>
 				<a href={githubRepo}>
-					<Button class="rounded-lg bg-zinc-800 hover:bg-zinc-700">
+					<Button class="rounded-lg bg-zinc-800 hover:bg-zinc-700 ">
 						<div
-							class="flex-cols flex items-center space-x-2 whitespace-nowrap text-violet-100"
+							class="flex flex-row items-center space-x-2 whitespace-nowrap text-violet-100"
 						>
 							<p>GitHub</p>
 							<Github />
@@ -38,10 +40,10 @@
 				</a>
 				<a href={cardLink}>
 					<Button
-						class="rounded-lg border-2 border-zinc-700 bg-transparent hover:bg-violet-200"
+						class="rounded-lg border-2 border-zinc-700 bg-transparent hover:bg-violet-200 "
 					>
 						<div
-							class="flex-cols flex items-center space-x-2 whitespace-nowrap font-semibold text-zinc-800"
+							class="flex flex-row items-center space-x-2 whitespace-nowrap font-semibold text-zinc-800"
 						>
 							<p>Live Demo</p>
 							<Globe2 />

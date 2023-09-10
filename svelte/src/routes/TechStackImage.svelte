@@ -11,7 +11,7 @@
 			<img
 				src={imgSrc}
 				alt={imgAlt}
-				class="h-24 w-24 rounded-lg object-contain"
+				class="mx-auto h-24 w-24 rounded-lg object-contain"
 			/>
 		{/if}
 		<slot />
