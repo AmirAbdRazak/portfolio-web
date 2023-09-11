@@ -36,50 +36,62 @@
 				/>
 				<Avatar.Fallback class="bg-transparent">Amir Razak</Avatar.Fallback>
 			</Avatar.Root>
-			<div>
+			<div class="pl-5">
 				<h1
-					class="mb-4 pl-5 text-3xl font-extrabold leading-none tracking-tight text-zinc-900 md:text-5xl lg:text-5xl"
+					class="mb-4 text-3xl font-extrabold leading-none tracking-tight text-zinc-900 md:text-5xl lg:text-5xl"
 				>
 					Backend Engineer
 				</h1>
-				<p class="text-md mb-8 pl-5 font-normal text-zinc-800 lg:text-lg">
+				<p class="text-md mb-8 font-normal text-zinc-800 lg:text-lg">
 					I'm Amir Razak, a backend engineer with an insatiable curiosity for
 					bleeding-edge technology. My expertise spans a wide range of areas,
 					from building robust RESTful APIs to seamlessly managing database
 					migrations.
 				</p>
 				<ul
-					class="text-md mx-auto mb-8 grid grid-cols-2 items-baseline space-y-2 font-normal text-zinc-800 sm:pl-5 lg:text-lg"
+					class="text-md mx-auto mb-8 grid grid-cols-1 items-baseline space-y-2 font-normal text-zinc-800 sm:grid-cols-2 lg:text-lg"
 				>
 					<li
-						class="flex flex-col space-x-2 space-y-2 sm:flex-row sm:space-y-0"
+						class="flex flex-row justify-between pr-4 sm:justify-start sm:space-x-2"
 					>
-						<Phone class="mx-auto sm:mx-0" />
-						<p class="hidden sm:block">:</p>
-						<p class="text-center sm:text-left">+60-175005516</p>
+						<div class="flex flex-row space-x-2">
+							<Phone />
+							<p class="hidden sm:block">:</p>
+							<p class="block sm:hidden">Phone Number:</p>
+						</div>
+						<p class="text-left">+60-175005516</p>
 					</li>
 					<li
-						class="flex flex-col space-x-2 space-y-2 sm:flex-row sm:space-y-0"
+						class="flex flex-row justify-between pr-4 sm:justify-start sm:space-x-2"
 					>
-						<Mail class="mx-auto sm:mx-0" />
-						<p class="hidden sm:block">:</p>
-						<p class="text-center sm:text-left">amrrzk02@gmail.com</p>
+						<div class="flex flex-row space-x-2">
+							<Mail />
+							<p class="hidden sm:block">:</p>
+							<p class="block sm:hidden">Email:</p>
+						</div>
+						<p class="text-left">amrrzk02@gmail.com</p>
 					</li>
 					<li
-						class="flex flex-col space-x-2 space-y-2 sm:flex-row sm:space-y-0"
+						class="flex flex-row justify-between pr-4 sm:justify-start sm:space-x-2"
 					>
-						<Linkedin class="mx-auto sm:mx-0" />
-						<p class="hidden sm:block">:</p>
+						<div class="flex flex-row space-x-2">
+							<Linkedin />
+							<p class="hidden sm:block">:</p>
+							<p class="block sm:hidden">LinkedIn:</p>
+						</div>
 						<a
 							href="https://www.linkedin.com/in/AmirAbdRazak"
 							class="text-center underline sm:text-left">@AmirAbdRazak</a
 						>
 					</li>
 					<li
-						class="flex flex-col space-x-2 space-y-2 sm:flex-row sm:space-y-0"
+						class="flex flex-row justify-between pr-4 sm:justify-start sm:space-x-2"
 					>
-						<GithubIcon class="mx-auto sm:mx-0" />
-						<p class="hidden sm:block">:</p>
+						<div class="flex flex-row space-x-2">
+							<GithubIcon />
+							<p class="hidden sm:block">:</p>
+							<p class="block sm:hidden">Github:</p>
+						</div>
 						<a
 							href="https://www.github.com/AmirAbdRazak"
 							class="text-center underline sm:text-left"
@@ -88,7 +100,7 @@
 						>
 					</li>
 				</ul>
-				<div class="flex flex-row items-center pl-5">
+				<div class="flex flex-row items-center">
 					<Button
 						class="flex flex-row space-x-2 rounded-lg bg-zinc-800 px-5 text-lg font-semibold text-violet-200 "
 						href={resumePDF}
