@@ -47,7 +47,7 @@
 				width: 1200,
 				height: 630,
 				secureUrl: MetaCover,
-				type: 'image/jpeg'
+				type: 'photo'
 			}
 		],
 		siteName: 'Amir Razak'
