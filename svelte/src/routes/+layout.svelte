@@ -26,6 +26,14 @@
 			font-weight: 100;
 		}
 	</style>
+
+	<link
+		rel="preload"
+		href="/oembed"
+		as="fetch"
+		crossorigin="anonymous"
+		type="application/json+oembed"
+	/>
 </svelte:head>
 
 <MetaTags
