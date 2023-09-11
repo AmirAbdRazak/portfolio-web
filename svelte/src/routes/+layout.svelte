@@ -37,20 +37,20 @@
 		type: 'website',
 		url: 'https://www.amirrazak.com',
 		locale: 'en_US',
-		title: 'Amir Razak',
+		title: "Amir Razak's Portfolio Website",
 		description:
 			"Backend Engineer in his early careers who's looking forward for establishing digital footprints globally",
 		images: [
 			{
 				url: MetaCover,
 				alt: "Amir Razak's Portfolio Cover Page",
-				width: 800,
-				height: 600,
+				width: 1200,
+				height: 630,
 				secureUrl: MetaCover,
 				type: 'image/jpeg'
 			}
 		],
-		siteName: "Amir Razak's"
+		siteName: 'Amir Razak'
 	}}
 />
 
