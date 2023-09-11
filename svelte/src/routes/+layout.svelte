@@ -44,8 +44,8 @@
 			{
 				url: MetaCover,
 				alt: "Amir Razak's Portfolio Cover Page",
-				width: 1200,
-				height: 630,
+				width: 300,
+				height: 300,
 				secureUrl: MetaCover,
 				type: 'photo'
 			}
