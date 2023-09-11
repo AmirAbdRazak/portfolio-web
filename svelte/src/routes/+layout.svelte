@@ -17,7 +17,12 @@
 	</style>
 </svelte:head>
 
-<NavBar />
+<NavBar
+	homeNav={[
+		{ link: '/charts', title: 'Charts' },
+		{ link: '/resume', title: 'Resume' }
+	]}
+/>
 <slot />
 
 <section class="space-y-5 bg-zinc-900 py-10">

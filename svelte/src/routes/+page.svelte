@@ -78,7 +78,7 @@
 				</ul>
 				<div class="flex flex-row items-center">
 					<Button
-						class="text-md rounded-lg bg-zinc-800 px-5 font-semibold text-violet-200 md:text-lg"
+						class="md:text-md rounded-lg bg-zinc-800 px-5 font-semibold text-violet-200 sm:text-sm md:text-lg"
 						href={resumePDF}
 						download="Amir Razak SWE Resume">Download Resume</Button
 					>

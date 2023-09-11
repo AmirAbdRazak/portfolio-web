@@ -6,6 +6,8 @@
 	let showMobileMenu = false;
 	let isDarkMode: boolean;
 	$: isDarkMode = true;
+
+	export let homeNav: { link: string; title: string }[];
 </script>
 
 <nav
@@ -102,24 +104,19 @@
 					class="hidden w-full items-center sm:ml-6 sm:flex sm:flex-row sm:justify-between"
 				>
 					<div class="flex flex-row items-center space-x-4">
-						<a
-							href="/charts"
-							class={`text-md rounded-md px-3 py-2 font-medium text-white ${
-								$page.route.id && $page.route.id == '/'
-									? ' bg-transparent font-semibold text-zinc-800 hover:bg-violet-100'
-									: 'hover:bg-zinc-800'
-							}`}
-							aria-current="page">Charts</a
-						>
-						<a
-							href="/resume"
-							class={`text-md rounded-md px-3 py-2 font-medium text-white ${
-								$page.route.id && $page.route.id == '/'
-									? ' bg-transparent font-semibold text-zinc-800 hover:bg-violet-100'
-									: 'hover:bg-zinc-800'
-							}`}
-							aria-current="page">Resume</a
-						>
+						{#each homeNav as nav}
+							<a
+								href={nav.link}
+								class={`text-md rounded-md px-3 py-2 font-medium text-white ${
+									$page.route.id && $page.route.id == '/'
+										? ' bg-transparent font-semibold text-zinc-800 hover:bg-violet-100'
+										: $page.route.id == nav.link
+										? 'bg-zinc-200 text-zinc-900'
+										: 'hover:bg-zinc-800 hover:text-zinc-200'
+								}`}
+								aria-current="page">{nav.title}</a
+							>
+						{/each}
 					</div>
 					<div
 						class={$page.route.id && $page.route.id == '/resume'
@@ -150,17 +147,21 @@
 		<div
 			class={`w-full ${
 				$page.route.id && $page.route.id == '/' ? 'bg-zinc-800' : 'bg-zinc-900'
-			} px-2 pb-3 pt-2`}
+			} space-x-2 px-2 pb-3 pt-2 `}
 		>
-			<a
-				href="/charts"
-				class={`rounded-md ${
-					$page.route.id && $page.route.id == '/'
-						? 'bg-violet-300 text-zinc-800'
-						: 'bg-zinc-800 text-zinc-200'
-				} px-3 py-2 text-base font-medium `}
-				aria-current="page">Charts</a
-			>
+			{#each homeNav as nav}
+				<a
+					href={nav.link}
+					class={`rounded-md ${
+						$page.route.id && $page.route.id == '/'
+							? 'text-violet-100 hover:bg-violet-300 hover:text-zinc-800'
+							: $page.route.id == nav.link
+							? 'bg-zinc-200 text-zinc-800'
+							: 'text-zinc-200 hover:bg-zinc-800'
+					} px-3 py-2 text-base font-medium `}
+					aria-current="page">{nav.title}</a
+				>
+			{/each}
 		</div>
 	</div>
 </nav>
