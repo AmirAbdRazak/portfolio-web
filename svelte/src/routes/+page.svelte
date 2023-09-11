@@ -3,7 +3,7 @@
 	import { Button } from '$lib/components/ui/button';
 	import * as Tooltip from '$lib/components/ui/tooltip';
 
-	import { Info, Linkedin, Mail, Phone } from 'lucide-svelte';
+	import { Download, Info, Linkedin, Mail, Phone } from 'lucide-svelte';
 	import PortfolioCard from './PortfolioCard.svelte';
 	import TechStackImage from './TechStackImage.svelte';
 
@@ -78,9 +78,12 @@
 				</ul>
 				<div class="flex flex-row items-center">
 					<Button
-						class="md:text-md rounded-lg bg-zinc-800 px-5 font-semibold text-violet-200 sm:text-sm md:text-lg"
+						class="flex flex-row space-x-2 rounded-lg bg-zinc-800 px-5 text-lg font-semibold text-violet-200 "
 						href={resumePDF}
-						download="Amir Razak SWE Resume">Download Resume</Button
+						download="Amir Razak SWE Resume"
+						><p class="hidden sm:block">Download Resume</p>
+						<p class="block sm:hidden">Resume</p>
+						<Download /></Button
 					>
 					<a href="/resume" class="px-5 text-zinc-800 underline"
 						>Or view it on the web</a
