@@ -39,7 +39,7 @@
 		locale: 'en_US',
 		title: "Amir Razak's Portfolio Website",
 		description:
-			"Backend Engineer in his early careers who's looking forward to establishing digital footprints globally",
+			"Backend Engineer in his early careers who's looking forward to establish digital footprints globally",
 		images: [
 			{
 				url: MetaCover,
