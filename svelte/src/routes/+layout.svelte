@@ -2,7 +2,7 @@
 	import { GithubIcon, Instagram, Linkedin } from 'lucide-svelte';
 	import '../app.postcss';
 	import NavBar from './NavBar.svelte';
-	import { MetaTags } from 'svelte-meta-tags';
+	import { MetaTags, JsonLd } from 'svelte-meta-tags';
 	import MetaCover from '$lib/assets/metacover.png';
 </script>
 
@@ -44,21 +44,32 @@
 			{
 				url: MetaCover,
 				alt: "Amir Razak's Portfolio Cover Page",
-				width: 300,
-				height: 300,
+				width: 1200,
+				height: 630,
 				secureUrl: MetaCover,
 				type: 'image/jpeg'
 			}
 		],
 		siteName: 'Amir Razak'
 	}}
-	additionalLinkTags={[
-		{
-			rel: 'oembed',
-			type: 'application/json+oembed',
-			href: '$lib/assets/oembed.json'
+/>
+
+<JsonLd
+	schema={{
+		'@type': 'ImageObject',
+		url: 'https://example.com/logo.jpg',
+		author: {
+			'@type': 'Person',
+			name: 'Amir Razak',
+			url: 'https://amirrazak.com'
+		},
+		provider: {
+			'@type': 'Person',
+
+			name: 'Amir Razak',
+			url: 'https://amirrazak.com'
 		}
-	]}
+	}}
 />
 
 <NavBar
