@@ -20,7 +20,7 @@
 	class={` drop-shadow-md ${
 		$page.route.id && $page.route.id == '/'
 			? showMobileMenu
-				? 'bg-zinc-800'
+				? 'bg-zinc-800 sm:bg-gradient-to-b sm:from-indigo-100 sm:to-indigo-200 sm:drop-shadow-none'
 				: 'bg-gradient-to-b from-indigo-100 to-indigo-200 drop-shadow-none'
 			: 'bg-zinc-900'
 	}`}
@@ -90,7 +90,7 @@
 						class={`font-semibold ${
 							$page.route.id && $page.route.id == '/'
 								? showMobileMenu
-									? 'text-violet-100'
+									? 'text-violet-100 sm:text-zinc-800'
 									: 'text-zinc-800'
 								: 'text-zinc-300'
 						}`}

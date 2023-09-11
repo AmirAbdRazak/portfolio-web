@@ -19,7 +19,8 @@
 			font-weight: 400;
 		}
 
-		nav {
+		nav,
+		section {
 			font-family: 'Montserrat';
 		}
 	</style>
