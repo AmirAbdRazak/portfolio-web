@@ -149,7 +149,7 @@
 			</div>
 			<div
 				class={$page.route.id && $page.route.id == '/resume'
-					? 'block sm:hidden'
+					? 'absolute right-0 block sm:hidden'
 					: 'hidden'}
 			>
 				<Button
