@@ -3,6 +3,7 @@
 
 	export let imgSrc: string | undefined = undefined;
 	export let imgAlt: string | undefined = undefined;
+	export let small = false;
 </script>
 
 <Tooltip.Root openDelay={2}>
@@ -11,7 +12,9 @@
 			<img
 				src={imgSrc}
 				alt={imgAlt}
-				class="mx-auto h-24 w-24 rounded-lg object-contain"
+				class={`mx-auto ${
+					small ? 'h-16 w-16' : 'h-24 w-24'
+				} rounded-lg object-contain`}
 			/>
 		{/if}
 		<slot />

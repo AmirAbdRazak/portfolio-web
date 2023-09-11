@@ -21,6 +21,7 @@
 	import nextLogo from '$lib/assets/nextjs.png';
 	import linuxLogo from '$lib/assets/linux.png';
 	import svelteLogo from '$lib/assets/svelte.png';
+	import bunLogo from '$lib/assets/bun.png';
 	import { GithubIcon } from 'lucide-svelte';
 </script>
 
@@ -163,20 +164,38 @@
 		</h1>
 	</div>
 	<div
-		class="grid grid-cols-2 gap-10 pb-10 md:grid-cols-3 lg:mx-auto lg:flex lg:flex-row lg:justify-center lg:space-x-10"
+		class="grid grid-cols-3 gap-10 pb-10 md:grid-cols-4 lg:mx-auto lg:flex lg:flex-row lg:justify-center lg:space-x-10"
 	>
-		<TechStackImage imgSrc={dockerLogo} imgAlt="Docker" />
-		<TechStackImage imgSrc={djangoLogo} imgAlt="Django Backend Framework" />
-		<TechStackImage imgSrc={gqlLogo} imgAlt="GraphQL API Server" />
-		<TechStackImage imgSrc={linuxLogo} imgAlt="Linux Operating System" />
-		<TechStackImage imgSrc={nextLogo} imgAlt="NextJS Full Stack Framework" />
+		<TechStackImage imgSrc={dockerLogo} imgAlt="Docker" small={true} />
+		<TechStackImage
+			imgSrc={djangoLogo}
+			imgAlt="Django Backend Framework"
+			small={true}
+		/>
+		<TechStackImage imgSrc={gqlLogo} imgAlt="GraphQL API Server" small={true} />
+		<TechStackImage
+			imgSrc={linuxLogo}
+			imgAlt="Linux Operating System"
+			small={true}
+		/>
+		<TechStackImage
+			imgSrc={nextLogo}
+			imgAlt="NextJS Full Stack Framework"
+			small={true}
+		/>
 		<TechStackImage
 			imgSrc={svelteLogo}
 			imgAlt="SvelteKit Full Stack Framework"
+			small={true}
 		/>
-		<TechStackImage imgAlt="Github"
+		<TechStackImage
+			imgSrc={bunLogo}
+			imgAlt="Bun JavaScript Toolkit"
+			small={true}
+		/>
+		<TechStackImage imgAlt="Github" small={true}
 			><GithubIcon
-				class="mx-auto h-24 w-24 rounded-lg object-contain"
+				class="mx-auto h-16 w-16 rounded-lg object-contain"
 			/></TechStackImage
 		>
 	</div>
@@ -233,6 +252,7 @@
 				'TypeScript',
 				'JavaScript',
 				'Svelte',
+				'Bun',
 				'Axum',
 				'Docker',
 				'GraphQL API',
