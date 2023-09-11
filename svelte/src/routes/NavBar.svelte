@@ -7,6 +7,12 @@
 	let isDarkMode: boolean;
 	$: isDarkMode = true;
 
+	$: routeSection = $page.route.id
+		? $page.route.id.split('/').length > 0
+			? $page.route.id.split('/')[1]
+			: '/'
+		: undefined;
+
 	export let homeNav: { link: string; title: string }[];
 </script>
 
@@ -91,11 +97,12 @@
 						href="/"
 					>
 						Amir <i
-							class="not-italic {$page.route.id &&
-							$page.route.id.split('/').length > 0 &&
-							$page.route.id.split('/')[1] == 'charts'
+							class="not-italic
+							{routeSection == 'charts'
 								? 'text-rose-400'
-								: 'text-violet-600'}"
+								: routeSection == 'resume'
+								? 'text-zinc-400'
+								: 'text-violet-600 '}"
 							>Razak
 						</i>
 					</a>
@@ -139,6 +146,26 @@
 						</Button>
 					</div>
 				</div>
+			</div>
+			<div
+				class={$page.route.id && $page.route.id == '/resume'
+					? 'block sm:hidden'
+					: 'hidden'}
+			>
+				<Button
+					on:click={() => {
+						isDarkMode = !isDarkMode;
+						stateStore.set({
+							isDarkMode
+						});
+					}}
+				>
+					{#if isDarkMode}
+						<Moon class="text-zinc-200" size={28} />
+					{:else}
+						<Sun class="text-zinc-200" size={28} />
+					{/if}
+				</Button>
 			</div>
 		</div>
 	</div>
