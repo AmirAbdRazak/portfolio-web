@@ -31,7 +31,7 @@
 <MetaTags
 	title="Amir Razak"
 	titleTemplate="%s | Portfolio Website"
-	description="| Jumping on technology hypetrains, a bit too early sometimes | Bun | Svelte | Rust |"
+	description="Jumping on technology hypetrains, a bit too early sometimes. Website made in Bun, Svelte and Rust."
 	canonical="https://www.amirrazak.com"
 	openGraph={{
 		type: 'website',
@@ -39,7 +39,7 @@
 		locale: 'en_US',
 		title: "Amir Razak's Portfolio Website",
 		description:
-			'| Jumping on technology hypetrains, a bit too early sometimes | Bun | Svelte | Rust |',
+			'Jumping on technology hypetrains, a bit too early sometimes. Website made in Bun, Svelte and Rust.',
 		images: [
 			{
 				url: MetaCover,
@@ -56,7 +56,7 @@
 		cardType: 'summary_large_image',
 		title: 'Portfolio Website',
 		description:
-			'| Jumping on technology hypetrains, a bit too early sometimes | Bun | Svelte | Rust |',
+			'Jumping on technology hypetrains, a bit too early sometimes. Website made in Bun, Svelte and Rust.',
 		image: MetaCover,
 		imageAlt: "Amir Razak's Portfolio Cover Page"
 	}}
@@ -67,7 +67,7 @@
 		'@type': 'WebPage',
 		name: 'Portfolio Website',
 		description:
-			'| Jumping on technology hypetrains, a bit too early sometimes | Bun | Svelte | Rust |',
+			'Jumping on technology hypetrains, a bit too early sometimes. Website made in Bun, Svelte and Rust.',
 		author: {
 			'@type': 'Person',
 			name: 'Amir Razak',
