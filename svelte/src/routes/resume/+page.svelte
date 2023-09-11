@@ -9,29 +9,12 @@
 	});
 </script>
 
-<svelte:head>
-	<style>
-		@import url('https://fonts.googleapis.com/css2?family=Spectral:wght@400;600&display=swap');
-
-		body {
-			font-family: 'Spectral';
-			font-style: 'normal';
-			font-weight: 400;
-		}
-
-		nav,
-		section {
-			font-family: 'Montserrat';
-		}
-	</style>
-</svelte:head>
-
 <div
 	class={`${
 		stateData.isDarkMode
 			? 'bg-zinc-900 text-white'
 			: 'bg-zinc-100 text-zinc-900'
-	} space-y-3 px-10 py-10 text-lg md:px-20 lg:space-y-0 lg:px-40`}
+	} font-serif-spectral space-y-3 px-10 py-10 text-lg md:px-20 lg:space-y-0 lg:px-40`}
 >
 	<h1 class="text-center text-xl font-semibold">
 		MUHAMMAD AMIR BIN ABDUL RAZAK

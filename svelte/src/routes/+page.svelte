@@ -174,7 +174,7 @@
 			imgSrc={svelteLogo}
 			imgAlt="SvelteKit Full Stack Framework"
 		/>
-		<TechStackImage
+		<TechStackImage imgAlt="Github"
 			><GithubIcon
 				class="mx-auto h-24 w-24 rounded-lg object-contain"
 			/></TechStackImage
@@ -189,6 +189,9 @@
 		<p>Feb 2023 - Aug 2023</p>
 		<p class="text-xl font-semibold">
 			Backend Engineer Intern @ Infin8co Sdn Bhd
+		</p>
+		<p class="pb-2">
+			Python • Django • Docker • API • GraphQL • Linux • PostgreSQL
 		</p>
 		<p class="md:pr-24 lg:pr-48 xl:pr-72">
 			Joined the team to work on an enterprise chat platform named Talkhub as a

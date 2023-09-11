@@ -2,11 +2,14 @@
 	import { GithubIcon, Instagram, Linkedin } from 'lucide-svelte';
 	import '../app.postcss';
 	import NavBar from './NavBar.svelte';
+	import { MetaTags } from 'svelte-meta-tags';
+	import MetaCover from '$lib/assets/metacover.png';
 </script>
 
 <svelte:head>
 	<style>
 		@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;600;800&display=swap');
+		@import url('https://fonts.googleapis.com/css2?family=Spectral:wght@100;400;600&display=swap');
 
 		body {
 			font-family: 'Montserrat';
@@ -14,8 +17,42 @@
 			font-weight: 400;
 			background-color: #18181b;
 		}
+
+		.font-serif-spectral {
+			font-family: 'Spectral', 'Helvetica';
+		}
+
+		.font-spectral-thin {
+			font-weight: 100;
+		}
 	</style>
 </svelte:head>
+
+<MetaTags
+	title="Amir Razak"
+	titleTemplate="%s | Portfolio Website"
+	description="Backend Engineer in his early careers who's looking forward for establishing digital footprints globally"
+	canonical="https://www.amirrazak.com"
+	openGraph={{
+		type: 'website',
+		url: 'https://www.amirrazak.com',
+		locale: 'en_US',
+		title: 'Amir Razak',
+		description:
+			"Backend Engineer in his early careers who's looking forward for establishing digital footprints globally",
+		images: [
+			{
+				url: MetaCover,
+				alt: "Amir Razak's Portfolio Cover Page",
+				width: 800,
+				height: 600,
+				secureUrl: MetaCover,
+				type: 'image/jpeg'
+			}
+		],
+		siteName: "Amir Razak's"
+	}}
+/>
 
 <NavBar
 	homeNav={[
