@@ -26,20 +26,12 @@
 			font-weight: 100;
 		}
 	</style>
-
-	<link
-		rel="preload"
-		href="/oembed"
-		as="fetch"
-		crossorigin="anonymous"
-		type="application/json+oembed"
-	/>
 </svelte:head>
 
 <MetaTags
 	title="Amir Razak"
 	titleTemplate="%s | Portfolio Website"
-	description="Backend Engineer in his early careers who's looking forward for establishing digital footprints globally"
+	description="| Jumping on technology hypetrains, a bit too early sometimes | Svelte | Rust |"
 	canonical="https://www.amirrazak.com"
 	openGraph={{
 		type: 'website',
@@ -47,7 +39,7 @@
 		locale: 'en_US',
 		title: "Amir Razak's Portfolio Website",
 		description:
-			"Backend Engineer in his early careers who's looking forward to establish digital footprints globally",
+			'| Jumping on technology hypetrains, a bit too early sometimes | Svelte | Rust |',
 		images: [
 			{
 				url: MetaCover,
@@ -60,12 +52,22 @@
 		],
 		siteName: 'Amir Razak'
 	}}
+	twitter={{
+		cardType: 'summary_large_image',
+		title: 'Portfolio Website',
+		description:
+			'| Jumping on technology hypetrains, a bit too early sometimes | Svelte | Rust |',
+		image: MetaCover,
+		imageAlt: "Amir Razak's Portfolio Cover Page"
+	}}
 />
 
 <JsonLd
 	schema={{
-		'@type': 'ImageObject',
-		url: 'https://example.com/logo.jpg',
+		'@type': 'WebPage',
+		name: 'Portfolio Website',
+		description:
+			'| Jumping on technology hypetrains, a bit too early sometimes | Svelte | Rust |',
 		author: {
 			'@type': 'Person',
 			name: 'Amir Razak',
@@ -73,7 +75,6 @@
 		},
 		provider: {
 			'@type': 'Person',
-
 			name: 'Amir Razak',
 			url: 'https://amirrazak.com'
 		}
