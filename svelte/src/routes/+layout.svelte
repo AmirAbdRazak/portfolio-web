@@ -47,11 +47,18 @@
 				width: 300,
 				height: 300,
 				secureUrl: MetaCover,
-				type: 'photo'
+				type: 'image/jpeg'
 			}
 		],
 		siteName: 'Amir Razak'
 	}}
+	additionalLinkTags={[
+		{
+			rel: 'oembed',
+			type: 'application/json+oembed',
+			href: '$lib/assets/oembed.json'
+		}
+	]}
 />
 
 <NavBar
