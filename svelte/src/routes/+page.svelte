@@ -118,7 +118,7 @@
 						>Or view it on the web</a
 					>
 					<a href="/resume" class="block px-5 text-zinc-800 underline sm:hidden"
-						>Browser View</a
+						>View on Browser</a
 					>
 				</div>
 			</div>
