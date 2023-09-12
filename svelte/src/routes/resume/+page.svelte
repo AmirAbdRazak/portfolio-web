@@ -126,7 +126,7 @@
 		Docker • Rust • Typescript • Javascript • Axum • SvelteKit • GraphQL API •
 		PostgreSQL • Linux • Cloud Deployment
 	</p>
-	<ul class="space-y-3 pb-5 pr-24 text-justify lg:space-y-1">
+	<ul class="space-y-3 pb-5 text-justify md:pr-24 lg:space-y-1">
 		<li>
 			• Achieved blazingly fast API call execution through asynchronous
 			programming, processing thousands of calls within seconds, which is

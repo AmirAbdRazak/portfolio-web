@@ -43,14 +43,16 @@
 				>
 					Backend Engineer
 				</h1>
-				<p class="text-md mb-8 font-normal text-zinc-800 lg:text-lg">
+				<p
+					class="text-md mb-8 pr-5 text-justify font-normal text-zinc-800 sm:pr-0 sm:text-left lg:text-lg"
+				>
 					I'm Amir Razak, a backend engineer with an insatiable curiosity for
 					bleeding-edge technology. My expertise spans a wide range of areas,
 					from building robust RESTful APIs to seamlessly managing database
 					migrations.
 				</p>
 				<ul
-					class="text-md mx-auto mb-8 grid grid-cols-1 items-baseline space-y-2 font-normal text-zinc-800 sm:grid-cols-2 lg:text-lg"
+					class="text-md mx-auto mb-8 grid grid-cols-1 items-baseline space-y-2 pr-2 font-normal text-zinc-800 sm:grid-cols-2 sm:pr-0 lg:text-lg"
 				>
 					<li
 						class="flex flex-row justify-between pr-4 sm:justify-start sm:space-x-2"
@@ -101,9 +103,11 @@
 						>
 					</li>
 				</ul>
-				<div class="flex flex-row items-center">
+				<div
+					class="flex flex-row items-center justify-between sm:justify-start"
+				>
 					<Button
-						class="flex flex-row space-x-2 rounded-lg bg-zinc-800 px-5 text-lg font-semibold text-violet-200 "
+						class="flex w-64  flex-row space-x-2 rounded-lg bg-zinc-800 px-5 text-lg font-semibold text-violet-200 sm:w-fit "
 						href={resumePDF}
 						download="Amir Razak SWE Resume"
 						><p class="hidden sm:block">Download Resume</p>
@@ -204,7 +208,7 @@
 	<h1 class="py-10 text-center text-4xl font-semibold text-zinc-800">
 		Professional Experience
 	</h1>
-	<div class="px-10 pb-10 text-zinc-800 md:pl-20 lg:pl-24">
+	<div class="px-10 pb-5 text-zinc-800 md:pl-20 lg:pl-24">
 		<p>Feb 2023 - Aug 2023</p>
 		<p class="text-xl font-semibold">
 			Backend Engineer Intern @ Infin8co Sdn Bhd
@@ -220,6 +224,18 @@
 			thousand lines of code into production including rigorous test cases for
 			reliability.
 		</p>
+	</div>
+	<hr class="mx-20 border-zinc-800" />
+	<h1 class="py-5 text-center text-4xl font-semibold text-zinc-800">
+		Education
+	</h1>
+	<div class="px-10 pb-10 text-zinc-800 md:pl-20 lg:pl-24">
+		<p>Sep 2020 - Aug 2023</p>
+		<p class="text-xl font-semibold">
+			Management and Science University, Selangor MY
+		</p>
+		<p>Bachelor in Computer Science (Honours)</p>
+		<p class="pb-2">CGPA: 3.61</p>
 	</div>
 </section>
 <section class="bg-zinc-800">
