@@ -107,7 +107,7 @@
 					class="flex flex-row items-center justify-between sm:justify-start"
 				>
 					<Button
-						class="flex w-64  flex-row space-x-2 rounded-lg bg-zinc-800 px-5 text-lg font-semibold text-violet-200 sm:w-fit "
+						class="flex w-48  flex-row space-x-2 rounded-lg bg-zinc-800 px-5 text-lg font-semibold text-violet-200 sm:w-fit "
 						href={resumePDF}
 						download="Amir Razak SWE Resume"
 						><p class="hidden sm:block">Download Resume</p>
@@ -118,7 +118,7 @@
 						>Or view it on the web</a
 					>
 					<a href="/resume" class="block px-5 text-zinc-800 underline sm:hidden"
-						>View on Browser</a
+						>Browser View</a
 					>
 				</div>
 			</div>
