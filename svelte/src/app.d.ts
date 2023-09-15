@@ -14,3 +14,7 @@ export {};
 declare module '@fortawesome/pro-solid-svg-icons/index.es' {
 	export * from '@fortawesome/pro-solid-svg-icons';
 }
+
+declare module '$env/static/private' {
+	export const AXUM_URL: string;
+}

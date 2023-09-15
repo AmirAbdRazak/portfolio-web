@@ -210,7 +210,9 @@
 		<p class="w-1/3 text-center text-white">
 			Some error occurred, either check your username, or its on our side.
 			Eitherway, here's the error: <b
-				>{$queryData.error.name}: {$queryData.error.message}</b
+				>{$queryData.error.name}: {$queryData.error.message}
+				{$queryData.error.response}
+				{$queryData.error.graphQLErrors}</b
 			>
 		</p>
 	</div>

@@ -1,9 +1,8 @@
-import { env } from '$env/dynamic/private';
+import {env} from '$env/dynamic/private';
 import type { LayoutServerLoad } from './$types';
 
 export const load: LayoutServerLoad = async () => {
-	console.log(env.AXUM_URL);
 	return {
-		backend_url: env.AXUM_URL || 'http://localhost:8000/'
+		backend_url: env.DEV_MODE ? 'http://localhost:8000/' : 'https://axum-backend.fly.dev/'
 	};
 };
