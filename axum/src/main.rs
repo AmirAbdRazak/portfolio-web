@@ -7,6 +7,7 @@ use axum::http::header::{
     ACCESS_CONTROL_ALLOW_CREDENTIALS, ACCESS_CONTROL_ALLOW_HEADERS, ACCESS_CONTROL_ALLOW_METHODS,
     ACCESS_CONTROL_ALLOW_ORIGIN, CONTENT_LENGTH, CONTENT_TYPE,
 };
+use axum::routing::post;
 use axum::{extract::Extension, http::Method, routing::get, Router};
 use dotenv::dotenv;
 use schema::Query;
@@ -69,10 +70,11 @@ async fn main() -> Result<(), sqlx::Error> {
         .finish();
 
     let app = Router::new()
-        .route("/graphql", get(graphiql).post(graphql_handler))
+        .route("/graphql", post(graphql_handler))
         .layer(Extension(schema))
         .layer(cors_layer())
-        .layer(TraceLayer::new_for_http());
+        .layer(TraceLayer::new_for_http())
+        .route("/health", get(health_check));
 
     info!("Starting the server...");
     let addr = SocketAddr::from(([0, 0, 0, 0], 8000));
@@ -84,4 +86,8 @@ async fn main() -> Result<(), sqlx::Error> {
         .unwrap();
 
     Ok(())
+}
+
+async fn health_check() -> &'static str {
+    "healthy"
 }
