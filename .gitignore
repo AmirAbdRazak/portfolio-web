@@ -6,6 +6,7 @@
 /svelte/.DS_Store
 /svelte/node_modules
 /svelte/build
+/svelte/bun.lockb
 /svelte/.svelte-kit
 /svelte/package-lock.json
 /svelte/.env
