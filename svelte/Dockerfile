@@ -5,6 +5,10 @@ FROM oven/bun
 
 WORKDIR /app
 
+RUN apt update && apt upgrade; \
+    apt install -y curl dnsutils;
+
+
 COPY package.json package.json
 RUN bun install
 

@@ -1,7 +1,7 @@
 pub mod history_fm;
 pub mod schema;
 
-use crate::schema::{graphiql, graphql_handler};
+use crate::schema::graphql_handler;
 use async_graphql::{EmptyMutation, EmptySubscription, Schema};
 use axum::http::header::{
     ACCESS_CONTROL_ALLOW_CREDENTIALS, ACCESS_CONTROL_ALLOW_HEADERS, ACCESS_CONTROL_ALLOW_METHODS,
@@ -19,7 +19,8 @@ use tracing::info;
 
 fn cors_layer() -> CorsLayer {
     let allowed_origins = vec![
-        "http://localhost:5173".parse().unwrap(),
+        "http://0.0.0.0:5173".parse().unwrap(),
+        "http://0.0.0.0:8000".parse().unwrap(),
         "https://amirrazak.com".parse().unwrap(),
         "https://amrrzk.fly.dev".parse().unwrap(),
     ];
@@ -38,6 +39,7 @@ fn cors_layer() -> CorsLayer {
         .allow_origin(allowed_origins)
         .allow_methods(allowed_methods)
         .allow_headers(allowed_headers)
+        .allow_credentials(true)
 }
 
 #[tokio::main]
@@ -77,7 +79,7 @@ async fn main() -> Result<(), sqlx::Error> {
         .route("/health", get(health_check));
 
     info!("Starting the server...");
-    let addr = SocketAddr::from(([0, 0, 0, 0], 8000));
+    let addr = "[::]:8000".parse::<SocketAddr>().unwrap();
     tracing::debug!("Listening on {}", addr);
 
     axum::Server::bind(&addr)

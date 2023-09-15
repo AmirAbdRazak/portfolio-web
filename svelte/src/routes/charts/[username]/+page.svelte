@@ -26,10 +26,11 @@
 	import Loader from './Loader.svelte';
 	import { goto } from '$app/navigation';
 	import zoomPlugin from 'chartjs-plugin-zoom';
-	import { _getChartConfig } from './+page';
-	import type { formDataType } from './+page';
+	import { _getChartConfig } from './utils';
+	import type { formDataType } from './utils';
 	import GenerateOptions from '../GenerateOptions.svelte';
 	import * as Alert from '$lib/components/ui/alert';
+	import { Client, cacheExchange, fetchExchange } from '@urql/svelte';
 
 	export let data: PageData;
 
@@ -39,6 +40,11 @@
 	let currentChart: Chart;
 
 	let formData: formDataType;
+
+	const client = new Client({
+		url: data.backend_url + 'graphql',
+		exchanges: [cacheExchange, fetchExchange]
+	});
 
 	formDataStore.subscribe((data) => {
 		formData = {
@@ -81,7 +87,7 @@
 	$: isMounted = false;
 	$: isFetched = false;
 	$: queryData = queryStore({
-		client: getContextClient(),
+		client: client,
 		query: ChartDocument,
 		variables: {
 			username,
@@ -212,8 +218,12 @@
 			Eitherway, here's the error: <b
 				>{$queryData.error.name}: {$queryData.error.message}
 				{$queryData.error.response}
-				{$queryData.error.graphQLErrors}</b
-			>
+				{$queryData.error.graphQLErrors}
+				{$queryData.error.cause}
+				{$queryData.error.networkError}
+				{$queryData.error.stack}
+				{$queryData.error.toString()}
+			</b>
 		</p>
 	</div>
 {:else if isMounted && $queryData.data}

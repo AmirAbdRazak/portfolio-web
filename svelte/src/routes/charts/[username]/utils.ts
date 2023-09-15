@@ -1,8 +1,5 @@
-import type { ChartConfiguration } from 'chart.js';
-import type { PageLoad } from './$types';
 import type { ChartDataConfig } from '@/src/generated/graphql';
-
-export const ssr = false;
+import type { ChartConfiguration } from 'chart.js';
 
 export type formDataType = {
 	chartType: string;
@@ -12,11 +9,6 @@ export type formDataType = {
 	endTimestamp: number;
 	chartScale: 'linear' | 'logarithmic';
 	dateRange: 'Week' | 'Month' | 'Quarter' | 'Year' | 'Custom';
-};
-
-export const load: PageLoad = ({ params }) => {
-	const username = params.username;
-	return { username };
 };
 
 const dateRangeMap = {
