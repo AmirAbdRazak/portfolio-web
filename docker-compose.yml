@@ -34,10 +34,10 @@ services:
     container_name: postgres
     image: postgres:latest
     environment:
-      PGUSER: ${PGUSER}
-      PGPASSWORD: ${PGPASSWORD}
-      PGDATABASE: ${PGDATABASE}
-      PGHOST: ${PGHOST}
+      POSTGRES_USER: ${PGUSER}
+      POSTGRES_PASSWORD: ${PGPASSWORD}
+      POSTGRES_DB: ${PGDATABASE}
+      POSTGRES_HOST: ${PGHOST}
     volumes:
       - pg_data:/var/lib/postgresql/data
     ports:
