@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import { getContextClient, queryStore } from '@urql/svelte';
+	import { queryStore } from '@urql/svelte';
 	import {
 		ChartDocument,
 		type ChartDataConfig,
@@ -43,7 +43,11 @@
 
 	const client = new Client({
 		url: data.backend_url + 'graphql',
-		exchanges: [cacheExchange, fetchExchange]
+		exchanges: [cacheExchange, fetchExchange],
+		fetchOptions: {
+			referrerPolicy: 'unsafe-url',
+			mode: 'no-cors'
+		}
 	});
 
 	formDataStore.subscribe((data) => {
@@ -223,6 +227,7 @@
 				{$queryData.error.networkError}
 				{$queryData.error.stack}
 				{$queryData.error.toString()}
+				{console.log($queryData)}
 			</b>
 		</p>
 	</div>

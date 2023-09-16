@@ -16,7 +16,7 @@ sqlx = { version = "0.7.1", features = [
 ] }
 async-graphql = "6.0.0"
 async-graphql-axum = "6.0.0"
-axum = { version = "0.6.19", features = ["macros"] }
+axum = { version = "0.6.19", features = ["macros", "http2"] }
 serde = { version = "1.0.178", features = ["derive"] }
 serde_json = "1.0.104"
 tokio = { version = "1.29.1", features = ["full"] }
@@ -27,3 +27,6 @@ surf = "2.3.2"
 futures = "0.3.28"
 chrono = "0.4.26"
 tower-http = { version = "0.4.3", features = ["cors", "tokio", "trace"] }
+rustls = "0.21.7"
+axum-server = { version = "0.5.1", features = ["rustls", "tls-rustls"] }
+rcgen = { version = "0.11.1", features = ["x509-parser"] }

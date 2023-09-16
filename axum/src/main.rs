@@ -9,37 +9,20 @@ use axum::http::header::{
 };
 use axum::routing::post;
 use axum::{extract::Extension, http::Method, routing::get, Router};
+use axum_server::tls_rustls::RustlsConfig;
 use dotenv::dotenv;
+use rcgen::generate_simple_self_signed;
+use rustls::ServerConfig;
 use schema::Query;
 use sqlx::postgres::PgPoolOptions;
+use std::sync::Arc;
 use std::{env, net::SocketAddr};
-use tower_http::cors::CorsLayer;
+use tower_http::cors::{Any, CorsLayer};
 use tower_http::trace::TraceLayer;
 use tracing::info;
 
 fn cors_layer() -> CorsLayer {
-    let allowed_origins = vec![
-        "http://0.0.0.0:5173".parse().unwrap(),
-        "http://0.0.0.0:8000".parse().unwrap(),
-        "https://amirrazak.com".parse().unwrap(),
-        "https://amrrzk.fly.dev".parse().unwrap(),
-    ];
-    let allowed_methods = vec![Method::GET, Method::POST, Method::OPTIONS];
-
-    let allowed_headers = vec![
-        CONTENT_LENGTH,
-        CONTENT_TYPE,
-        ACCESS_CONTROL_ALLOW_ORIGIN,
-        ACCESS_CONTROL_ALLOW_CREDENTIALS,
-        ACCESS_CONTROL_ALLOW_HEADERS,
-        ACCESS_CONTROL_ALLOW_METHODS,
-    ];
-
-    CorsLayer::new()
-        .allow_origin(allowed_origins)
-        .allow_methods(allowed_methods)
-        .allow_headers(allowed_headers)
-        .allow_credentials(true)
+    CorsLayer::very_permissive()
 }
 
 #[tokio::main]
@@ -78,11 +61,29 @@ async fn main() -> Result<(), sqlx::Error> {
         .layer(TraceLayer::new_for_http())
         .route("/health", get(health_check));
 
+    let subject_alt_names = vec![
+        "localhost".to_string(),
+        "amrrzk.fly.dev".to_string(),
+        "axum-backend.internal".to_string(),
+        "axum-backend.fly.dev".to_string(),
+        "amirrazak.com".to_string(),
+    ];
+
+    let rcgen_cert = generate_simple_self_signed(subject_alt_names).unwrap();
+    let cert = rustls::Certificate(rcgen_cert.serialize_der().expect("Couldn't serialize cert"));
+    let private_key = rustls::PrivateKey(rcgen_cert.serialize_private_key_der());
+
+    let config = ServerConfig::builder()
+        .with_safe_defaults()
+        .with_no_client_auth()
+        .with_single_cert(vec![cert], private_key)
+        .expect("Bad certificate in main");
+
     info!("Starting the server...");
     let addr = "[::]:8000".parse::<SocketAddr>().unwrap();
     tracing::debug!("Listening on {}", addr);
 
-    axum::Server::bind(&addr)
+    axum_server::bind_rustls(addr, RustlsConfig::from_config(Arc::new(config)))
         .serve(app.into_make_service())
         .await
         .unwrap();
