@@ -20,6 +20,7 @@ use tracing::info;
 fn cors_layer() -> CorsLayer {
     let allowed_origins = vec![
         "http://0.0.0.0:5173".parse().unwrap(),
+        "http://localhost:5173".parse().unwrap(),
         "http://0.0.0.0:8000".parse().unwrap(),
         "https://amirrazak.com".parse().unwrap(),
         "https://amrrzk.fly.dev".parse().unwrap(),

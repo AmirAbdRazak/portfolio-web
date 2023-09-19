@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import { getContextClient, queryStore } from '@urql/svelte';
+	import { queryStore } from '@urql/svelte';
 	import {
 		ChartDocument,
 		type ChartDataConfig,

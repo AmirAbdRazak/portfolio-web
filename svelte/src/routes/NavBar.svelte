@@ -102,6 +102,8 @@
 								? 'text-rose-400'
 								: routeSection == 'resume'
 								? 'text-zinc-400'
+								: routeSection == 'workout'
+								? 'text-cyan-200'
 								: 'text-violet-600 '}"
 							>Razak
 						</i>
