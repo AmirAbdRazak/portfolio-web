@@ -7,7 +7,7 @@
 	import PortfolioCard from './PortfolioCard.svelte';
 	import TechStackImage from './TechStackImage.svelte';
 
-	import resumePDF from '$lib/assets/Amir Razak SWE Resume .pdf';
+	import resumePDF from '$lib/assets/Amir Razak SWE Resume.pdf';
 
 	import chartImage from '$lib/assets/chartexample.png';
 	import ecommImage from '$lib/assets/ecommfypexample.png';
@@ -44,12 +44,18 @@
 					Backend Engineer
 				</h1>
 				<p
+					class="text-md mb-4 pr-5 text-justify font-normal text-zinc-800 sm:pr-0 sm:text-left lg:text-lg"
+				>
+					Amir Razak - A backend engineer with a strong foundation in
+					fundamentals and an insatiable passion for cutting-edge technologies.
+					Proficient in developing high-performance APIS, managing complex
+					database operations, and seamless application deployment.
+				</p>
+				<p
 					class="text-md mb-8 pr-5 text-justify font-normal text-zinc-800 sm:pr-0 sm:text-left lg:text-lg"
 				>
-					I'm Amir Razak, a backend engineer with an insatiable curiosity for
-					bleeding-edge technology. My expertise spans a wide range of areas,
-					from building robust RESTful APIs to seamlessly managing database
-					migrations.
+					Committed to continual learning and leveraging modern tools and
+					architectures to build scalable and efficient backend system.s
 				</p>
 				<ul
 					class="text-md mx-auto mb-8 grid grid-cols-1 items-baseline space-y-2 pr-2 font-normal text-zinc-800 sm:grid-cols-2 sm:pr-0 lg:text-lg"
@@ -209,6 +215,23 @@
 		Professional Experience
 	</h1>
 	<div class="px-10 pb-5 text-zinc-800 md:pl-20 lg:pl-24">
+		<p>Sep 2023 - Present</p>
+		<p class="text-xl font-semibold">
+			Junior Backend Developer @ Infin8co Sdn Bhd
+		</p>
+		<p class="pb-2">
+			Python • Django • Docker • API • GraphQL • Linux • PostgreSQL
+		</p>
+		<p class="md:pr-24 lg:pr-48 xl:pr-72">
+			Returned to the company as a Junior Backend Developer with expanded
+			responsibilities including managing feature flags, user permissions,
+			optimizing test environments, and ensuring high-performance code delivery
+			to minimize user-product friction. Key focus areas involved writing
+			performant code, collaborating across teams, and enhancing the overall
+			developer and user experience alike.
+		</p>
+	</div>
+	<div class="px-10 pb-5 text-zinc-800 md:pl-20 lg:pl-24">
 		<p>Feb 2023 - Aug 2023</p>
 		<p class="text-xl font-semibold">
 			Backend Engineer Intern @ Infin8co Sdn Bhd
@@ -217,12 +240,12 @@
 			Python • Django • Docker • API • GraphQL • Linux • PostgreSQL
 		</p>
 		<p class="md:pr-24 lg:pr-48 xl:pr-72">
-			Joined the team to work on an enterprise chat platform named Talkhub as a
-			Backend Engineer Intern. Primarily responsible for 2 different feature
-			sections, namely CSV Importing and Reporting Metrics within the respective
-			GraphQL endpoints, inside the Django and Docker ecosystem. Committed a few
-			thousand lines of code into production including rigorous test cases for
-			reliability.
+			Contributed to the development of an enterprise chat platform as a Backend
+			Engineer Intern. Spearheaded the development of CSV importing and
+			reporting metrics features within the GraphQL API ecosystem built on
+			Djangoand Docker. Enforced rigorous test coverage to ensure product
+			reliability and gained hands-on experience with the entire development
+			lifecycle, from requirement analysis to deployment.
 		</p>
 	</div>
 	<hr class="mx-20 border-zinc-800" />
@@ -235,7 +258,7 @@
 			Management and Science University, Selangor MY
 		</p>
 		<p>Bachelor in Computer Science (Honours)</p>
-		<p class="pb-2">CGPA: 3.61</p>
+		<p class="pb-2">CGPA: 3.65</p>
 	</div>
 </section>
 <section class="bg-zinc-800">
