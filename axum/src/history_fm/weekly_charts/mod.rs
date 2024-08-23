@@ -3,11 +3,11 @@ pub mod user_info;
 use std::{collections::HashMap, env, time::Instant};
 
 use async_graphql::{Context, Object, SimpleObject};
-use chrono::{DateTime, Datelike, Duration, , Utc};
+use chrono::{DateTime, Datelike, Duration};
 use dotenv::dotenv;
 use serde::Serialize;
-use sqlx::{Pool, Postgres};
 use sqlx::Error;
+use sqlx::{Pool, Postgres};
 use tracing::info;
 
 use self::{
@@ -39,7 +39,8 @@ async fn get_chart_timestamp_list(
     end_timestamp: i64,
 ) -> Vec<WeeklyChartEntry> {
     let start = Instant::now();
-    let current_datetime = DateTime::from_timestamp(start_timestamp, 0).expect("Failed to parse start timestamp");
+    let current_datetime =
+        DateTime::from_timestamp(start_timestamp, 0).expect("Failed to parse start timestamp");
     let days_to_sunday = current_datetime.weekday().num_days_from_sunday();
 
     let nearest_sunday = current_datetime - Duration::days(days_to_sunday as i64);
