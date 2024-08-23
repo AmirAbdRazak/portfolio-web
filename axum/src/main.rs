@@ -53,23 +53,24 @@ async fn main() -> Result<(), sqlx::Error> {
 
     info!("Connecting to database...");
 
-    let pg_pool = PgPoolOptions::new()
+    let pg_pool_result = PgPoolOptions::new()
         .max_connections(10)
         .connect(&database_url)
-        .await
-        .expect("Failed to connect to database");
+        .await;
 
     info!("Building the schema...");
 
-    info!("Running migrations...");
-    sqlx::migrate!("./migrations")
-        .run(&pg_pool)
-        .await
-        .expect("Failed to migrate");
-    info!("All migrations ran");
+    if let Ok(pg_pool) = &pg_pool_result {
+        info!("Running migrations...");
+        sqlx::migrate!("./migrations")
+            .run(pg_pool)
+            .await
+            .expect("Failed to migrate");
+        info!("All migrations ran");
+    }
 
     let schema = Schema::build(Query, EmptyMutation, EmptySubscription)
-        .data(pg_pool)
+        .data(pg_pool_result)
         .finish();
 
     let app = Router::new()

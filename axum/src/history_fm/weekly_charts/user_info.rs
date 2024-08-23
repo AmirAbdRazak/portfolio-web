@@ -1,5 +1,6 @@
 use dotenv::dotenv;
 use serde::Deserialize;
+use sqlx::Error;
 use sqlx::{self, Pool, Postgres};
 use tracing::info;
 
@@ -43,16 +44,20 @@ struct LastFMUserInfoResponse {
 pub async fn get_user_info<'a>(
     username: &'a str,
     api_key: &'a str,
-    pool: &Pool<Postgres>,
+    pool_result: &Result<Pool<Postgres>, Error>,
 ) -> UserInfo {
     info!("Inside getting user info from db...");
 
-    let user_info_from_db = sqlx::query!(
-            "SELECT username, image_url, playcount, artist_count, album_count, track_count, registered_unixtime FROM users where username ILIKE $1",
-            &username
-        )
-        .fetch_one(pool)
-        .await;
+    let mut user_info_from_db = Err(Error::PoolClosed);
+
+    if let Ok(pool) = pool_result {
+        user_info_from_db = sqlx::query!(
+                "SELECT username, image_url, playcount, artist_count, album_count, track_count, registered_unixtime FROM users where username ILIKE $1",
+                &username
+            )
+            .fetch_one(pool)
+            .await;
+    }
 
     match user_info_from_db {
         Ok(user_info) => UserInfo {
@@ -80,14 +85,14 @@ pub async fn get_user_info<'a>(
                 .expect("Failed to fetch unixtime from user info")
                 as u64,
         },
-        Err(_) => get_user_info_from_lastfm_api(username, api_key, pool).await,
+        Err(_) => get_user_info_from_lastfm_api(username, api_key, pool_result).await,
     }
 }
 
 pub async fn get_user_info_from_lastfm_api<'a>(
     username: &'a str,
     api_key: &'a str,
-    pool: &Pool<Postgres>,
+    pool_result: &Result<Pool<Postgres>, Error>,
 ) -> UserInfo {
     dotenv().ok();
 
@@ -134,7 +139,8 @@ pub async fn get_user_info_from_lastfm_api<'a>(
             .expect("Failed to parse unixtime into u64"),
     };
 
-    sqlx::query!("INSERT INTO users (username, image_url, playcount, artist_count, album_count, track_count, registered_unixtime) VALUES ($1, $2, $3, $4, $5, $6, $7)",
+    if let Ok(pool) = pool_result {
+        sqlx::query!("INSERT INTO users (username, image_url, playcount, artist_count, album_count, track_count, registered_unixtime) VALUES ($1, $2, $3, $4, $5, $6, $7)",
             user_info.username,
             user_info.image_url,
             user_info.playcount as i64,
@@ -142,6 +148,6 @@ pub async fn get_user_info_from_lastfm_api<'a>(
             user_info.album_count as i64,
             user_info.track_count as i64,
             user_info.registered_unixtime as i64).execute(pool).await.expect("Error inserting user info into db");
-
+    }
     user_info
 }

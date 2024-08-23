@@ -3,10 +3,11 @@ pub mod user_info;
 use std::{collections::HashMap, env, time::Instant};
 
 use async_graphql::{Context, Object, SimpleObject};
-use chrono::{DateTime, Datelike, Duration, NaiveDateTime, Utc};
+use chrono::{DateTime, Datelike, Duration, , Utc};
 use dotenv::dotenv;
 use serde::Serialize;
 use sqlx::{Pool, Postgres};
+use sqlx::Error;
 use tracing::info;
 
 use self::{
@@ -38,9 +39,7 @@ async fn get_chart_timestamp_list(
     end_timestamp: i64,
 ) -> Vec<WeeklyChartEntry> {
     let start = Instant::now();
-    let current_naive = NaiveDateTime::from_timestamp_opt(start_timestamp, 0)
-        .expect("Failed to parse start timestamp");
-    let current_datetime: DateTime<Utc> = DateTime::from_utc(current_naive, Utc);
+    let current_datetime = DateTime::from_timestamp(start_timestamp, 0).expect("Failed to parse start timestamp");
     let days_to_sunday = current_datetime.weekday().num_days_from_sunday();
 
     let nearest_sunday = current_datetime - Duration::days(days_to_sunday as i64);
@@ -48,6 +47,7 @@ async fn get_chart_timestamp_list(
         .date_naive()
         .and_hms_opt(0, 0, 0)
         .expect("Failed to parse nearest sunday")
+        .and_utc()
         .timestamp();
 
     let mut current_timestamp = start_of_nearest_sunday + 43200;
@@ -89,12 +89,12 @@ impl WeeklyChartsQuery {
         let fetch_start = Instant::now();
 
         let api_key = env::var("LASTFM_API_KEY").expect("LASTFM_API_KEY is not set");
-        let pool = ctx
-            .data::<Pool<Postgres>>()
+        let pool_result = ctx
+            .data::<Result<Pool<Postgres>, Error>>()
             .expect("Error connecting to Postgres pool connection");
 
         let start = Instant::now();
-        let user_info = get_user_info(&lastfm_username, &api_key, pool).await;
+        let user_info = get_user_info(&lastfm_username, &api_key, pool_result).await;
         info!(
             "Time Elapsed from fetching user info: {:?}",
             start.elapsed()
